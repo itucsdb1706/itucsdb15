@@ -6,7 +6,19 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
   </head>
   <body>
-    <h1>Hello, Flask!</h1>
+    <h1>Hello, HackPack!</h1>
+    <ul>
+        {% for item in tmp_list %}
+        <li>
+            {{ item }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% if tmp_if>5 %}
+        Greater than 5
+    {% else %}
+        Less than or equal 5
+    {% endif %}
 
     <footer>
       <div id="datetime">{{ current_time }}</div>

@@ -62,3 +62,9 @@ target/
 
 # Vagrant
 .vagrant/
+
+# PyCharm
+.idea/*
+
+# Macbook
+.DS_Store
