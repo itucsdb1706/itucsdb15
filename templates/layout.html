@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html id="h">
+    <head>
+        <meta charset="utf-8">
+        <title> {% block title %}Hackpack{% endblock %} </title>
+        <meta name= "viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" >
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    </head>
+
+    <body>
+
+        <!--navbar begins-->
+        <nav class="navbar">
+            <!-- Menu Items -->
+  			  <div>
+            <ul class="nav nav-pills">
+                <li class="nav-brand"> <a href="{{ url_for('core.home') }}"> HackPack</a> </li>
+
+                <li> <a href="{{ url_for('num.check_number', number=3) }}" > Number is 3 </a> </li>
+                <li> <a href="#" > Scoreboard </a> </li>
+
+
+                </ul>
+            </div>
+        </nav>
+        <!-- navbar ends -->
+
+        {% block content %}
+        {% endblock %}
+
+        <!--footer-->
+        <footer class="footer">
+            <div>
+                <p> Created by &nbsp; :    &nbsp; Oguz Paksoy   &nbsp;    |       &nbsp;Ecem Guldosuren   &nbsp;   |      &nbsp;Ezgi Yilmaz     &nbsp;|      &nbsp;Burak Bugrul  </p>
+            </div>
+        </footer>
+    </body>
+</html>

@@ -1,0 +1,38 @@
+.container-fluid{
+	font: Helvetica;
+	font-size: 15px;
+	word-break: keep-all;
+
+}
+
+#qtext{
+	margin: 5px;
+	padding-left:30px;
+	padding-right: 0px;
+	padding-bottom: 30px;
+	padding-top: 45px;
+	text-align: left;
+}
+
+#iotext{
+	margin: 25px;
+	padding-left:10px;
+	padding-right: 10px;
+	padding-bottom:10px;
+	padding-top: 10px;
+	text-align: left;
+}
+
+#inarea{
+	margin: 25px;
+	padding-left:10px;
+	padding-right: 10px;
+	padding-bottom:10px;
+	padding-top: 10px;
+	text-align: left;
+}
+
+#btnlink{
+	color:white;
+	decoration:none;
+}

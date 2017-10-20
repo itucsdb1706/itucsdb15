@@ -1,27 +1,10 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Home</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-  </head>
-  <body>
-    <h1>Hello, HackPack!</h1>
-    <ul>
-        {% for item in tmp_list %}
-        <li>
-            {{ item }}
-        </li>
-        {% endfor %}
-    </ul>
-    {% if tmp_if>5 %}
-        Greater than 5
-    {% else %}
-        Less than or equal 5
-    {% endif %}
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    <h1>Welcome to my movie collection!</h1>
+    <div class="greeting">Have a nice.</div>
 
-    <footer>
-      <div id="datetime">{{ current_time }}</div>
-    </footer>
-  </body>
-</html>
+    <ul>
+      <li><a href="">List movies</a></li>
+    </ul>
+{% endblock %}
