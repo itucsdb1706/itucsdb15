@@ -1,0 +1,21 @@
+.text-align-center {
+    text-align:center;
+}
+
+body{
+    min-height:500px;
+}
+.navbar-default {
+    background-color: #0285B7;
+    border-color: #FFFFFF;
+}
+.navbar-default .navbar-brand {
+    color: #FFF;
+}
+.navbar-default .navbar-brand:hover {
+    color: #FFF;
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: #FFF;
+}
