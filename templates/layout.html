@@ -1,45 +1,56 @@
 <!DOCTYPE html>
-<html id="h">
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <title> {% block title %}Hackpack{% endblock %} </title>
         <meta name= "viewport" content="width=device-width, initial-scale=1">
-
         <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" >
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 
         <!-- Latest compiled and minified JavaScript -->
-        <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" >
     </head>
 
     <body>
+        <nav class="navbar navbar-sticky-top">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a href="{{ url_for('core.home') }}" class="navbar-brand"> HackPack </a>
+				</div>
+				<!-- Menu Items -->
+					<ul class="nav navbar-nav">
+						<li class="active"> <a href=""{{ url_for('core.home') }}""> Home </a></li>
+						<li><a href="{{ url_for('num.check_number', number=3) }}"> Number is 3 </a></li>
 
-        <!--navbar begins-->
-        <nav class="navbar">
-            <!-- Menu Items -->
-  			  <div>
-            <ul class="nav nav-pills">
-                <li class="nav-brand"> <a href="{{ url_for('core.home') }}"> HackPack</a> </li>
-
-                <li> <a href="{{ url_for('num.check_number', number=3) }}" > Number is 3 </a> </li>
-                <li> <a href="#" > Scoreboard </a> </li>
-
-
-                </ul>
+						<!--dropdown -->
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle=".dropdown"> Scoreboard <span class="caret"> </span> </a>
+								<ul class="dropdown-menu">
+									<li><a href="#">Country Filtered</a></li>
+									<li><a href="#">----- </a></li>
+								</ul>
+						</li>
+					</ul>
+					<!--Right Align -->
+					<ul style="margin:5px;"class="nav navbar-nav navbar-right">
+						<li> <button class="btn btn-success"> <a style="color:white;"href="#">Log In </a> </button> </li>
+					</ul>
+			</div>
+		</nav>
+        <div class="container-fluid" >
+            <div id="main-content">
+                {% block content %}
+                {% endblock %}
             </div>
-        </nav>
-        <!-- navbar ends -->
-
-        {% block content %}
-        {% endblock %}
+        </div>
 
         <!--footer-->
-        <footer class="footer">
-            <div>
-                <p> Created by &nbsp; :    &nbsp; Oguz Paksoy   &nbsp;    |       &nbsp;Ecem Guldosuren   &nbsp;   |      &nbsp;Ezgi Yilmaz     &nbsp;|      &nbsp;Burak Bugrul  </p>
-            </div>
-        </footer>
+        <div  id="footer" class="navbar-sticky-bottom pull-right">
+                <p style="text-align:right"> Created by : Oguz Paksoy &nbsp;| Ecem Guldosuren&nbsp;| Ezgi Yilmaz     &nbsp;| Burak Bugrul  </p>
+        </div>
     </body>
 </html>

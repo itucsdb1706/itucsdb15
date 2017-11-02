@@ -17,7 +17,48 @@
 	margin: 0;
 	padding: 0;
 	height : 0px;
+}.navbar{
+    background-color:#eaeaee;
+    text-decoration: none;
+    font: Helvetica;
+
 }
+
+.navbar a{
+	padding-top: 12px;
+	color: black;
+}
+
+.nav-brand{
+	font-size: 15px;
+}
+
+#footer{
+	align: right;
+	background-color:#eaeaee;
+	color:  #222323;
+    width: 100%;
+    padding-right: 3%;
+    height: 10%;
+}
+
+#main-content{
+    text-align: center;
+    background: rgba(66, 28, 23, 0.74);
+    color: white;
+    margin-left: 5%;
+    margin-right: 20%;
+    padding: 10px;
+    float: left;
+    width: 70%;
+}
+
+#statistics{
+    background-color: rgb(111, 69, 34);
+    margin-right: 2%;
+    float: right;
+}
+
 #footer{
 	text-align: right;
 	background-color:#eaeaee;
