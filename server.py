@@ -4,7 +4,6 @@ from flask_login import LoginManager
 from core import core
 from num import num
 from user import get_user
-from problem import Problem
 
 import os
 import json
@@ -12,6 +11,7 @@ import re
 
 
 lm = LoginManager()
+
 
 # ElephantSQL JSON parser for the DSN string
 def get_elephantsql_dsn(vcap_services):
@@ -23,6 +23,7 @@ def get_elephantsql_dsn(vcap_services):
     dsn = """user='{}' password='{}' host='{}' port={}
              dbname='{}'""".format(user, password, host, port, dbname)
     return dsn
+
 
 @lm.user_loader
 def load_user(user_id):
