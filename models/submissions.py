@@ -33,18 +33,18 @@ class Submissions:
     def update(self):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            query = """UPDATE SUBMISSIONS SET (user_id, problem_id, score, """\
-                    """is_complete, source, language, error, send_time VALUES (%s, %s, %s, %s, %s)"""
-            cursor.execute(query, [self.user_id, self.problem_id, self.score,
-                                   self.is_complete, self.source, self.language, self.error, self.send_time])
+            query = """UPDATE SUBMISSIONS SET (user_id, problem_id, score, is_complete, """\
+                    """source, language, error, send_time WHERE submission_id=%s VALUES (%s, %s, %s, %s, %s)"""
+            cursor.execute(query, (self.submission_id, self.user_id, self.problem_id, self.score, self.is_complete,
+                                   self.source, self.language, self.error, self.send_time))
             connection.commit()
 
     @staticmethod
-    def get(input_id):
+    def get(submission_id):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """SELECT * FROM SUBMISSIONS WHERE submission_id=%s"""
-            cursor.execute(query, [input_id])
+            cursor.execute(query, (submission_id))
             result = cursor.fetchall()
             # TODO: None check
             connection.commit()
