@@ -26,8 +26,8 @@ class Input:
     def update(self):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            query = """UPDATE INPUT SET (problem_id, testcase, expected_output) VALUES (%s, %s, %s)"""
-            cursor.execute(query, [self.problem_id, self.testcase, self.expected_output])
+            query = """UPDATE INPUT SET (problem_id, testcase, expected_output) WHERE input_id=%s VALUES (%s, %s, %s)"""
+            cursor.execute(query, [self.input_id, self.problem_id, self.testcase, self.expected_output])
             connection.commit()
 
     @staticmethod

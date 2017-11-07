@@ -30,8 +30,9 @@ class Problems:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """UPDATE PROBLEMS SET (problem_name, statement, contest_id, max_score, editorial)""" \
-                    + """VALUES (%s, %s, %s, %s, %s)"""
-            cursor.execute(query, [self.problem_name, self.statement, self.contest_id, self.max_score, self.editorial])
+                    + """WHERE problem_id=%s VALUES (%s, %s, %s, %s, %s)"""
+            cursor.execute(query, (self.problem_id, self.problem_name, self.statement, self.contest_id,
+                                   self.max_score, self.editorial))
             connection.commit()
 
     @staticmethod
@@ -39,7 +40,7 @@ class Problems:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """SELECT * FROM PROBLEMS WHERE problem_id=%s"""
-            cursor.execute(query, [problem_id])
+            cursor.execute(query, (problem_id))
             result = cursor.fetchall()
             # TODO: None check
             connection.commit()
