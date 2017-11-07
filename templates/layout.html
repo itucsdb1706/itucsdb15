@@ -2,55 +2,106 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title> {% block title %}Hackpack{% endblock %} </title>
-        <meta name= "viewport" content="width=device-width, initial-scale=1">
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-
-        <!-- Optional theme -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-
-        <!-- Latest compiled and minified JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title> {% block title %}HackPack{% endblock %} </title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" >
     </head>
 
-    <body>
-        <nav class="navbar navbar-sticky-top">
+    <body id="body">
+    <div class="row">
+        <!-- navbar -->
+        <nav class="navbar navbar-light ">
 			<div class="container-fluid">
 				<div class="navbar-header">
-					<a href="{{ url_for('core.home') }}" class="navbar-brand"> HackPack </a>
+                    <!--logo-->
+				    <a href="{{ url_for('core.home') }}" class="navbar-brand">
+                        <img id="logo" src="{{ url_for('static', filename='img/logo.png') }}" />
+                    </a>
 				</div>
+
 				<!-- Menu Items -->
 					<ul class="nav navbar-nav">
-						<li class="active"> <a href=""{{ url_for('core.home') }}""> Home </a></li>
-						<li><a href="{{ url_for('num.check_number', number=3) }}"> Number is 3 </a></li>
+						<li> <a href=""{{ url_for('core.home') }}""> Home </a></li>
+						<li><a href="{{ url_for('num.check_number', number=3) }}"> Blog </a></li>
 
 						<!--dropdown -->
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle=".dropdown"> Scoreboard <span class="caret"> </span> </a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"> Social <span class="caret"> </span> </a>
 								<ul class="dropdown-menu">
-									<li><a href="#">Country Filtered</a></li>
-									<li><a href="#">----- </a></li>
+									<li><a href="#">Notifications</a></li>
+									<li><a href="#">Messages</a></li>
 								</ul>
 						</li>
+                        <li><a href="#">Profile</a></li>
 					</ul>
-					<!--Right Align -->
-					<ul style="margin:5px;"class="nav navbar-nav navbar-right">
-						<li> <button class="btn btn-success"> <a style="color:white;"href="#">Log In </a> </button> </li>
+					<!--Login and Register Buttons -->
+					<ul class="nav navbar-nav pull-right">
+						<li> <button id="navbutton" type="button" class="btn btn-success" data-toggle="modal" data-target="#popUpWindow"> <a style="color:white;"href="#">Log In </a> </button> </li>
+                        <li> <button id="navbutton" type="button" class="btn btn-info"> <a  style="color:white;" href="#">Register </a></button></li>
+                        <!-- Login Pop-up Window-->
+                        <div class="modal fade" id="popUpWindow" >
+        					<div class="modal-dialog">
+        							<div class="modal-content">
+        								<!-- Pop-up Header-->
+        								<div class="modal-header">
+        									  <button type="button" class="close" data-dismiss="modal">&times;</button>
+        										<h3 style="text-align:center;"class="modal-title">
+                                                    <p><img id="logo" src="{{ url_for('static', filename='img/logo.png') }}" /></p>
+                                                    <p>Log In</p>
+                                                </h3>
+        								</div>
+
+        								<!-- Login Forms -->
+        								<div class="modal-body">
+        									  <form role="form">
+        											  <div class="form-group">
+        													  <input type="email" class="form-control" placeholder="Email">
+        											   </div>
+
+        												<div class="form-group">
+        													  <input type="password" class="form-control" placeholder="Password">
+        												</div>
+        										</form>
+        								</div>
+
+        								<!-- Login  Button -->
+        								<div class="modal-footer">
+        									  <button class="btn btn-primary btn-block">Log In</button>
+        								</div>
+        							</div>
+        					</div>
+			            </div>
 					</ul>
 			</div>
 		</nav>
-        <div class="container-fluid" >
-            <div id="main-content">
-                {% block content %}
-                {% endblock %}
+    </div>
+        <div id="pagebody" class="container-fluid" >
+            <div class="row">
+                <div class="col-md-7 col-md-push-1">
+                    <div class="well" id="main-content">
+                        {% block content %}
+                        {% endblock %}
+                    </div>
+                </div>
+                <div id="right-bar" class="col-md-2 col-md-push-2">
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                </div>
             </div>
         </div>
-
         <!--footer-->
-        <div  id="footer" class="navbar-sticky-bottom pull-right">
-                <p style="text-align:right"> Created by : Oguz Paksoy &nbsp;| Ecem Guldosuren&nbsp;| Ezgi Yilmaz     &nbsp;| Burak Bugrul  </p>
-        </div>
+        <footer  id="footer" class="">
+            <div class="container">
+                <div class="row">
+                    <p style="text-align:right"> Created by : Oguz Paksoy &nbsp;| Ecem Guldosuren&nbsp;| Ezgi Yilmaz     &nbsp;| Burak Bugrul  </p>
+                </div>
+            </div>
+        </footer>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     </body>
 </html>
