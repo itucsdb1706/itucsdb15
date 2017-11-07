@@ -4,25 +4,50 @@ from flask import current_app
 
 class Input:
 
-    def __init__(self, problemID, testcase, expected_output):
-        self.problemID = problemID
+    def __init__(self, problem_id, testcase, expected_output):
+        self.problem_id = problem_id
         self.testcase = testcase
         self.expected_output = expected_output
 
-
     def save(self):
-        pass
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            query = """INSERT INTO INPUT (problem_id, testcase, expected_output) VALUES (%s, %s, %s)"""
+            cursor.execute(query, [self.problem_id, self.testcase, self.expected_output])
+            connection.commit()
 
-    def delete(self, inputID):
-        pass
+    def delete(self):
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            query = """DELETE FROM INPUT WHERE input_id=%s"""
+            cursor.execute(query, [self.input_id])
+            connection.commit()
 
+    def update(self):
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            query = """UPDATE INPUT SET (problem_id, testcase, expected_output) VALUES (%s, %s, %s)"""
+            cursor.execute(query, [self.problem_id, self.testcase, self.expected_output])
+            connection.commit()
 
-    def update(self, inputID):
-        pass
+    @staticmethod
+    def get(input_id):
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            query = """SELECT * FROM INPUT WHERE input_id=%s"""
+            cursor.execute(query, [input_id])
+            result = cursor.fetchall()
+            # TODO: None check
+            connection.commit()
+            return result
 
-    def get(self, inputID):
-        pass
-
-
-    def get_all(self):
-        pass
+    @staticmethod
+    def get_all():
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            query = """SELECT * FROM INPUT """
+            cursor.execute(query)
+            result = cursor.fetchall()
+            # TODO: None check
+            connection.commit()
+            return result
