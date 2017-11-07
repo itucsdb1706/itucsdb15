@@ -1,89 +1,57 @@
+#logo{
+    height: inherit;
+    margin-top: -15px;
+    padding-bottom: 5px;
+}
+#navbutton{
+    margin: 5px;
+}
+
 .navbar{
-	margin-bottom: 0;
-	padding:0px;
-}
-
-#navbar a{
-	padding-top: 12px;
-	color: black;
-}
-
-.nav-brand{
-	font-size: 15px;
-}
-
-#login{
-	float: right;
-	margin: 0;
-	padding: 0;
-	height : 0px;
-}.navbar{
-    background-color:#eaeaee;
     text-decoration: none;
     font: Helvetica;
-
+    margin: 0px;
+    background-color: white;
 }
 
 .navbar a{
-	padding-top: 12px;
-	color: black;
+    color: green;
 }
 
-.nav-brand{
-	font-size: 15px;
-}
-
-#footer{
-	align: right;
-	background-color:#eaeaee;
-	color:  #222323;
-    width: 100%;
-    padding-right: 3%;
-    height: 10%;
+#body{
+    background-color: rgb(144, 219, 122);
 }
 
 #main-content{
+    margin: 0px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     text-align: center;
-    background: rgba(66, 28, 23, 0.74);
+    background:rgb(231, 233, 198);
+    color: black;
+    padding: 40px;
+}
+#right-bar{
+    background-color: rgb(51, 140, 49);
+    margin: 0px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
     color: white;
-    margin-left: 5%;
-    margin-right: 20%;
-    padding: 10px;
-    float: left;
-    width: 70%;
+    padding: 20px;
 }
-
-#statistics{
-    background-color: rgb(111, 69, 34);
-    margin-right: 2%;
-    float: right;
+.container{
+    width: auto;
+    max-width: 680px;
+    padding: 0 15px;
 }
-
 #footer{
-	text-align: right;
+    position:absolute;
+    bottom: 0;
+    width: 100%;
+    display: block;
 	background-color:#eaeaee;
-	color:  #222323;
-	padding-left: 60px;
-	padding-right: 60px;
+	color: green;
 	padding-top: 12px;
 	padding-bottom: 12px;
-
-}
-#navbar{
-	background-color:#eaeaee;
-	text-decoration: none;
-	font: Helvetica;
-	padding-left: 15px;
-}
-
-#con{
-	text-decoration: none;
-}
-
-#con a{
-	color: 	#59709c;
-	text-decoration: underline;
-}
-#inlist{
-	list-style: none;
 }
