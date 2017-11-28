@@ -24,7 +24,7 @@
 
 				<!-- Menu Items -->
 					<ul class="nav navbar-nav">
-						<li> <a href=""{{ url_for('core.home') }}""> Home </a></li>
+						<li> <a href="{{ url_for('core.home') }}"> Home </a></li>
 						<li><a href="{{ url_for('num.check_number', number=3) }}"> Blog </a></li>
 
 						<!--dropdown -->
@@ -35,7 +35,7 @@
 									<li><a href="#">Messages</a></li>
 								</ul>
 						</li>
-                        <li><a href="#">Profile</a></li>
+                        <li><a href="{{ url_for('core.profile') }}">Profile</a></li>
 					</ul>
 					<!--Login and Register Buttons -->
 					<ul class="nav navbar-nav pull-right">
@@ -78,29 +78,78 @@
 			</div>
 		</nav>
     </div>
-        <div id="pagebody" class="container-fluid" >
+        <div id="body" class="container-fluid" >
             <div class="row">
-                <div class="col-md-7 col-md-push-1">
-                    <div class="well" id="main-content">
+                <div id="main-content" class="col-md-7 col-md-push-1">
                         {% block content %}
                         {% endblock %}
-                    </div>
                 </div>
                 <div id="right-bar" class="col-md-2 col-md-push-2">
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </p>
+                    <div class="col-md-12">
+                        <ul class="nav nav-tabs">
+                          <li class="active"><a data-toggle="tab" href="#message">Message</a></li>
+                          <li><a data-toggle="tab" href="#notification">Notifications</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div id="message" class="tab-pane fade in active">
+                            <ul>
+                                <li>
+                                    <button type="button" class="close" data-toggle="modal" data-target="#msgPopUp">
+                                            <p> New message --from-- </p>
+                                    </button>
+                                        <div class="modal fade" id="msgPopUp" >
+                                            <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="panel panel-info">
+                                                            <div class="modal-header panel-heading">
+                                                                <p>From --username--
+                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                </p>
+                                                            </div>
+                                                            <div class="panel-body">
+                                                                Message content
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                </li>
+                            </ul>
+                          </div>
+                          <div id="notification" class="tab-pane fade">
+                            <button type="button" class="close notif" data-toggle="modal" data-target="#notifPopUp">
+                                    <p> New contest! </p>
+                            </button>
+                                <div class="modal fade" id="notifPopUp" >
+                                    <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        <h3 style="text-align:center;"class="modal-title">
+                                                            New Contest
+                                                        </h3>
+                                                </div>
+                                                <div class="modal-body">
+                                                      <p>notification content</p>
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
+                          </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <!--footer-->
-        <footer  id="footer" class="">
-            <div class="container">
-                <div class="row">
-                    <p style="text-align:right"> Created by : Oguz Paksoy &nbsp;| Ecem Guldosuren&nbsp;| Ezgi Yilmaz     &nbsp;| Burak Bugrul  </p>
+        <!--footer
+        <footer  id="footer" class="navbar navbar-fixed-bottom">
+            <div class="row">
+                <div class="col-md-12">
+                    <p style="text-align:center;"> Created by : Oguz Paksoy &nbsp;| Ecem Guldosuren&nbsp;| Ezgi Yilmaz     &nbsp;| Burak Bugrul  </p>
                 </div>
             </div>
-        </footer>
+        </footer>-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     </body>
