@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    <div class="panel panel-success">
+    <div class="panel-heading"><h3>Welcome --username-- </h3></div>
+    <div id="profile" class="panel-body">
+        <h3 style="text-align:left" ><!--name and surname--> John Doe</h3>
+        <div class="row">
+            <div class="col-md-3">
+                <p>--picture--</p>
+            </div>
+            <div class="col-md-9">
+                <h4>Bio</h4>
+                <p>
+                    <p>
+                        --user bio--
+                    </p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Team</h4>
+                <p>
+                    --teamname--
+                    <!--team yoksa create team linki koyalim-->
+                </p>
+                <p>
+                    <strong>Rank: </strong> --teamrank--
+                </p>
+            </div>
+            <div class="col-md-6">
+                <h4>Personal Rank</h4>
+                <p>
+                     --rank--
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div style="text-align:left"  class="col-md-12">
+                <h4>Adress</h4>
+                <ul class="list-unstyled">
+                    <!--there will be if states-->
+                    <!--when clicked it will searched by that feature-->
+                    <li>City:--city--</li>
+                    <li>Country:--country--</li>
+                    <li>School:--school--</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Register Date</h4>
+                <p>--time--</p>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}
