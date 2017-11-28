@@ -58,3 +58,19 @@
 #profile{
     padding: 40px;
 }
+
+#ppicture{
+    border-style: groove;
+    border-color: grey;
+}
+
+.notif{
+    margin: 10px;
+    padding: 10px;
+    height: 30px;
+    width: 100%;
+    background-color: inherit;
+    font-size: 14px;
+    color: black;
+    font-family: inherit;
+}
