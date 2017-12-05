@@ -3,8 +3,8 @@ from flask import current_app
 
 
 class Contest:
-    def __init__(self, contest_id, contest_name, is_individual, start_time, end_time):
-        self.contest_id = contest_id
+    def __init__(self, contest_name, is_individual, start_time, end_time):
+        self.contest_id = None
         self.contest_name = contest_name
         self.is_individual = is_individual
         self.start_time = start_time
@@ -13,13 +13,13 @@ class Contest:
     def save(self):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """INSERT INTO CONTEST (contest_id ,contest_name, is_individual, start_time, end_time) 
-                                      VALUES (%s ,%s, %s, %s, %s);"""
-            cursor.execute(statement, (self.contest_id,
-                                       self.contest_name,
+            statement = """INSERT INTO CONTEST (contest_name, is_individual, start_time, end_time) 
+                                      VALUES (%s, %s, %s, %s);"""
+            cursor.execute(statement, (self.contest_name,
                                        self.is_individual,
                                        self.start_time,
                                        self.end_time))
+            self.contest_id = cursor.fetchone()[0]
             cursor.close()
 
     def delete(self):

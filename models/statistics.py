@@ -3,9 +3,9 @@ from flask import current_app
 
 
 class Statistics:
-    def __init__(self, statistics_id, top_language, most_solved_prob, most_tried_prob, most_solved_tag, most_tried_tag,
-                 top_coder, top_blog, top_comment):
-        self.statistics_id = statistics_id
+    def __init__(self, top_language, most_solved_prob, most_tried_prob, most_solved_tag, most_tried_tag, top_coder,
+                 top_blog, top_comment):
+        self.statistics_id = None
         self.top_language = top_language
         self.most_solved_prob = most_solved_prob
         self.most_tried_prob = most_tried_prob
@@ -19,11 +19,11 @@ class Statistics:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """INSERT INTO STATISTICS 
-                                      (statistics_id, top_language, most_solved_prob, most_tried_prob, most_solved_tag, 
-                                      most_tried_tag, top_coder, top_blog, top_comment) 
-                                      VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);"""
-            cursor.execute(statement, (self.statistics_id,
-                                       self.top_language,
+                                      (top_language, most_solved_prob, most_tried_prob, most_solved_tag, most_tried_tag, 
+                                      top_coder, top_blog, top_comment) 
+                                      VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                                      RETURNING statistics_id;"""
+            cursor.execute(statement, (self.top_language,
                                        self.most_solved_prob,
                                        self.most_tried_prob,
                                        self.most_solved_tag,
@@ -31,6 +31,7 @@ class Statistics:
                                        self.top_coder,
                                        self.top_blog,
                                        self.top_comment))
+            self.statistics_id = cursor.fetchone()[0]
             cursor.close()
 
     def delete(self):
