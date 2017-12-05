@@ -45,9 +45,9 @@ class Statistics:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """UPDATE STATISTICS
-                                  SET (top_language = %s, most_solved_prob = %s, most_tried_prob = %s, 
+                                  SET top_language = %s, most_solved_prob = %s, most_tried_prob = %s, 
                                       most_solved_tag = %s, most_tried_tag = %s, top_coder = %s, top_blog = %s, 
-                                      top_comment = %s)
+                                      top_comment = %s
                                   WHERE (statistics_id = %s);"""
             cursor.execute(statement, (self.top_language,
                                        self.most_solved_prob,
@@ -58,6 +58,24 @@ class Statistics:
                                        self.top_blog,
                                        self.top_comment,
                                        self.statistics_id))
+            cursor.close()
+
+    @staticmethod
+    def create():
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """CREATE TABLE IF NOT EXISTS STATISTICS (
+                                  statistics_id     SERIAL PRIMARY KEY NOT NULL,
+                                  top_language      VARCHAR(32),
+                                  most_solved_prob  VARCHAR(256),
+                                  most_tried_prob   VARCHAR(256),
+                                  most_solved_tag   VARCHAR(64),
+                                  most_tried_tag    VARCHAR(64),
+                                  top_coder         VARCHAR(256),
+                                  top_blog          VARCHAR(256),
+                                  top_comment       VARCHAR(1024)
+                                  );"""
+            cursor.execute(statement)
             cursor.close()
 
     @staticmethod

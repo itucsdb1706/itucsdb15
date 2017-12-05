@@ -34,13 +34,27 @@ class Contest:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """UPDATE CONTEST
-                                  SET (contest_name = %s, is_individual = %s, start_time = %s, end_time = %s)
+                                  SET contest_name = %s, is_individual = %s, start_time = %s, end_time = %s
                                   WHERE (contest_id = %s);"""
             cursor.execute(statement, (self.contest_name,
                                        self.is_individual,
                                        self.start_time,
                                        self.end_time,
                                        self.contest_id))
+            cursor.close()
+
+    @staticmethod
+    def create():
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """CREATE TABLE IF NOT EXISTS CONTEST (
+                                  contest_id    SERIAL PRIMARY KEY NOT NULL,
+                                  contest_name  VARCHAR(256),
+                                  is_individual BOOLEAN NOT NULL,
+                                  start_time    TIMESTAMP NOT NULL,
+                                  end_time      TIMESTAMP NOT NULL 
+                                  );"""
+            cursor.execute(statement)
             cursor.close()
 
     @staticmethod

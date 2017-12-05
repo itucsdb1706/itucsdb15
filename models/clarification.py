@@ -32,12 +32,25 @@ class Clarification:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """UPDATE CLARIFICATION
-                                  SET (contest_id = %s, user_id = %s, clarification_content = %s)
+                                  SET contest_id = %s, user_id = %s, clarification_content = %s
                                   WHERE (clarification_id = %s);"""
             cursor.execute(statement, (self.contest_id,
                                        self.user_id,
                                        self.clarification_content,
                                        self.clarification_id))
+            cursor.close()
+
+    @staticmethod
+    def create():
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """CREATE TABLE IF NOT EXISTS CLARIFICATION (
+                                      clarification_id      SERIAL PRIMARY KEY NOT NULL,
+                                      contest_id            INTEGER REFERENCES CONTEST(contest_id) NOT NULL,
+                                      user_id               INTEGER REFERENCES USERS(user_id) NOT NULL,
+                                      clarification_content VARCHAR(512)
+                                      );"""
+            cursor.execute(statement)
             cursor.close()
 
     @staticmethod
