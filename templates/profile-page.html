@@ -1,16 +1,26 @@
 {% extends "layout.html" %}
 {% block title %}Profile{% endblock %}
 {% block content %}
-    <div class="panel panel-success">
+    <div class="panel panel-primary">
     <div class="panel-heading"><h3>Welcome --username-- </h3></div>
     <div id="profile" class="panel-body">
-        <h3 style="text-align:left" ><!--name and surname--> John Doe</h3>
+        <div class="row">
+            <div class="col-md-11">
+                <h3 style="text-align:left" ><!--name and surname--> John Doe</h3>
+            </div>
+            <div class="col-md-1">
+                <a href="{{ url_for('core.editprofile') }}">Edit Profile</a>
+            </div>
+        </div>
+
         <div class="row">
             <div id="ppicture" class="col-md-3">
                 <p>--picture--</p>
                 <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/676465-200.png"/>
             </div>
             <div class="col-md-9">
+                <h4>Email</h4>
+                <p> current@email.com </p>
                 <h4>Bio</h4>
                 <p>
                     <p>

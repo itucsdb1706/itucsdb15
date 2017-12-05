@@ -15,8 +15,12 @@
     width: 100%;
 }
 
+.table th {
+   text-align: center;
+}
+
 .navbar a{
-    color: rgb(12, 30, 126);
+    color: rgb(30, 129, 156);
 }
 
 #body{

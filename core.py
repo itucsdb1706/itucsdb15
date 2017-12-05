@@ -19,3 +19,15 @@ def profile():
 @core.route('/register')
 def register():
     return render_template('register-page.html')
+
+@core.route('/edit-profile')
+def editprofile():
+    return render_template('profile-edit.html')
+
+@core.route('/problemlist')
+def problemlist():
+    return render_template('problems.html')
+
+@core.route('/statement')
+def statement():
+    return render_template('statement.html')
