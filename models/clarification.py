@@ -3,8 +3,8 @@ from flask import current_app
 
 
 class Clarification:
-    def __init__(self, clarification_id, contest_id, user_id, clarification_content):
-        self.clarification_id = clarification_id
+    def __init__(self, contest_id, user_id, clarification_content):
+        self.clarification_id = None
         self.contest_id = contest_id
         self.user_id = user_id
         self.clarification_content = clarification_content
@@ -12,12 +12,13 @@ class Clarification:
     def save(self):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """INSERT INTO CLARIFICATION (clarification_id ,contest_id, user_id, clarification_content) 
-                                      VALUES (%s ,%s, %s, %s);"""
-            cursor.execute(statement, (self.clarification_id,
-                                       self.contest_id,
+            statement = """INSERT INTO CLARIFICATION (contest_id, user_id, clarification_content) 
+                                      VALUES (%s, %s, %s) 
+                                      RETURNING clarification_id;"""
+            cursor.execute(statement, (self.contest_id,
                                        self.user_id,
                                        self.clarification_content))
+            self.clarification_id = cursor.fetchone()[0]
             cursor.close()
 
     def delete(self):
