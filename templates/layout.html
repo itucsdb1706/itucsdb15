@@ -17,7 +17,7 @@
 			<div class="navbar-header">
                 <!--logo-->
 			    <a href="{{ url_for('core.home') }}" class="navbar-brand">
-                    <img id="logo" src="{{ url_for('static', filename='img/logo.png') }}" />
+                    <img id="logo" src="{{ url_for('static', filename='img/logo2.png') }}" />
                 </a>
 			</div>
 
@@ -39,7 +39,11 @@
 			<!--Login and Register Buttons -->
 			<ul class="nav navbar-nav pull-right">
 				<li> <button id="navbutton" type="button" class="btn btn-success" data-toggle="modal" data-target="#popUpWindow"> <a style="color:white;"href="#">Log In </a> </button> </li>
-                <li> <button id="navbutton" type="button" class="btn btn-info"> <a  style="color:white;" href="{{ url_for('core.register') }}">Register </a></button></li>
+                <li>
+                    <form>
+                        <input id="navbutton" class="btn btn-info" type="button" value="Register" onclick="window.location.href= '{{ url_for('core.register')}}' " />
+                    </form>
+                </li>
                 <!-- Login Pop-up Window-->
                 <div class="modal fade" id="popUpWindow" >
 					<div class="modal-dialog">
@@ -48,7 +52,7 @@
 								<div class="modal-header">
 								    <button type="button" class="close" data-dismiss="modal">&times;</button>
 									<h3 style="text-align:center;"class="modal-title">
-                                        <p><img id="logo" src="{{ url_for('static', filename='img/logo.png') }}" /></p>
+                                        <p><img id="logo" src="{{ url_for('static', filename='img/logo3.png') }}" /></p>
                                         <p>Log In</p>
                                     </h3>
 								</div>
