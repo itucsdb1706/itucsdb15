@@ -1,0 +1,60 @@
+<div id="right-bar" class="col-md-2">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#message">Message</a></li>
+          <li><a data-toggle="tab" href="#notification">Notifications</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="message" class="tab-pane fade in active">
+                <ul class="social">
+                    <li id="message-list">
+                        <button type="button" class="btn btn-block notif" data-toggle="modal" data-target="#msgPopUp">
+                            New message --from--
+                        </button>
+                    </li>
+                    <div class="modal fade" id="msgPopUp" >
+                        <div class="modal-dialog">
+                            <div class="modal-content panel panel-info">
+                                <div class="modal-header panel-heading">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h3 style="text-align:center;"class="modal-title">
+                                        Message From:
+                                    </h3>
+                                </div>
+                                <div class="modal-body panel-body">
+                                    <p>Message content</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ul>
+            </div>
+            <div id="notification" class="tab-pane fade">
+                <ul class="social">
+                    <li>
+                        <button class="btn btn-block notif" type="button" data-toggle="modal" data-target="#notifPopUp">
+                            New contest!
+                        </button>
+                        <div class="modal fade" id="notifPopUp">
+                            <div class="modal-dialog">
+                                <div class="modal-content panel panel-primary">
+                                    <div class="modal-header panel-heading">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h3 style="text-align:center;"class="modal-title">
+                                            New Contest
+                                        </h3>
+                                    </div>
+                                    <div class="modal-body panel-body">
+                                        <p>notification content</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</div>

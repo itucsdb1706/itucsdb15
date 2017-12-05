@@ -10,16 +10,17 @@
 .navbar{
     text-decoration: none;
     font: Helvetica;
-    margin: 0px;
     background-color: white;
+    width: 100%;
 }
 
 .navbar a{
-    color: green;
+    color: rgb(12, 30, 126);
 }
 
 #body{
-    background-color: rgb(144, 219, 122);
+    background-color: rgba(114, 165, 203, 0.76);
+    width: 100%;
 }
 
 #main-content{
@@ -32,27 +33,13 @@
 }
 #right-bar{
     background-color: white;
-    margin: 0px;
     margin-top: 20px;
-    margin-bottom: 20px;
     text-align: center;
     color: black;
     padding: 20px;
 }
 .container{
-    width: auto;
-    max-width: 680px;
-    padding: 0 15px;
-}
-#footer{
-    position:absolute;
-    bottom: 0;
-    width: 100%;
-    display: block;
-	background-color:#eaeaee;
-	color: green;
-	padding-top: 12px;
-	padding-bottom: 12px;
+    padding-top: 15px;
 }
 
 #profile{
@@ -60,17 +47,32 @@
 }
 
 #ppicture{
-    border-style: groove;
+    border-style: ridge;
     border-color: grey;
 }
 
-.notif{
-    margin: 10px;
-    padding: 10px;
-    height: 30px;
+.social{
+    list-style: none;
+    padding-left: 0;
+}
+
+#notification{
+    height: 40px;
     width: 100%;
-    background-color: inherit;
     font-size: 14px;
     color: black;
-    font-family: inherit;
+    font-family: Helvetica;
+    text-align: center;
+    padding: 0px;
+}
+
+.notif{
+    height: 100%;
+    width: 100%;
+    border-style: solid;
+    border-color: grey;
+}
+
+#message-list{
+    list-style: none;
 }

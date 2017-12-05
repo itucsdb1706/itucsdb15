@@ -10,138 +10,83 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" >
     </head>
 
-    <body id="body">
-    <div class="row">
-        <!-- navbar -->
-        <nav class="navbar navbar-light ">
-			<div class="container-fluid">
-				<div class="navbar-header">
-                    <!--logo-->
-				    <a href="{{ url_for('core.home') }}" class="navbar-brand">
-                        <img id="logo" src="{{ url_for('static', filename='img/logo.png') }}" />
-                    </a>
-				</div>
-
-				<!-- Menu Items -->
-					<ul class="nav navbar-nav">
-						<li> <a href="{{ url_for('core.home') }}"> Home </a></li>
-						<li><a href="{{ url_for('num.check_number', number=3) }}"> Blog </a></li>
-
-						<!--dropdown -->
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown"> Social <span class="caret"> </span> </a>
-								<ul class="dropdown-menu">
-									<li><a href="#">Notifications</a></li>
-									<li><a href="#">Messages</a></li>
-								</ul>
-						</li>
-                        <li><a href="{{ url_for('core.profile') }}">Profile</a></li>
-					</ul>
-					<!--Login and Register Buttons -->
-					<ul class="nav navbar-nav pull-right">
-						<li> <button id="navbutton" type="button" class="btn btn-success" data-toggle="modal" data-target="#popUpWindow"> <a style="color:white;"href="#">Log In </a> </button> </li>
-                        <li> <button id="navbutton" type="button" class="btn btn-info"> <a  style="color:white;" href="#">Register </a></button></li>
-                        <!-- Login Pop-up Window-->
-                        <div class="modal fade" id="popUpWindow" >
-        					<div class="modal-dialog">
-        							<div class="modal-content">
-        								<!-- Pop-up Header-->
-        								<div class="modal-header">
-        									  <button type="button" class="close" data-dismiss="modal">&times;</button>
-        										<h3 style="text-align:center;"class="modal-title">
-                                                    <p><img id="logo" src="{{ url_for('static', filename='img/logo.png') }}" /></p>
-                                                    <p>Log In</p>
-                                                </h3>
-        								</div>
-
-        								<!-- Login Forms -->
-        								<div class="modal-body">
-        									  <form role="form">
-        											  <div class="form-group">
-        													  <input type="email" class="form-control" placeholder="Email">
-        											   </div>
-
-        												<div class="form-group">
-        													  <input type="password" class="form-control" placeholder="Password">
-        												</div>
-        										</form>
-        								</div>
-
-        								<!-- Login  Button -->
-        								<div class="modal-footer">
-        									  <button class="btn btn-primary btn-block">Log In</button>
-        								</div>
-        							</div>
-        					</div>
-			            </div>
-					</ul>
+<body id="body">
+    <!-- navbar -->
+    <nav class="navbar navbar-dark">
+		<div class="container-fluid">
+			<div class="navbar-header">
+                <!--logo-->
+			    <a href="{{ url_for('core.home') }}" class="navbar-brand">
+                    <img id="logo" src="{{ url_for('static', filename='img/logo.png') }}" />
+                </a>
 			</div>
-		</nav>
-    </div>
-        <div id="body" class="container-fluid" >
-            <div class="row">
-                <div id="main-content" class="col-md-7 col-md-push-1">
-                        {% block content %}
-                        {% endblock %}
-                </div>
-                <div id="right-bar" class="col-md-2 col-md-push-2">
-                    <div class="col-md-12">
-                        <ul class="nav nav-tabs">
-                          <li class="active"><a data-toggle="tab" href="#message">Message</a></li>
-                          <li><a data-toggle="tab" href="#notification">Notifications</a></li>
-                        </ul>
 
-                        <div class="tab-content">
-                          <div id="message" class="tab-pane fade in active">
-                            <ul>
-                                <li>
-                                    <button type="button" class="close" data-toggle="modal" data-target="#msgPopUp">
-                                            <p> New message --from-- </p>
-                                    </button>
-                                        <div class="modal fade" id="msgPopUp" >
-                                            <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="panel panel-info">
-                                                            <div class="modal-header panel-heading">
-                                                                <p>From --username--
-                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                </p>
-                                                            </div>
-                                                            <div class="panel-body">
-                                                                Message content
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                            </div>
-                                        </div>
-                                </li>
-                            </ul>
-                          </div>
-                          <div id="notification" class="tab-pane fade">
-                            <button type="button" class="close notif" data-toggle="modal" data-target="#notifPopUp">
-                                    <p> New contest! </p>
-                            </button>
-                                <div class="modal fade" id="notifPopUp" >
-                                    <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                      <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                        <h3 style="text-align:center;"class="modal-title">
-                                                            New Contest
-                                                        </h3>
-                                                </div>
-                                                <div class="modal-body">
-                                                      <p>notification content</p>
-                                                </div>
-                                            </div>
-                                    </div>
-                                </div>
-                          </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+			<!-- Menu Items -->
+			<ul class="nav navbar-nav">
+				<li> <a href="{{ url_for('core.home') }}"> Home </a></li>
+				<li> <a href="{{ url_for('num.check_number', number=3) }}"> Blog </a></li>
+
+				<!--dropdown -->
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"> Social <span class="caret"> </span> </a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Notifications</a></li>
+							<li><a href="#">Messages</a></li>
+						</ul>
+				</li>
+                <li><a href="{{ url_for('core.profile') }}">Profile</a></li>
+			</ul>
+			<!--Login and Register Buttons -->
+			<ul class="nav navbar-nav pull-right">
+				<li> <button id="navbutton" type="button" class="btn btn-success" data-toggle="modal" data-target="#popUpWindow"> <a style="color:white;"href="#">Log In </a> </button> </li>
+                <li> <button id="navbutton" type="button" class="btn btn-info"> <a  style="color:white;" href="{{ url_for('core.register') }}">Register </a></button></li>
+                <!-- Login Pop-up Window-->
+                <div class="modal fade" id="popUpWindow" >
+					<div class="modal-dialog">
+							<div class="modal-content">
+								<!-- Pop-up Header-->
+								<div class="modal-header">
+								    <button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h3 style="text-align:center;"class="modal-title">
+                                        <p><img id="logo" src="{{ url_for('static', filename='img/logo.png') }}" /></p>
+                                        <p>Log In</p>
+                                    </h3>
+								</div>
+
+								<!-- Login Forms -->
+								<div class="modal-body">
+									    <form role="form">
+											<div class="form-group">
+                                                <input type="email" class="form-control" placeholder="Email">
+											</div>
+
+											<div class="form-group">
+											    <input type="password" class="form-control" placeholder="Password">
+										    </div>
+									    </form>
+								</div>
+
+								<!-- Login  Button -->
+								<div class="modal-footer">
+									  <button class="btn btn-primary btn-block">Log In</button>
+								</div>
+							</div>
+					</div>
+	            </div>
+			</ul>
         </div>
+	</nav>
+    <div class="container-fluid">
+        <div class="row">
+            <div id="main-content" class="col-md-7 col-md-push-1">
+                    {% block content %}
+                    {% endblock %}
+            </div>
+            <div class="col-md-1">
+            </div>
+            {% include "socialbar.html" %}
+        </div>
+    </div>
         <!--footer
         <footer  id="footer" class="navbar navbar-fixed-bottom">
             <div class="row">

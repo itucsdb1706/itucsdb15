@@ -15,3 +15,7 @@ def home():
 @core.route('/profile')
 def profile():
     return render_template('profile-page.html')
+
+@core.route('/register')
+def register():
+    return render_template('register-page.html')
