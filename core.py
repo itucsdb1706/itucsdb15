@@ -61,6 +61,14 @@ def problemlist():
     return render_template('problems.html')
 
 
+@core.route('/contestlist')
+def contestlist():
+    return render_template('contestlist.html')
+
+@core.route('/contestname')
+def contest():
+    return render_template('contest-page.html')
+
 @core.route('/statement')
 def statement():
     return render_template('statement.html')

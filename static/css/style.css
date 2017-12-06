@@ -82,3 +82,13 @@
 #message-list{
     list-style: none;
 }
+
+#nopaddingnomargin{
+    height: inherit;
+    margin: 0;
+}
+
+a.disabled {
+  color: gray;
+  pointer-events: none;
+}
