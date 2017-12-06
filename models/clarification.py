@@ -3,7 +3,9 @@ from flask import current_app
 
 
 class Clarification:
-    def __init__(self, contest_id, user_id, clarification_content):
+    fields = ['clarification_id', 'contest_id', 'user_id', 'clarification_content']
+
+    def __init__(self, contest_id=None, user_id=None, clarification_content=None):
         self.clarification_id = None
         self.contest_id = contest_id
         self.user_id = user_id
@@ -47,23 +49,25 @@ class Clarification:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS CLARIFICATION (
                                       clarification_id      SERIAL PRIMARY KEY NOT NULL,
-                                      contest_id            INTEGER REFERENCES CONTEST(contest_id) NOT NULL,
-                                      user_id               INTEGER REFERENCES USERS(user_id) NOT NULL,
+                                      contest_id            INTEGER REFERENCES CONTEST(contest_id) ON DELETE CASCADE 
+                                                            NOT NULL,
+                                      user_id               INTEGER REFERENCES USERS(user_id) ON DELETE CASCADE 
+                                                            NOT NULL,
                                       clarification_content VARCHAR(512)
                                       );"""
             cursor.execute(statement)
             cursor.close()
 
     @staticmethod
-    def get(clarification_id):
+    def get(*args, **kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT * FROM CLARIFICATION
-                                  WHERE (clarification_id = %s);"""
-            cursor.execute(statement, (clarification_id,))
-            result = cursor.fetchone()
+                                  WHERE (""" + ' '.join([key + ' = ' + str(kwargs[key]) for key in kwargs]) + """);"""
+            cursor.execute(statement)
+            result = cursor.fetchall()
             cursor.close()
-            return result
+            return [Clarification.object_converter(item) for item in result]
 
     @staticmethod
     def get_all():
@@ -74,3 +78,12 @@ class Clarification:
             result = cursor.fetchall()
             cursor.close()
             return result
+
+    @staticmethod
+    def object_converter(values):
+        clarification = Clarification()
+
+        for ind, field in enumerate(Clarification.fields):
+            clarification.__setattr__(field, values[ind])
+
+        return clarification
