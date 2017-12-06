@@ -2,7 +2,7 @@
 {% block title %}Home{% endblock %}
 {% block content %}
     <div class="panel panel-primary">
-    <div class="panel-heading"><h3>Welcome to HackPack</h3></div>
+    <div class="panel-heading"><h3>Welcome to HackPack {{ current_user.username }}</h3></div>
     <div class="panel-body">Have a nice hackday.</div>
     </div>
 {% endblock %}

@@ -3,7 +3,6 @@ from flask_login import LoginManager
 
 from core import core
 from num import num
-from user import get_user
 from models.blog import Blog
 from models.clarification import Clarification
 from models.comment import Comment
@@ -39,7 +38,7 @@ def get_elephantsql_dsn(vcap_services):
 
 @lm.user_loader
 def load_user(user_id):
-    return get_user(user_id)
+    return Users.get(user_id)
 
 
 def create_app():

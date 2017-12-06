@@ -38,7 +38,6 @@ def check_number(number):
 
     u = Users(username='burakbugrul', email='bbugrul96@gmail.com', password='123456gs')
     u.save()
-    print('PASS AND ID CHECK ->', u.user_id, u.check_password('123456gs'))
 
     if number >= 10:
         return redirect(url_for('core.home'))
