@@ -1,10 +1,14 @@
 import psycopg2 as dbapi2
 from flask import current_app
+from datetime import datetime
 
 
 class Submissions:
+    fields = ['submission_id', 'user_id', 'problem_id', 'score', 'is_complete', 'source', 'language', 'error',
+              'send_time']
 
-    def __init__(self, user_id, problem_id, score, is_complete, source, language, error, send_time):
+    def __init__(self, user_id, problem_id, score=0, is_complete=False, source='', language='c', error='',
+                 send_time=datetime.now()):
         self.user_id = user_id
         self.problem_id = problem_id
         self.score = score
@@ -59,15 +63,16 @@ class Submissions:
             cursor.close()
 
     @staticmethod
-    def get(submission_id):
+    def get(*args, **kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            query = """SELECT * FROM SUBMISSIONS WHERE submission_id=%s;"""
-            cursor.execute(query, (submission_id))
+            statement = """SELECT * FROM USERS
+                                    WHERE (""" + ' '.join([key + ' = ' + str(kwargs[key]) for key in kwargs]) + """);"""
+            cursor.execute(statement)
             result = cursor.fetchall()
             # TODO: None check
             connection.commit()
-            return result
+            return [Submissions.object_converter(row) for row in result]
 
     @staticmethod
     def get_all():
@@ -79,3 +84,12 @@ class Submissions:
             # TODO: None check
             connection.commit()
             return result
+
+    @staticmethod
+    def object_converter(values):
+        submission = Submissions('a', 'b')
+
+        for ind, field in enumerate(Submissions.fields):
+            submission.__setattr__(field, values[ind])
+
+        return submission

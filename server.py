@@ -38,7 +38,7 @@ def get_elephantsql_dsn(vcap_services):
 
 @lm.user_loader
 def load_user(user_id):
-    return Users.get(user_id=user_id)
+    return Users.get(user_id=user_id)[0]
 
 
 def create_app():

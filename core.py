@@ -20,7 +20,7 @@ def home():
 def login():
     email = request.form.get('email', '-')
     password = request.form.get('password', '-')
-    user = Users.get(user_id=5)
+    user = Users.get(email=email)[0]
     print('DBEUBDUEBEDUBUEDBUED ->', user)
 
     if user is not None and user.check_password(password):
@@ -38,7 +38,7 @@ def logout():
     return redirect(url_for('core.home'))
 
 
-@core.route('/profile')
+@core.route('/profile', methods=['GET', 'POST'])
 def profile():
     return render_template('profile-page.html')
 

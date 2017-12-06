@@ -56,7 +56,7 @@ class Users(UserMixin):
                                        self.profile_photo,
                                        self.school,
                                        self.city,
-                                       self.county,
+                                       self.country,
                                        self.bio,
                                        self.user_id))
             cursor.close()
@@ -107,12 +107,11 @@ class Users(UserMixin):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT * FROM USERS
-                                      WHERE (""" + ' '.join([key + ' = ' + str(kwargs[key]) for key in kwargs])\
-                        + """);"""
+                          WHERE (""" + ' '.join([key + ' = \'' + str(kwargs[key]) + '\'' for key in kwargs]) + """);"""
             cursor.execute(statement)
-            result = cursor.fetchone()
+            result = cursor.fetchall()
             cursor.close()
-            return Users.user_object(result)
+            return [Users.object_converter(row) for row in result]
 
     @staticmethod
     def get_all():
@@ -125,7 +124,7 @@ class Users(UserMixin):
             return result
 
     @staticmethod
-    def user_object(values):
+    def object_converter(values):
 
         user = Users('a', 'b', 'c')
 

@@ -8,18 +8,18 @@
             <div class="col-md-4">
                 <fieldset class="form-group">
                     <label for="InputUsername1">Username*</label>
-                    <input type="text" class="form-control" id="InputUsername1" placeholder= "current username" disabled>
+                    <input type="text" class="form-control" id="InputUsername1" value="{{ current_user.username }}" placeholder= "current username" disabled form="edit-profile-form">
                 </fieldset>
             </div>
             <div class="col-md-1">
 
             </div>
-            <div class="col-md-6">
+            <!--div class="col-md-6">
                 <fieldset class="form-group">
                     <label for="NameSurname1">Name Surname*</label>
-                    <input type="text" class="form-control" id="NameSurname1" placeholder= "Current Name Surname">
+                    <input type="text" class="form-control" id="NameSurname1" placeholder= "Current Name Surname" form="edit-profile-form">
                 </fieldset>
-            </div>
+            </div-->
         </div>
         <div class="row">
             <div class="col-md-1">
@@ -30,7 +30,7 @@
                 <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/676465-200.png"/>
                 <fieldset class="form-group">
                     <label for="File">Profile Picture</label>
-                    <input type="file" class="form-control-file" id="File">
+                    <input type="file" class="form-control-file" id="File" form="edit-profile-form">
                     <small class="text-muted"></small>
                 </fieldset>
             </div>
@@ -40,21 +40,21 @@
             <div class="col-md-6">
                 <fieldset class="form-group">
                     <label for="Email1">Email address*</label>
-                    <input type="email" class="form-control" id="Email1" placeholder="current@email.com">
+                    <input type="email" name="email" value="{{ current_user.email }}" class="form-control" id="Email1" placeholder="current@email.com" form="edit-profile-form">
                     <small class="text-muted">We will send a new confirmation mail.</small>
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="Password1">Password*</label>
-                    <input type="password" class="form-control" id="Password1" placeholder="Enter your old password" required>
-                    <input type="password" class="form-control" id="Password1" placeholder="New password" required>
+                    <input type="password" class="form-control" id="Password1" placeholder="Enter your old password" required form="edit-profile-form">
+                    <input type="password" class="form-control" id="Password1" placeholder="New password" required form="edit-profile-form">
                     <small class="text-muted"> Your password must be at least 6 characters also include at least <strong>one number and letter *</strong> </small>
-                    <input type="password" class="form-control" id="Password1" placeholder="New password again" required>
+                    <input type="password" class="form-control" id="Password1" placeholder="New password again" required form="edit-profile-form">
                 </fieldset>
             </div>
         </div>
         <fieldset class="form-group">
             <label for="Bio">Bio</label>
-            <textarea class="form-control" id="Bio" rows="5" placeholder="Current Bio"></textarea>
+            <textarea class="form-control" id="Bio" value="{{ current_user.bio }}" name="bio" rows="5" placeholder="Current Bio"></textarea>
         </fieldset>
         <div class="row">
             <div  style="text-align:left" class="col-md-6">
@@ -63,19 +63,21 @@
                     <br>
                     <a href="#">Create Team</a>
                     or
-                    <input type="text" class="form-control disabled" id="Team1" placeholder= "Current Team Name" disabled>
+                    <input type="text" class="form-control disabled" id="Team1" placeholder= "Current Team Name" disabled form="edit-profile-form">
                 </fieldset>
             </div>
             <div style="text-align:left"  class="col-md-6">
                 <fieldset class="form-group">
                     <label for="exampleInputAdress">Adress</label>
-                    <input type="text" class="form-control" id="exampleInputAdress" placeholder="Current Country" >
-                    <input type="text" class="form-control" id="exampleInputAdress" placeholder="Current City" >
-                    <input type="text" class="form-control" id="exampleInputAdress" placeholder="Current School" >
+                    <input type="text" value="{{ current_user.country }}" name="country" class="form-control" id="exampleInputAdress" placeholder="Current Country" form="edit-profile-form">
+                    <input type="text" value="{{ current_user.city }}" name="city" class="form-control" id="exampleInputAdress" placeholder="Current City" form="edit-profile-form">
+                    <input type="text" value="{{ current_user.school }}" name="school" class="form-control" id="exampleInputAdress" placeholder="Current School" form="edit-profile-form">
                 </fieldset>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Submit Changes</button>
+        <form action="" method="post" id="edit-profile-form">
+            <button type="submit" class="btn btn-primary">Submit Changes</button>
+        </form>
     </div>
     </div>
 {% endblock %}
