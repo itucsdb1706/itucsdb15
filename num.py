@@ -4,6 +4,20 @@ from flask import redirect
 from flask.helpers import url_for
 from flask import current_app
 
+from models.blog import Blog
+from models.clarification import Clarification
+from models.comment import Comment
+from models.contest import Contest
+from models.input import Input
+# from models.message import Message
+# from models.notification import Notification
+from models.problems import Problems
+from models.statistics import Statistics
+from models.submissions import Submissions
+from models.team import Team
+from models.users import Users
+
+
 num = Blueprint('num', __name__)
 
 
@@ -12,6 +26,20 @@ def check_number(number):
     """
     If given number is less than 10, prints the number; else redirects to home page
     """
+
+    Team.create()
+    Users.create()
+    Contest.create()
+    Clarification.create()
+    Problems.create()
+    Submissions.create()
+    Input.create()
+    Statistics.create()
+
+    u = Users(username='burakbugrul', email='bbugrul96@gmail.com', password='123456gs')
+    u.save()
+    print('PASS AND ID CHECK ->', u.user_id, u.check_password('123456gs'))
+
     if number >= 10:
         return redirect(url_for('core.home'))
     return render_template('number.html', number=number)
