@@ -15,25 +15,41 @@ class Problems:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """INSERT INTO PROBLEMS (problem_name, statement, contest_id, max_score, editorial)""" \
-                    + """VALUES (%s, %s, %s, %s, %s)"""
+                    + """VALUES (%s, %s, %s, %s, %s) RETURNING problem_id;"""
             cursor.execute(query, [self.problem_name, self.statement, self.contest_id, self.max_score, self.editorial])
+            self.problem_id = cursor.fetchone()[0]
             connection.commit()
 
     def delete(self):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            query = """DELETE FROM PROBLEMS WHERE problem_id=%s"""
+            query = """DELETE FROM PROBLEMS WHERE problem_id = %s;"""
             cursor.execute(query, [self.problem_id])
             connection.commit()
 
     def update(self):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            query = """UPDATE PROBLEMS SET (problem_name, statement, contest_id, max_score, editorial)""" \
-                    + """WHERE problem_id=%s VALUES (%s, %s, %s, %s, %s)"""
-            cursor.execute(query, (self.problem_id, self.problem_name, self.statement, self.contest_id,
-                                   self.max_score, self.editorial))
+            query = """UPDATE PROBLEMS SET problem_name = %s, statement = %s, contest_id = %s, 
+                        max_score = %s, editorial = %s WHERE problem_id=%s;"""
+            cursor.execute(query, (self.problem_name, self.statement, self.contest_id, self.max_score,
+                                   self.editorial, self.problem_id))
             connection.commit()
+
+    @staticmethod
+    def create():
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """CREATE TABLE IF NOT EXISTS PROBLEMS (
+                                      problem_id    SERIAL PRIMARY KEY NOT NULL,
+                                      problem_name  VARCHAR(140),
+                                      statement     VARCHAR(1000),
+                                      contest_id    INTEGER REFERENCES CONTEST(contest_id) NOT NULL,
+                                      max_score     INT NOT NULL,
+                                      editorial     VARCHAR(1000)
+                                      );"""
+            cursor.execute(statement)
+            cursor.close()
 
     @staticmethod
     def get(problem_id):
