@@ -15,8 +15,8 @@ class Clarification:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """INSERT INTO CLARIFICATION (contest_id, user_id, clarification_content) 
-                                      VALUES (%s, %s, %s) 
-                                      RETURNING clarification_id;"""
+                                  VALUES (%s, %s, %s) 
+                                  RETURNING clarification_id;"""
             cursor.execute(statement, (self.contest_id,
                                        self.user_id,
                                        self.clarification_content))
@@ -27,7 +27,7 @@ class Clarification:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """DELETE FROM CLARIFICATION 
-                                      WHERE (clarification_id = %s);"""
+                                  WHERE (clarification_id = %s);"""
             cursor.execute(statement, (self.clarification_id,))
             cursor.close()
 
@@ -48,13 +48,12 @@ class Clarification:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS CLARIFICATION (
-                                      clarification_id      SERIAL PRIMARY KEY NOT NULL,
-                                      contest_id            INTEGER REFERENCES CONTEST(contest_id) ON DELETE CASCADE 
-                                                            NOT NULL,
-                                      user_id               INTEGER REFERENCES USERS(user_id) ON DELETE CASCADE 
-                                                            NOT NULL,
-                                      clarification_content VARCHAR(512)
-                                      );"""
+                                  clarification_id      SERIAL PRIMARY KEY NOT NULL,
+                                  contest_id            INTEGER REFERENCES CONTEST(contest_id) ON DELETE CASCADE 
+                                                        NOT NULL,
+                                  user_id               INTEGER REFERENCES USERS(user_id) ON DELETE CASCADE NOT NULL,
+                                  clarification_content VARCHAR(512)
+                                  );"""
             cursor.execute(statement)
             cursor.close()
 
@@ -62,8 +61,8 @@ class Clarification:
     def get(*args, **kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """SELECT * FROM CLARIFICATION
-                                  WHERE (""" + ' '.join([key + ' = ' + str(kwargs[key]) for key in kwargs]) + """);"""
+            where_cond = ' '.join([key + ' = \'' + str(kwargs[key]) + '\'' for key in kwargs])
+            statement = """SELECT * FROM CLARIFICATION WHERE (""" + where_cond + """);"""
             cursor.execute(statement)
             result = cursor.fetchall()
             cursor.close()

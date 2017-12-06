@@ -16,7 +16,7 @@ class Contest:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """INSERT INTO CONTEST (contest_name, is_individual, start_time, end_time) 
-                                      VALUES (%s, %s, %s, %s);"""
+                                  VALUES (%s, %s, %s, %s);"""
             cursor.execute(statement, (self.contest_name,
                                        self.is_individual,
                                        self.start_time,
@@ -28,7 +28,7 @@ class Contest:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """DELETE FROM CONTEST 
-                                      WHERE (contest_id = %s);"""
+                                  WHERE (contest_id = %s);"""
             cursor.execute(statement, (self.contest_id,))
             cursor.close()
 
@@ -63,8 +63,8 @@ class Contest:
     def get(*args, **kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """SELECT * FROM CONTEST
-                                  WHERE (""" + ' '.join([key + ' = ' + str(kwargs[key]) for key in kwargs]) + """);"""
+            where_cond = ' '.join([key + ' = ' + str(kwargs[key]) for key in kwargs])
+            statement = """SELECT * FROM CONTEST WHERE (""" + where_cond + """);"""
             cursor.execute(statement)
             result = cursor.fetchall()
             cursor.close()
