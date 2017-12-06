@@ -103,12 +103,13 @@ class Users(UserMixin):
             cursor.close()
 
     @staticmethod
-    def get(user_id):
+    def get(*args, **kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT * FROM USERS
-                                      WHERE (user_id = %s);"""
-            cursor.execute(statement, (user_id,))
+                                      WHERE (""" + ' '.join([key + ' = ' + str(kwargs[key]) for key in kwargs])\
+                        + """);"""
+            cursor.execute(statement)
             result = cursor.fetchone()
             cursor.close()
             return Users.user_object(result)
