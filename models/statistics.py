@@ -3,8 +3,11 @@ from flask import current_app
 
 
 class Statistics:
-    def __init__(self, top_language, most_solved_prob, most_tried_prob, most_solved_tag, most_tried_tag, top_coder,
-                 top_blog, top_comment):
+    fields = ['statistics_id', 'top_language', 'most_solved_prob', 'most_tried_prob', 'most_solved_tag',
+              'most_tried_tag', 'top_coder', 'top_blog', 'top_comment']
+
+    def __init__(self, top_language=None, most_solved_prob=None, most_tried_prob=None, most_solved_tag=None,
+                 most_tried_tag=None, top_coder=None, top_blog=None, top_comment=None):
         self.statistics_id = None
         self.top_language = top_language
         self.most_solved_prob = most_solved_prob
@@ -80,15 +83,15 @@ class Statistics:
             cursor.close()
 
     @staticmethod
-    def get(statistics_id):
+    def get(*args, **kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT * FROM STATISTICS
-                                  WHERE (statistics_id = %s);"""
-            cursor.execute(statement, (statistics_id,))
-            result = cursor.fetchone()
+                                  WHERE (""" + ' '.join([key + ' = ' + str(kwargs[key]) for key in kwargs]) + """);"""
+            cursor.execute(statement)
+            result = cursor.fetchall()
             cursor.close()
-            return result
+            return [Statistics.object_converter(item) for item in result]
 
     @staticmethod
     def get_all():
@@ -99,3 +102,12 @@ class Statistics:
             result = cursor.fetchall()
             cursor.close()
             return result
+
+    @staticmethod
+    def object_converter(values):
+        statistics = Statistics()
+
+        for ind, field in enumerate(Statistics.fields):
+            statistics.__setattr__(field, values[ind])
+
+        return statistics

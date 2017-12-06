@@ -3,7 +3,9 @@ from flask import current_app
 
 
 class Contest:
-    def __init__(self, contest_name, is_individual, start_time, end_time):
+    fields = ['contest_id', 'contest_name', 'is_individual', 'start_time', 'end_time']
+
+    def __init__(self, contest_name=None, is_individual=None, start_time=None, end_time=None):
         self.contest_id = None
         self.contest_name = contest_name
         self.is_individual = is_individual
@@ -49,7 +51,7 @@ class Contest:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS CONTEST (
                                   contest_id    SERIAL PRIMARY KEY NOT NULL,
-                                  contest_name  VARCHAR(256),
+                                  contest_name  VARCHAR(256) NOT NULL,
                                   is_individual BOOLEAN NOT NULL,
                                   start_time    TIMESTAMP NOT NULL,
                                   end_time      TIMESTAMP NOT NULL 
@@ -58,15 +60,15 @@ class Contest:
             cursor.close()
 
     @staticmethod
-    def get(contest_id):
+    def get(*args, **kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT * FROM CONTEST
-                                  WHERE (contest_id = %s);"""
-            cursor.execute(statement, (contest_id,))
-            result = cursor.fetchone()
+                                  WHERE (""" + ' '.join([key + ' = ' + str(kwargs[key]) for key in kwargs]) + """);"""
+            cursor.execute(statement)
+            result = cursor.fetchall()
             cursor.close()
-            return result
+            return [Contest.object_converter(item) for item in result]
 
     @staticmethod
     def get_all():
@@ -77,3 +79,12 @@ class Contest:
             result = cursor.fetchall()
             cursor.close()
             return result
+
+    @staticmethod
+    def object_converter(values):
+        contest = Contest()
+
+        for ind, field in enumerate(Contest.fields):
+            contest.__setattr__(field, values[ind])
+
+        return contest
