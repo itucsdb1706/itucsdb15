@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block title %}Contests{% endblock %}
+{% block content %}
+    <div class="panel panel-default">
+    <div class="panel-heading"><h3>Contests</h3></div>
+    <table class="table table-striped">
+        <tr>
+            <th>Name</th><th>Start Date</th><th>End Date</th><th>Leaderboard</th><th></th>
+        </tr>
+        <tr >
+            <td><a href="{{ url_for('core.contest') }}">Contest 4</a> </td> <td></td><td></td><td > <a class="disabled" href="#">See leaderboard</a> </td> <td > <button class="btn btn-success btn-xs" type="button" name="button"> Register </button> </td>
+
+        </tr>
+        <tr class = "success">
+            <td><a href="{{ url_for('core.contest') }}">Contest 1</a> </td> <td></td><td></td><td > <a href="#">See leaderboard</a> </td> <td > <button class="btn btn-success btn-xs" type="button" name="button"> Register </button> </td>
+
+        </tr>
+        <tr class="danger">
+            <td><a href="{{ url_for('core.contest') }}">Contest 2</a></td> <td></td><td></td><td > <a href="#">See leaderboard</a> </td> <td > <a href="#"> See problems</a> </td>
+
+        </tr>
+        <tr class="danger">
+            <td><a href="{{ url_for('core.contest') }}">Contest 3</a></td><td></td><td></td><td > <a href="#">See leaderboard</a> </td> <td > <a href="#"> See problems</a> </td>
+        </tr>
+    </table>
+    </div>
+{% endblock %}
