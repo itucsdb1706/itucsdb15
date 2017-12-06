@@ -22,10 +22,10 @@ class Statistics:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """INSERT INTO STATISTICS 
-                                      (top_language, most_solved_prob, most_tried_prob, most_solved_tag, most_tried_tag, 
-                                      top_coder, top_blog, top_comment) 
-                                      VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                                      RETURNING statistics_id;"""
+                                  (top_language, most_solved_prob, most_tried_prob, most_solved_tag, most_tried_tag, 
+                                  top_coder, top_blog, top_comment) 
+                                  VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                                  RETURNING statistics_id;"""
             cursor.execute(statement, (self.top_language,
                                        self.most_solved_prob,
                                        self.most_tried_prob,
@@ -41,7 +41,7 @@ class Statistics:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """DELETE FROM STATISTICS 
-                                      WHERE (statistics_id = %s);"""
+                                  WHERE (statistics_id = %s);"""
             cursor.execute(statement, (self.statistics_id,))
             cursor.close()
 
@@ -86,8 +86,8 @@ class Statistics:
     def get(*args, **kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """SELECT * FROM STATISTICS
-                                  WHERE (""" + ' '.join([key + ' = ' + str(kwargs[key]) for key in kwargs]) + """);"""
+            where_cond = ' '.join([key + ' = ' + str(kwargs[key]) for key in kwargs])
+            statement = """SELECT * FROM STATISTICS WHERE (""" + where_cond + """);"""
             cursor.execute(statement)
             result = cursor.fetchall()
             cursor.close()
