@@ -1,10 +1,14 @@
 import psycopg2 as dbapi2
 from flask import current_app
 from datetime import datetime
+from flask_login import UserMixin
 from passlib.apps import custom_app_context as pwd_context
 
 
-class Users:
+class Users(UserMixin):
+    fields = ['user_id', 'username', 'email', 'password', 'rank', 'team_id', 'profile_photo', 'school', 'city',
+              'country', 'bio']
+
     def __init__(self, username, email, password, rank=0, team_id=None, profile_photo=None, school=None, city=None,
                  country=None, bio=None):
         self.username = username
@@ -74,6 +78,9 @@ class Users:
             cursor.close()
         return return_value
 
+    def get_id(self):
+        return self.user_id
+
     @staticmethod
     def create():
         with dbapi2.connect(current_app.config['dsn']) as connection:
@@ -104,7 +111,7 @@ class Users:
             cursor.execute(statement, (user_id,))
             result = cursor.fetchone()
             cursor.close()
-            return result
+            return Users.user_object(result)
 
     @staticmethod
     def get_all():
@@ -115,3 +122,15 @@ class Users:
             result = cursor.fetchall()
             cursor.close()
             return result
+
+    @staticmethod
+    def user_object(values):
+
+        user = Users('a', 'b', 'c')
+
+        for ind, field in enumerate(Users.fields):
+            user.__setattr__(field, values[ind])
+
+        return user
+
+
