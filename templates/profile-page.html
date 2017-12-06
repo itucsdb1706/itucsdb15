@@ -39,17 +39,16 @@
             <div  style="text-align:left" class="col-md-5">
                 <h4>Team</h4>
                 <p>
-                    {% if  %}
                     <!--team yoksa create team linki koyalim-->
                 </p>
                 <p>
-                    <strong>Rank: </strong> --teamrank--
+                    <strong>Rank: -- teamrank --</strong>
                 </p>
             </div>
             <div  style="text-align:left"  class="col-md-5">
                 <h4>Personal Rank</h4>
                 <p>
-                     --rank--
+                     {{ current_user.rank }}
                 </p>
             </div>
         </div>
@@ -62,14 +61,14 @@
                 <ul class="list-unstyled">
                     <!--there will be if states-->
                     <!--when clicked users will searched by that feature-->
-                    <li>City:--city--</li>
-                    <li>Country:--country--</li>
-                    <li>School:--school--</li>
+                    <li>City: {{ current_user.city }}</li>
+                    <li>Country: {{ current_user.country }}</li>
+                    <li>School: {{ current_user.school }}</li>
                 </ul>
             </div>
             <div  style="text-align:left" class="col-md-5">
                 <h4>Register Date</h4>
-                <p>--time--</p>
+                <p>{{ current_user.register_date.day }}/{{ current_user.register_date.month }}/{{ current_user.register_date.year }}</p>
             </div>
         </div>
     </div>

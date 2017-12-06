@@ -3,6 +3,7 @@ from flask import current_app
 
 
 class Input:
+    fields = ['input_id', 'problem_id', 'testcase', 'expected_output']
 
     def __init__(self, problem_id, testcase, expected_output):
         self.problem_id = problem_id
@@ -46,11 +47,12 @@ class Input:
             cursor.close()
 
     @staticmethod
-    def get(input_id):
+    def get(*args, **kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            query = """SELECT * FROM INPUT WHERE input_id=%s;"""
-            cursor.execute(query, input_id)
+            statement = """SELECT * FROM USERS
+                                    WHERE (""" + ' '.join([key + ' = ' + str(kwargs[key]) for key in kwargs]) + """);"""
+            cursor.execute(statement)
             result = cursor.fetchall()
             # TODO: None check
             connection.commit()
@@ -66,3 +68,13 @@ class Input:
             # TODO: None check
             connection.commit()
             return result
+
+    @staticmethod
+    def object_converter(values):
+
+        input = Input('a', 'b', 'c')
+
+        for ind, field in enumerate(Input.fields):
+            input.__setattr__(field, values[ind])
+
+        return input

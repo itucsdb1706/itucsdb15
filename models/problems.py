@@ -3,8 +3,9 @@ from flask import current_app
 
 
 class Problems:
+    fields = ['problem_id', 'problem_name', 'statement', 'contest_id', 'max_score', 'editorial']
 
-    def __init__(self, problem_name, statement, contest_id, max_score, editorial):
+    def __init__(self, problem_name, statement, contest_id=None, max_score=0, editorial=None):
         self.problem_name = problem_name
         self.statement = statement
         self.contest_id = contest_id
@@ -52,15 +53,16 @@ class Problems:
             cursor.close()
 
     @staticmethod
-    def get(problem_id):
+    def get(*args, **kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            query = """SELECT * FROM PROBLEMS WHERE problem_id=%s"""
-            cursor.execute(query, (problem_id))
+            statement = """SELECT * FROM PROBLEMS
+                                    WHERE (""" + ' '.join([key + ' = ' + str(kwargs[key]) for key in kwargs]) + """);"""
+            cursor.execute(statement)
             result = cursor.fetchall()
             # TODO: None check
             connection.commit()
-            return result
+            return [Problems.object_converter(row) for row in result]
 
     @staticmethod
     def get_all():
@@ -71,3 +73,12 @@ class Problems:
             result = cursor.fetchall()
             connection.commit()
             return result
+
+    @staticmethod
+    def object_converter(values):
+        problem = Problems('a', 'b')
+
+        for ind, field in enumerate(Problems.fields):
+            problem.__setattr__(field, values[ind])
+
+        return problem
