@@ -20,13 +20,22 @@ def home():
 def login():
     email = request.form.get('email', '-')
     password = request.form.get('password', '-')
-    user = Users.get(5)
+    user = Users.get(user_id=5)
     print('DBEUBDUEBEDUBUEDBUED ->', user)
 
     if user is not None and user.check_password(password):
         login_user(user)
 
     return redirect(request.referrer)
+
+
+@core.route('/logout')
+def logout():
+
+    if current_user.is_authenticated:
+        logout_user()
+
+    return redirect(url_for('core.home'))
 
 
 @core.route('/profile')

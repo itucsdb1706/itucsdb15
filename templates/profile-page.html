@@ -6,7 +6,7 @@
     <div id="profile" class="panel-body">
         <div class="row">
             <div class="col-md-11">
-                <h3 style="text-align:left" ><!--name and surname--> John Doe</h3>
+                <h3 style="text-align:left" ><!--name and surname--> {{ current_user.username }}</h3>
             </div>
             <div class="col-md-1">
                 <a href="{{ url_for('core.editprofile') }}">Edit Profile</a>
@@ -20,15 +20,13 @@
             </div>
             <div class="col-md-9">
                 <h4>Email</h4>
-                <p> current@email.com </p>
+                <p> {{ current_user.email }} </p>
                 <h4>Bio</h4>
                 <p>
                     <p>
                         --user bio--
                     </p>
-                    <p style="text-align:left; margin:10px;">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    <p style="text-align:left; margin:10px;"> {% if current_user.bio %}{{ current_user.bio }}{% else %}There is no bio. {% endif %}
                     </p>
                 </p>
             </div>
@@ -41,7 +39,7 @@
             <div  style="text-align:left" class="col-md-5">
                 <h4>Team</h4>
                 <p>
-                    --teamname--
+                    {% if  %}
                     <!--team yoksa create team linki koyalim-->
                 </p>
                 <p>

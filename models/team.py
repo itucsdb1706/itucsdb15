@@ -22,7 +22,7 @@ class Team:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """DELETE FROM TEAM WHERE team_id=%s"""
-            cursor.execute(query, (self.team_id))
+            cursor.execute(query, (self.team_id,))
             connection.commit()
 
     def update(self):
