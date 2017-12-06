@@ -1,12 +1,13 @@
 from flask import Blueprint
 from flask import render_template
-from flask import redirect
+from flask import redirect, request, url_for
 from flask.helpers import url_for
 from flask import current_app
 from flask import request
-from flask_login.utils import login_required, login_user, current_user, logout_user
+from flask_login.utils import login_user, current_user, logout_user
 
 from models.users import Users
+from utils import login_required
 
 core = Blueprint('core', __name__)
 
@@ -39,6 +40,7 @@ def logout():
 
 
 @core.route('/profile', methods=['GET', 'POST'])
+@login_required
 def profile():
     return render_template('profile-page.html')
 
@@ -49,6 +51,7 @@ def register():
 
 
 @core.route('/edit-profile')
+@login_required
 def editprofile():
     return render_template('profile-edit.html')
 
