@@ -6,49 +6,44 @@
             <h3>Please enter your information to begin your education journey in HackPack</h3>
         </div>
         <div class="panel-body">
-            <form>
+            <form action="" method="post">
                 <fieldset class="form-group">
                     <label for="InputUsername1">Username*</label>
-                    <input type="text" class="form-control" id="InputUsername1" placeholder= "e.g hackergirl123" required>
+                    <input type="text" class="form-control" name="username" placeholder= "e.g hackergirl123" required>
                     <small class="text-muted">this must be <strong>unique and this will be permanent</strong> for this account) <strong>*</strong></small>
                 </fieldset>
 
                 <fieldset class="form-group">
-                    <label for="NameSurname1">Name Surname*</label>
-                    <input type="text" class="form-control" id="NameSurname1" placeholder= "John Doe" required>
-                </fieldset>
-
-                <fieldset class="form-group">
                     <label for="Email1">Email address*</label>
-                    <input type="email" class="form-control" id="Email1" placeholder="info@hackpack.com" required>
+                    <input type="email" class="form-control" name="email" id="Email1" placeholder="info@hackpack.com" required>
                     <small class="text-muted">If you forget your password we will use this email</small>
                 </fieldset>
 
                 <fieldset class="form-group">
                     <label for="Password1">Password*</label>
-                    <input type="password" class="form-control" id="Password1" placeholder="Password" required>
+                    <input type="password" class="form-control" name="password1" placeholder="Password" required>
                     <small class="text-muted"> Your password must be at least 6 characters also include at least <strong>one number and letter *</strong> </small>
-                    <input type="password" class="form-control" id="Password1" placeholder="Please enter your password again" required>
+                    <input type="password" class="form-control" name="password2" placeholder="Please enter your password again" required>
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="Bio">Bio</label>
-                    <textarea class="form-control" id="Bio" rows="3" placeholder="Please enter some imformation about you."></textarea>
+                    <textarea class="form-control" name="bio" id="Bio" rows="3" placeholder="Please enter some imformation about you."></textarea>
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="File">Profile Picture</label>
-                    <input type="file" class="form-control-file" id="File">
+                    <input type="file" name="profile_photo" class="form-control-file" id="File">
                     <small class="text-muted"></small>
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="Adress">Adress</label>
-                    <input type="text" class="form-control" id="Adress" placeholder="Country" >
-                    <input type="text" class="form-control" id="Adress" placeholder="City" >
-                    <input type="text" class="form-control" id="Adress" placeholder="School" >
+                    <input type="text" class="form-control" name="country" placeholder="Country" >
+                    <input type="text" class="form-control" name="city" placeholder="City" >
+                    <input type="text" class="form-control" name="school" placeholder="School" >
                 </fieldset>
 
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" required > I agree the <a href="#"> Terms and Conditions *</a>
+                        <input type="checkbox" name=terms_and_conditions required > I agree the <a href="#"> Terms and Conditions *</a>
                     </label>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>

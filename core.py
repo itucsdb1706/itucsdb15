@@ -2,12 +2,11 @@ from flask import Blueprint
 from flask import render_template
 from flask import redirect, request, url_for
 from flask.helpers import url_for
-from flask import current_app
 from flask import request
 from flask_login.utils import login_user, current_user, logout_user
 
 from models.users import Users
-from utils import login_required
+from utils import login_required, is_mail, password_validation
 
 core = Blueprint('core', __name__)
 
@@ -45,9 +44,36 @@ def profile():
     return render_template('profile-page.html')
 
 
-@core.route('/register')
+@core.route('/register', methods=['GET', 'POST'])
 def register():
-    return render_template('register-page.html')
+
+    if request.method == 'GET':
+        return render_template('register-page.html')
+    else:
+
+        print(request.form)
+
+        required_inputs = ['username', 'email', 'password1', 'password2', 'terms_and_conditions']
+        form_inputs = ['bio', 'country', 'city', 'school']
+
+        for inp in required_inputs:
+            if inp not in request.form:
+                return redirect(url_for('core.home'))
+
+        if is_mail(request.form['email']) is None or \
+                request.form['password1'] != request.form['password2'] or \
+                not password_validation(request.form['password1']):
+            return redirect(url_for('core.home'))
+
+        user = Users(username=request.form['username'], email=request.form['email'])
+        for inp in form_inputs:
+            if inp in request.form:
+                user.__setattr__(inp, request.form[inp])
+
+        user.save()
+        user.set_password(request.form['password1'])
+        login_user(user)
+        return redirect(url_for('core.home'))
 
 
 @core.route('/edit-profile', methods=['GET', 'POST'])
@@ -68,7 +94,6 @@ def edit_profile():
         current_user.update()
 
     return render_template('profile-edit.html')
-
 
 
 @core.route('/problemlist')
