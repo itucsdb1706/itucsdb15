@@ -85,7 +85,13 @@
 
 #nopaddingnomargin{
     height: inherit;
-    margin: 0;
+    margin: 0px;
+    padding: 0px;
+}
+
+.username{
+    background-color: inherit;
+    pointer-events: none;
 }
 
 a.disabled {
