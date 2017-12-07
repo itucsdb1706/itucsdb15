@@ -10,7 +10,7 @@ class Users(UserMixin):
               'country', 'bio']
     editable_fields = ['email', 'bio', 'country', 'city', 'school']
 
-    def __init__(self, username, email, password, rank=0, team_id=None, profile_photo=None, school=None, city=None,
+    def __init__(self, username, email, password='', rank=0, team_id=None, profile_photo=None, school=None, city=None,
                  country=None, bio=None):
         self.username = username
         self.email = email
@@ -49,8 +49,8 @@ class Users(UserMixin):
             set_condition = ', '.join([field + '= %s' for field in Users.editable_fields])
             statement = """UPDATE USERS SET {} WHERE (user_id = %s);""".format(set_condition)
             print(statement)
-            print(tuple(str(self.__getattribute__(field)) for field in Users.editable_fields)\
-                           + (str(self.user_id),))
+            print(tuple(str(self.__getattribute__(field)) for field in Users.editable_fields)
+                  + (str(self.user_id),))
             cursor.execute(statement, tuple(str(self.__getattribute__(field)) for field in Users.editable_fields)\
                            + (str(self.user_id),))
             cursor.close()
@@ -81,8 +81,8 @@ class Users(UserMixin):
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS USERS (
                                       user_id       SERIAL PRIMARY KEY NOT NULL,
-                                      username      VARCHAR(32),
-                                      email         VARCHAR(100),
+                                      username      VARCHAR(32) UNIQUE,
+                                      email         VARCHAR(100) UNIQUE,
                                       password      VARCHAR(256),
                                       rank          INT NOT NULL,
                                       register_date TIMESTAMP NOT NULL,
