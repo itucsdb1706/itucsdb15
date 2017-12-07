@@ -8,6 +8,7 @@ from passlib.apps import custom_app_context as pwd_context
 class Users(UserMixin):
     fields = ['user_id', 'username', 'email', 'password', 'rank', 'team_id', 'profile_photo', 'school', 'city',
               'country', 'bio']
+    editable_fields = ['email', 'bio', 'country', 'city', 'school']
 
     def __init__(self, username, email, password, rank=0, team_id=None, profile_photo=None, school=None, city=None,
                  country=None, bio=None):
@@ -38,27 +39,20 @@ class Users(UserMixin):
     def delete(self):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """DELETE FROM USERS 
-                                      WHERE (user_id = %s);"""
+            statement = """DELETE FROM USERS WHERE (user_id = %s);"""
             cursor.execute(statement, (self.user_id,))
             cursor.close()
 
     def update(self):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """UPDATE USERS
-                                  SET email = %s, rank = %s, team_id = %s, profile_photo = %s, school = %s, city = %s,
-                                  country = %s, bio = %s
-                                  WHERE (user_id = %s);"""
-            cursor.execute(statement, (self.email,
-                                       self.rank,
-                                       self.team_id,
-                                       self.profile_photo,
-                                       self.school,
-                                       self.city,
-                                       self.country,
-                                       self.bio,
-                                       self.user_id))
+            set_condition = ', '.join([field + '= %s' for field in Users.editable_fields])
+            statement = """UPDATE USERS SET {} WHERE (user_id = %s);""".format(set_condition)
+            print(statement)
+            print(tuple(str(self.__getattribute__(field)) for field in Users.editable_fields)\
+                           + (str(self.user_id),))
+            cursor.execute(statement, tuple(str(self.__getattribute__(field)) for field in Users.editable_fields)\
+                           + (str(self.user_id),))
             cursor.close()
 
     def set_password(self, password):
@@ -103,12 +97,13 @@ class Users(UserMixin):
             cursor.close()
 
     @staticmethod
-    def get(*args, **kwargs):
+    def get(**kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """SELECT * FROM USERS
-                          WHERE (""" + ' '.join([key + ' = \'' + str(kwargs[key]) + '\'' for key in kwargs]) + """);"""
-            cursor.execute(statement)
+            statement = """SELECT {} FROM USERS WHERE ( {} );"""\
+                .format(', '.join(Users.fields), ', '.join([key + ' = %s' for key in kwargs]))
+            print(statement)
+            cursor.execute(statement, tuple(str(kwargs[key]) for key in kwargs))
             result = cursor.fetchall()
             cursor.close()
             return [Users.object_converter(row) for row in result]
@@ -117,7 +112,7 @@ class Users(UserMixin):
     def get_all():
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """SELECT * FROM USERS;"""
+            statement = """SELECT {} FROM USERS;""".format(', '.join(Users.fields))
             cursor.execute(statement)
             result = cursor.fetchall()
             cursor.close()

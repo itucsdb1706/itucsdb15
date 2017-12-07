@@ -45,16 +45,16 @@
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="Password1">Password*</label>
-                    <input type="password" class="form-control" id="Password1" placeholder="Enter your old password" required form="edit-profile-form">
-                    <input type="password" class="form-control" id="Password1" placeholder="New password" required form="edit-profile-form">
+                    <input type="password" name="old_password" class="form-control" id="Password1" placeholder="Enter your old password" form="edit-profile-form">
+                    <input type="password" name="old_password2"class="form-control" id="Password1" placeholder="New password" form="edit-profile-form">
                     <small class="text-muted"> Your password must be at least 6 characters also include at least <strong>one number and letter *</strong> </small>
-                    <input type="password" class="form-control" id="Password1" placeholder="New password again" required form="edit-profile-form">
+                    <input type="password" name="new_password" class="form-control" id="Password1" placeholder="New password again" form="edit-profile-form">
                 </fieldset>
             </div>
         </div>
         <fieldset class="form-group">
             <label for="Bio">Bio</label>
-            <textarea class="form-control" id="Bio" value="{{ current_user.bio }}" name="bio" rows="5" placeholder="Current Bio"></textarea>
+            <textarea class="form-control" id="Bio"  name="bio" rows="5" placeholder="Current Bio" form="edit-profile-form">{{ current_user.bio }}</textarea>
         </fieldset>
         <div class="row">
             <div  style="text-align:left" class="col-md-6">
