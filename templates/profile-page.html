@@ -2,7 +2,7 @@
 {% block title %}Profile{% endblock %}
 {% block content %}
     <div class="panel panel-primary">
-    <div class="panel-heading"><h3>Welcome --username-- </h3></div>
+    <div class="panel-heading"><h3>Welcome {{ current_user.username }} ! </h3></div>
     <div id="profile" class="panel-body">
         <div class="row">
             <div class="col-md-11">
@@ -23,9 +23,7 @@
                 <p> {{ current_user.email }} </p>
                 <h4>Bio</h4>
                 <p>
-                    <p>
-                        --user bio--
-                    </p>
+                    
                     <p style="text-align:left; margin:10px;"> {% if current_user.bio %}{{ current_user.bio }}{% else %}There is no bio. {% endif %}
                     </p>
                 </p>

@@ -65,6 +65,10 @@ def problemlist():
 def contestlist():
     return render_template('contestlist.html')
 
+@core.route('/leaderboard')
+def leaderboard():
+    return render_template('leaderboard.html')
+
 @core.route('/contestname')
 def contest():
     return render_template('contest-page.html')

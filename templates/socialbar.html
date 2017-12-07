@@ -1,8 +1,9 @@
-<div id="right-bar" class="col-md-2">
+<div id="right-bar" class="col-md-3">
     <div class="col-md-12">
-        <ul class="nav nav-tabs">
+        <ul class="nav nav-tabs nav-sm">
           <li class="active"><a data-toggle="tab" href="#message">Message</a></li>
           <li><a data-toggle="tab" href="#notification">Notifications</a></li>
+          <li style="float:right;"><a href="#"> Send Msg <i class="small material-icons">add_box</i></a></li>
         </ul>
 
         <div class="tab-content">
@@ -12,7 +13,7 @@
                         <button type="button" class="btn btn-block notif" data-toggle="modal" data-target="#msgPopUp">
                             New message --from--
                         </button>
-                    </li>
+
                     <div class="modal fade" id="msgPopUp" >
                         <div class="modal-dialog">
                             <div class="modal-content panel panel-info">
@@ -28,6 +29,7 @@
                             </div>
                         </div>
                     </div>
+                    </li>
                 </ul>
             </div>
             <div id="notification" class="tab-pane fade">
