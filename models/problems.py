@@ -5,7 +5,8 @@ from flask import current_app
 class Problems:
     fields = ['problem_id', 'problem_name', 'statement', 'contest_id', 'max_score', 'editorial']
 
-    def __init__(self, problem_name, statement, contest_id=None, max_score=0, editorial=None):
+    def __init__(self, problem_name, statement, contest_id=None, max_score=0, editorial=None, problem_id=None):
+        self.problem_id = problem_id
         self.problem_name = problem_name
         self.statement = statement
         self.contest_id = contest_id
