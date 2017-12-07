@@ -50,10 +50,25 @@ def register():
     return render_template('register-page.html')
 
 
-@core.route('/edit-profile')
+@core.route('/edit-profile', methods=['GET', 'POST'])
 @login_required
-def editprofile():
+def edit_profile():
+
+    if request.method == 'POST':
+        print(request.form)
+
+        for field in Users.editable_fields:
+            if field in request.form:
+                current_user.__setattr__(field, request.form[field])
+
+        if request.form.get('old_password', '-') == request.form.get('old_password2', '+') and\
+                current_user.check_password(request.form['old_password']) and 'new_password' in request.form:
+            current_user.set_password(request.form['new_password'])
+
+        current_user.update()
+
     return render_template('profile-edit.html')
+
 
 
 @core.route('/problemlist')
