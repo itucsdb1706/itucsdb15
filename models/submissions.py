@@ -1,6 +1,8 @@
 import psycopg2 as dbapi2
 from flask import current_app
 from datetime import datetime
+from .users import Users
+from .problems import Problems
 
 
 class Submissions:
@@ -74,6 +76,23 @@ class Submissions:
             connection.commit()
             return [Submissions.object_converter(row) for row in result]
 
+    def get_join(**kwargs):
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """SELECT {}, {}, {} FROM SUBMISSIONS INNER JOIN USERS ON (SUBMISSIONS.user_id = USERS.user_id)
+                                              INNER JOIN PROBLEMS ON (SUBMISSIONS.problem_id = PROBLEMS.problem_id)
+                                              WHERE ( {} );"""\
+                .format(', '.join(map(lambda x: 'SUBMISSIONS.' + x, Submissions.fields)),
+                        ', '.join(map(lambda x: 'USERS.' + x, Users.fields)),
+                        ', '.join(map(lambda x: 'PROBLEMS.' + x, Problems.fields)),
+                        'AND '.join(['USERS.' + key + ' = %s' for key in kwargs]))
+            print(statement)
+            cursor.execute(statement, tuple(str(kwargs[key]) for key in kwargs))
+            result = cursor.fetchall()
+            print(result)
+            cursor.close()
+            return [Submissions.object_converter(row, True) for row in result]
+
     @staticmethod
     def get_all():
         with dbapi2.connect(current_app.config['dsn']) as connection:
@@ -86,10 +105,27 @@ class Submissions:
             return result
 
     @staticmethod
-    def object_converter(values):
+    def object_converter(values, is_joined=False):
+
         submission = Submissions('a', 'b')
 
         for ind, field in enumerate(Submissions.fields):
             submission.__setattr__(field, values[ind])
+
+        if is_joined:
+
+            user = Users('a', 'b')
+
+            for ind, field in enumerate(Users.fields):
+                submission.__setattr__(field, values[len(Submissions.fields) + ind])
+
+            submission.user = user
+
+            problem = Problems('a', 'b')
+
+            for ind, field in enumerate(Problems.fields):
+                submission.__setattr__(field, values[len(Submissions.fields) + len(Users.fields) + ind])
+
+            submission.problem = problem
 
         return submission

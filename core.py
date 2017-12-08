@@ -11,6 +11,14 @@ from utils import login_required, is_mail, password_validation
 core = Blueprint('core', __name__)
 
 
+@core.route('/debug')
+def debug():
+    u = Users.get_join(username='burakbugrul', email='bbugrul96@gmail.com')[0]
+    u.get_submissions()
+    print('AAAAAAAAAa->', u.team.team_name)
+    return render_template('debug.html', u=u)
+
+
 @core.route('/')
 def home():
     return render_template('home.html')
@@ -21,7 +29,6 @@ def login():
     email = request.form.get('email', '-')
     password = request.form.get('password', '-')
     user = Users.get(email=email)[0]
-    print('DBEUBDUEBEDUBUEDBUED ->', user)
 
     if user is not None and user.check_password(password):
         login_user(user)

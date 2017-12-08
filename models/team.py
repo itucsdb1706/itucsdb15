@@ -3,8 +3,9 @@ from flask import current_app
 
 
 class Team:
+    fields = ['team_id', 'team_name', 'team_rank', 'team_photo']
 
-    def __init__(self, team_name, team_rank, team_photo):
+    def __init__(self, team_name, team_rank=0, team_photo=None):
         self.team_name = team_name
         self.team_rank = team_rank
         self.team_photo = team_photo
