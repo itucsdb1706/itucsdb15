@@ -16,6 +16,10 @@ from models.statistics import Statistics
 from models.submissions import Submissions
 from models.team import Team
 from models.users import Users
+from models.tag import Tag
+
+from models.problem_tag import ProblemTag
+from models.contest_user import ContestUser
 
 
 num = Blueprint('num', __name__)
@@ -30,14 +34,19 @@ def check_number(number):
     Team.create()
     Users.create()
     Contest.create()
+
     Clarification.create()
     Problems.create()
-    Submissions.create()
     Input.create()
+    Submissions.create()
     Statistics.create()
+    # Tag.create()
 
-    u = Users(username='burakbugrul', email='bbugrul96@gmail.com', password='123456gs')
-    u.save()
+    ContestUser.create()
+    # ProblemTag.create()
+
+    # u = Users(username='burakbugrul', email='bbugrul96@gmail.com', password='123456gs')
+    # u.save()
 
     if number >= 10:
         return redirect(url_for('core.home'))

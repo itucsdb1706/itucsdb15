@@ -15,8 +15,12 @@ core = Blueprint('core', __name__)
 def debug():
     u = Users.get_join(username='burakbugrul', email='bbugrul96@gmail.com')[0]
     u.get_submissions()
-    print('AAAAAAAAAa->', u.team.team_name)
-    return render_template('debug.html', u=u)
+    print('AAAAAAAAAa->', u.team.team_name, current_user)
+    s = set()
+    s.add(1)
+    s.add(2)
+    s.add(3)
+    return render_template('debug.html', u=u, s=s)
 
 
 @core.route('/')
@@ -101,25 +105,3 @@ def edit_profile():
         current_user.update()
 
     return render_template('profile-edit.html')
-
-
-@core.route('/problemlist')
-def problemlist():
-    return render_template('problems.html')
-
-
-@core.route('/contestlist')
-def contestlist():
-    return render_template('contestlist.html')
-
-@core.route('/leaderboard')
-def leaderboard():
-    return render_template('leaderboard.html')
-
-@core.route('/contestname')
-def contest():
-    return render_template('contest-page.html')
-
-@core.route('/statement')
-def statement():
-    return render_template('statement.html')

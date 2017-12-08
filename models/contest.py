@@ -1,5 +1,6 @@
 import psycopg2 as dbapi2
 from flask import current_app
+from datetime import datetime
 
 
 class Contest:
@@ -60,25 +61,27 @@ class Contest:
             cursor.close()
 
     @staticmethod
-    def get(*args, **kwargs):
+    def get(**kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            where_cond = ' '.join([key + ' = ' + str(kwargs[key]) for key in kwargs])
-            statement = """SELECT * FROM CONTEST WHERE (""" + where_cond + """);"""
-            cursor.execute(statement)
+            statement = """SELECT {} FROM CONTEST WHERE ( {} );"""\
+                .format(', '.join(Contest.fields), 'AND '.join([key + ' = %s' for key in kwargs]))
+            print(statement)
+            cursor.execute(statement, tuple(str(kwargs[key]) for key in kwargs))
             result = cursor.fetchall()
             cursor.close()
-            return [Contest.object_converter(item) for item in result]
+            return [Contest.object_converter(row) for row in result]
 
     @staticmethod
     def get_all():
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """SELECT * FROM CONTEST;"""
+            statement = """SELECT {} FROM CONTEST ORDER BY start_time DESC, end_time;"""\
+                .format(', '.join(Contest.fields))
             cursor.execute(statement)
             result = cursor.fetchall()
             cursor.close()
-            return result
+            return [Contest.object_converter(row) for row in result]
 
     @staticmethod
     def object_converter(values):
@@ -86,5 +89,12 @@ class Contest:
 
         for ind, field in enumerate(Contest.fields):
             contest.__setattr__(field, values[ind])
+
+        if contest.end_time < datetime.now():
+            contest.status = 'finished'
+        elif contest.start_time <= datetime.now() <= contest.end_time:
+            contest.status = 'active'
+        else:
+            contest.status = 'upcoming'
 
         return contest

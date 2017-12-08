@@ -3,17 +3,8 @@ from flask_login import LoginManager
 
 from core import core
 from num import num
-from models.blog import Blog
-from models.clarification import Clarification
-from models.comment import Comment
-from models.contest import Contest
-from models.input import Input
-# from models.message import Message
-# from models.notification import Notification
-from models.problems import Problems
-from models.statistics import Statistics
-from models.submissions import Submissions
-from models.team import Team
+from study import study
+
 from models.users import Users
 
 import os
@@ -46,6 +37,7 @@ def create_app():
     app.secret_key = 'suchsecretmuchwow'
     app.config.from_object('settings')
     app.register_blueprint(core)
+    app.register_blueprint(study)
     app.register_blueprint(num)
 
     lm.init_app(app)
