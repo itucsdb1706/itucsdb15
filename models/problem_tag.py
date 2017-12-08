@@ -10,7 +10,7 @@ class ProblemTag:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS PROBLEM_TAG (
-                                  problem_id INTEGER REFERENCES PROBLEM(problem_id) NOT NULL,
+                                  problem_id INTEGER REFERENCES PROBLEMS(problem_id) NOT NULL,
                                   tag_id     INTEGER REFERENCES TAG(tag_id) NOT NULL,
                                   PRIMARY KEY (problem_id, tag_id)
                                   );"""
@@ -40,7 +40,7 @@ class ProblemTag:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT (tag_id, tag_name) 
-                                  FROM PROBLEM NATURAL JOIN PROBLEM_TAG NATURAL JOIN TAG
+                                  FROM PROBLEMS NATURAL JOIN PROBLEM_TAG NATURAL JOIN TAG
                                   WHERE (problem_id = %s);"""
             cursor.execute(statement, (problem.problem_id,))
             tags_as_tuples = cursor.fetchall()
@@ -52,7 +52,7 @@ class ProblemTag:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT (problem_id, problem_name, statement, contest_id, max_score, editorial)
-                                  FROM PROBLEM NATURAL JOIN PROBLEM_TAG NATURAL JOIN TAG
+                                  FROM PROBLEMS NATURAL JOIN PROBLEM_TAG NATURAL JOIN TAG
                                   WHERE (tag_id = %s);"""
             cursor.execute(statement, (tag.tag_id,))
             problems_as_tuples = cursor.fetchall()

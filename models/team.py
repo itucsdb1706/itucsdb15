@@ -33,6 +33,11 @@ class Team:
             cursor.execute(query, (self.team_name, self.team_rank, self.team_photo, self.team_id))
             connection.commit()
 
+    def get_users(self):
+        from .users import Users
+        self.users = Users.get(team_id=self.team_id)
+        return self.users
+
     @staticmethod
     def create():
         with dbapi2.connect(current_app.config['dsn']) as connection:
@@ -47,22 +52,34 @@ class Team:
             cursor.close()
 
     @staticmethod
-    def get(team_id):
+    def get(**kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            query = """SELECT * FROM TEAM WHERE team_id = %s;"""
-            cursor.execute(query, (team_id,))
+            statement = """SELECT {} FROM TEAM WHERE ( {} );"""\
+                .format(', '.join(Team.fields), 'AND '.join([key + ' = %s' for key in kwargs]))
+            print(statement)
+            cursor.execute(statement, tuple(str(kwargs[key]) for key in kwargs))
             result = cursor.fetchall()
-            connection.commit()
-            return result
+            cursor.close()
+            return [Team.object_converter(row) for row in result]
 
     @staticmethod
     def get_all():
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            query = """SELECT * FROM TEAM;"""
+            query = """SELECT {} FROM TEAM;""".format(', '.join(Team.fields))
             cursor.execute(query)
             result = cursor.fetchall()
             # TODO: None check
             connection.commit()
             return result
+
+    @staticmethod
+    def object_converter():
+
+        team = Team('a')
+
+        for ind, field in enumerate(Team.fields):
+            team.__setattr__(field, values[ind])
+
+        return team

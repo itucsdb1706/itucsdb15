@@ -4,6 +4,7 @@ from datetime import datetime
 from flask_login import UserMixin
 from passlib.apps import custom_app_context as pwd_context
 from .team import Team
+from .contest import Contest
 
 
 class Users(UserMixin):
@@ -73,12 +74,28 @@ class Users(UserMixin):
             cursor.close()
         return return_value
 
+    def get_team(self):
+        self.team = Team.get(team_id=self.team_id)
+        return self.team
+
     def get_submissions(self):
         from .submissions import Submissions
         self.submissions = Submissions.get_join(user_id=self.user_id)
 
     def get_notifications(self):
         pass
+
+    def get_registered_contests(self):
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """SELECT contest_id FROM CONTEST NATURAL JOIN CONTEST_USERS WHERE (user_id = %s);"""
+            cursor.execute(statement, (self.user_id,))
+            result = cursor.fetchall()
+            cursor.close()
+            contest_set = set()
+            for row in result:
+                contest_set.add(row[0])
+            return contest_set
 
     def get_id(self):
         return self.user_id
