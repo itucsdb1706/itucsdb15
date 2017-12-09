@@ -54,7 +54,7 @@ class Problems:
             cursor.close()
 
     @staticmethod
-    def get(*args, **kwargs):
+    def get(**kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT * FROM PROBLEMS

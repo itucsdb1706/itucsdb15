@@ -4,24 +4,15 @@
     <div class="panel panel-primary">
     <div class="panel-heading"><h3>Contestname</h3></div>
     <div class="panel-body">
-        <button class="btn btn-success btn-lg" type="button" name="button"> Register </button>
-        <!-- If registered
+
         <table class="table table-striped">
-            <tr>
-                <td><a href="{{ url_for('core.statement') }}">Problem 1</a></td> <td style="text-align:left"> <span style="color:green;" class="glyphicon glyphicon-ok"></span> </td>
-
-            </tr>
-            <tr>
-                <td><a href="{{ url_for('core.statement') }}">Problem 2</a></td> <td style="text-align:left"> <span style="color:red;" class=" 	glyphicon glyphicon-remove"></span> </td>
-
-            </tr>
-            <tr>
-                <td><a href="{{ url_for('core.statement') }}">Problem 3</a></td> <td style="text-align:left"> </td>
-            </tr>
-        </table-->
-        <!-- or if the contest has ended
-        <a href="{{ url_for('core.leaderboard') }}">See leaderboard</a>
-        -->
+            {% for problem in contest.problems %}
+                <tr>
+                    <td><a href="{{ url_for('study.statement', problem_id=problem.problem_id) }}">{{ problem.problem_name }}</a></td> <td style="text-align:left"> {% if problem.problem_id in solved %}<span style="color:green;" class="glyphicon glyphicon-ok"></span>{% elif problem.problem_id in tried %}<span style="color:red;" class="glyphicon glyphicon-remove"></span>{% endif %} </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <!--a href="{{ url_for('study.leaderboard') }}">See leaderboard</a-->
     </div>
     </div>
 {% endblock %}
