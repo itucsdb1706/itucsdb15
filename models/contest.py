@@ -46,6 +46,10 @@ class Contest:
                                        self.contest_id))
             cursor.close()
 
+    def get_problems(self):
+        from .problems import Problems
+        self.problems = Problems.get(contest_id=self.contest_id)
+
     @staticmethod
     def create():
         with dbapi2.connect(current_app.config['dsn']) as connection:
@@ -71,6 +75,54 @@ class Contest:
             result = cursor.fetchall()
             cursor.close()
             return [Contest.object_converter(row) for row in result]
+
+    @staticmethod
+    def get_with_leaderboard(contest_name):
+
+        from .problems import Problems
+        from .submissions import Submissions
+        from .users import Users
+
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+
+            statement = """SELECT {}, {}, {}, MAX(SUBMISSIONS.score) FROM CONTEST 
+        INNER JOIN CONTEST_USERS ON (CONTEST.contest_id = CONTEST_USERS.contest_id)
+        INNER JOIN USERS ON (CONTEST_USERS.user_id = USERS.user_id)
+        INNER JOIN PROBLEMS ON (CONTEST.contest_id = PROBLEMS.contest_id)
+        INNER JOIN SUBMISSIONS ON (USERS.user_id = SUBMISSIONS.user_id AND SUBMISSIONS.problem_id = PROBLEMS.problem_id) 
+        WHERE ( CONTEST.contest_name = %s )
+        GROUP BY (CONTEST.contest_id, USERS.user_id, PROBLEMS.problem_id)
+        ORDER BY MAX(SUBMISSIONS.score) DESC;"""\
+                .format(', '.join(map(lambda x: 'CONTEST.'+x, Contest.fields)),
+                        ', '.join(map(lambda x: 'USERS.'+x, Users.fields)),
+                        ', '.join(map(lambda x: 'PROBLEMS.'+x, Problems.fields)),)
+            print(statement)
+            cursor.execute(statement, (contest_name,))
+            result = cursor.fetchall()
+            print(result)
+            cursor.close()
+
+        u_id = len(Contest.fields)
+        p_id = len(Contest.fields)+len(Users.fields)
+
+        return_dict = {'contest': Contest.object_converter(result[0]), 'users': {}}
+
+        for i in range(len(result)):
+            print(result[i])
+
+            user = Users.object_converter(result[i][u_id:])
+            problem = Problems.object_converter(result[i][p_id:])
+            problem.score = result[i][-1]
+            problem.is_complete = (problem.score == problem.max_score)
+
+            if user.user_id not in return_dict['users']:
+                user.problems = [problem]
+                return_dict['users'][user.user_id] = user
+            else:
+                return_dict['users'][user.user_id].problems.append(problem)
+
+        return return_dict
 
     @staticmethod
     def get_with_problems(**kwargs):

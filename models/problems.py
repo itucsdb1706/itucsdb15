@@ -106,7 +106,7 @@ class Problems:
             cursor = connection.cursor()
             statement = """SELECT {} FROM PROBLEMS WHERE ( {} );"""\
                 .format(', '.join(Problems.fields), 'AND '.join([key + ' = %s' for key in kwargs]))
-            cursor.execute(statement)
+            cursor.execute(statement, tuple(str(kwargs[key]) for key in kwargs))
             result = cursor.fetchall()
             # TODO: None check
             connection.commit()
