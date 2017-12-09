@@ -39,22 +39,22 @@ class ProblemTag:
     def get_tags_for_problem(problem):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """SELECT (tag_id, tag_name) 
-                                  FROM PROBLEMS NATURAL JOIN PROBLEM_TAG NATURAL JOIN TAG
-                                  WHERE (problem_id = %s);"""
+            statement = """SELECT {} 
+                                  FROM PROBLEM NATURAL JOIN PROBLEM_TAG NATURAL JOIN TAG
+                                  WHERE (problem_id = %s);""".format(', '.join(Tag.fields))
             cursor.execute(statement, (problem.problem_id,))
             tags_as_tuples = cursor.fetchall()
             cursor.close()
-            return [Tag(item[1], item[0]) for item in tags_as_tuples]
+            return [Tag.object_converter(item) for item in tags_as_tuples]
 
     @staticmethod
     def get_problems_with_tag(tag):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """SELECT (problem_id, problem_name, statement, contest_id, max_score, editorial)
-                                  FROM PROBLEMS NATURAL JOIN PROBLEM_TAG NATURAL JOIN TAG
-                                  WHERE (tag_id = %s);"""
+            statement = """SELECT {}
+                                  FROM PROBLEM NATURAL JOIN PROBLEM_TAG NATURAL JOIN TAG
+                                  WHERE (tag_id = %s);""".format(', '.join(Problems.fields))
             cursor.execute(statement, (tag.tag_id,))
             problems_as_tuples = cursor.fetchall()
             cursor.close()
-            return [Problems(item[1], item[2], item[3], item[4], item[5], item[0]) for item in problems_as_tuples]
+            return [Problems.object_converter(item) for item in problems_as_tuples]
