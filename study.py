@@ -6,6 +6,7 @@ from flask import request
 from flask_login.utils import login_user, current_user, logout_user
 
 from models.users import Users
+from models.problems import Problems
 from models.contest import Contest
 from models.submissions import Submissions
 
@@ -62,10 +63,18 @@ def contest(contest_name):
         solved = Submissions.get_solved_problems(current_user, contest)
         tried = Submissions.get_tried_problems(current_user, contest)
 
-    print('solved ->', solved, 'tried->', tried)
     return render_template('contest-page.html', contest=contest, solved=solved, tried=tried)
 
 
-@study.route('/statement/<string:problem_id>')
+# TODO: discussion and post
+@study.route('/statement/<string:problem_id>', methods=['GET', 'POST'])
 def statement(problem_id):
-    return render_template('statement.html')
+
+    if request.method == 'GET':
+        if current_user.is_authenticated:
+            problem = Problems.get_with_submissions(problem_id=problem_id, user_id=current_user.user_id)[0]
+        else:
+            problem = Problems.get(problem_id=problem_id)
+        problem.get_sample()
+    
+    return render_template('statement.html', problem=problem)

@@ -2,7 +2,7 @@
 {% block title %}Home{% endblock %}
 {% block content %}
     <div class="panel panel-primary">
-    <div class="panel-heading"><h3>Problem name</h3></div>
+    <div class="panel-heading"><h3>{{ problem.problem_name }}</h3></div>
     <div class="panel-body">
         <ul class="nav nav-tabs">
           <li class="active"><a data-toggle="tab" href="#statement">Statement</a></li>
@@ -13,18 +13,14 @@
             <div id="statement" class="tab-pane fade in active">
                 <p>Statement</p>
                 <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                {{ problem.statement }}
                 </p>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="panel ">
                         <div class="panel-heading">Sample Input</div>
                         <div class="panel-body">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            {{ problem.sample.testcase }}
                         </div>
                         </div>
                     </div>
@@ -32,15 +28,15 @@
                         <div class="panel ">
                         <div class="panel-heading">Sample Output</div>
                         <div class="panel-body">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            {{ problem.sample.expected_output }}
                         </div>
                         </div>
                     </div>
                 </div>
-                <div class="well well-sm">
+                <!--div class="well well-sm">
                     Explanation
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                </div>
+                </div-->
                 <div class="row">
                     <div class="col-md-4">
                         <fieldset class="form-group">
@@ -73,10 +69,10 @@
             </div>
             <div id="submission" class="tab-pane fade">
                 <table class="table table-striped ">
-                    <tr><th>Problem name</th><th>Score</th><th>Status</th><th>Language</th><th>Error Message</th> </tr>
-                    <tr><td>--problem name--</td><td>92</td><td>Correct</td><td>C++</td><td></td></tr>
-                    <tr><td>--problem name--</td><td>92</td><td>Correct</td><td>C</td><td></td></tr>
-                    <tr><td>--problem name--</td><td>92</td><td>Correct</td><td>Java</td><td></td></tr>
+                    <tr><th>Problem name</th><th>Score</th><th>Status</th><th>Language</th><th>Send Time</th> </tr>
+                    {% for submission in problem.submissions %}
+                        <tr><td>{{ problem.problem_name }}</td><td>{{ submission.score }}/{{ problem.max_score }}</td><td>{% if submission.is_complete %}Correct{% else %}{{ submission.error }}{% endif %}</td><td>{{ submission.language }}</td><td>{{ submission.send_time }}</td></tr>
+                    {% endfor %}
                 </table>
             </div>
             <div id="discussion" style="padding-top:20px;" class="tab-pane fade">
