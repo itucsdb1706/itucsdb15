@@ -120,7 +120,7 @@ class Problems:
             cursor.execute(query)
             result = cursor.fetchall()
             connection.commit()
-            return result
+            return [Problems.object_converter(row) for row in result]
 
     @staticmethod
     def object_converter(values):

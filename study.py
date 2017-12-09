@@ -19,7 +19,17 @@ study = Blueprint('study', __name__)
 
 @study.route('/problemlist')
 def problem_list():
-    return render_template('problems.html')
+
+    problems = Problems.get_all()
+
+    if current_user.is_authenticated:
+        solved = Submissions.get_solved_problems(current_user)
+        tried = Submissions.get_tried_problems(current_user)
+    else:
+        solved = set()
+        tried = set()
+
+    return render_template('problems.html', problems=problems, solved=solved, tried=tried)
 
 
 @study.route('/contestlist')
@@ -76,5 +86,5 @@ def statement(problem_id):
         else:
             problem = Problems.get(problem_id=problem_id)
         problem.get_sample()
-    
+
     return render_template('statement.html', problem=problem)

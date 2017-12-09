@@ -93,7 +93,7 @@ class Submissions:
                 cursor = connection.cursor()
                 statement = """SELECT PROBLEMS.problem_id FROM PROBLEMS 
                       INNER JOIN SUBMISSIONS ON (PROBLEMS.problem_id = SUBMISSIONS.problem_id)
-                      WHERE ( SUBMISSION.user_id = %s AND SUBMISSIONS.is_complete = TRUE );"""\
+                      WHERE ( SUBMISSIONS.user_id = %s AND SUBMISSIONS.is_complete = TRUE );"""\
                     .format(', '.join(Submissions.fields))
                 cursor.execute(statement, (user.user_id,))
                 result = cursor.fetchall()
@@ -122,7 +122,7 @@ class Submissions:
                 cursor = connection.cursor()
                 statement = """SELECT PROBLEMS.problem_id FROM PROBLEMS 
                           INNER JOIN SUBMISSIONS ON (PROBLEMS.problem_id = SUBMISSIONS.problem_id)
-                          WHERE ( SUBMISSIONS.user_id = %s AND SUBMISSION.is_complete = FALSE );""" \
+                          WHERE ( SUBMISSIONS.user_id = %s AND SUBMISSIONS.is_complete = FALSE );""" \
                     .format(', '.join(Submissions.fields))
                 cursor.execute(statement, (user.user_id,))
                 result = cursor.fetchall()
