@@ -47,34 +47,33 @@ class Input:
             cursor.close()
 
     @staticmethod
-    def get(*args, **kwargs):
+    def get(**kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """SELECT * FROM USERS
-                                    WHERE (""" + ' '.join([key + ' = ' + str(kwargs[key]) for key in kwargs]) + """);"""
+            statement = """SELECT {} FROM INPUT WHERE ( {} );""" \
+                .format(', '.join(Input.fields), 'AND '.join([key + ' = %s' for key in kwargs]))
             cursor.execute(statement)
             result = cursor.fetchall()
             # TODO: None check
             connection.commit()
-            return result
+            return [Input.object_converter(row) for row in result]
 
     @staticmethod
     def get_all():
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            query = """SELECT * FROM INPUT;"""
+            query = """SELECT {} FROM INPUT;""".format(', '.join(Input.fields))
             cursor.execute(query)
             result = cursor.fetchall()
-            # TODO: None check
             connection.commit()
             return result
 
     @staticmethod
     def object_converter(values):
 
-        input = Input('a', 'b', 'c')
+        inp = Input('a', 'b', 'c')
 
         for ind, field in enumerate(Input.fields):
-            input.__setattr__(field, values[ind])
+            inp.__setattr__(field, values[ind])
 
-        return input
+        return inp

@@ -38,6 +38,20 @@ class Problems:
                                    self.editorial, self.problem_id))
             connection.commit()
 
+    def get_sample(self):
+
+        from .input import Input
+
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """SELECT {} FROM INPUT WHERE (problem_id = %s) ORDER BY input_id LIMIT 1;"""\
+                .format(', '.join(Input.fields))
+            cursor.execute(statement, (self.problem_id,))
+            result = cursor.fetchall()
+            cursor.close()
+
+        self.sample = Input.object_converter(result[0])
+
     @staticmethod
     def create():
         with dbapi2.connect(current_app.config['dsn']) as connection:
@@ -54,11 +68,44 @@ class Problems:
             cursor.close()
 
     @staticmethod
+    def get_with_submissions(problem_id, user_id):
+
+        from .submissions import Submissions
+
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """SELECT {}, {} FROM PROBLEMS 
+                                          INNER JOIN SUBMISSIONS ON (PROBLEMS.problem_id = SUBMISSIONS.problem_id)
+                                          WHERE ( PROBLEMS.problem_id = %s AND SUBMISSIONS.user_id = %s )
+                                          ORDER BY SUBMISSIONS.send_time;"""\
+                .format(', '.join(map(lambda x: 'PROBLEMS.' + x, Problems.fields)),
+                        ', '.join(map(lambda x: 'SUBMISSIONS.' + x, Submissions.fields)))
+            print(statement)
+            cursor.execute(statement, (problem_id, user_id))
+            result = cursor.fetchall()
+            cursor.close()
+
+        return_list = []
+
+        for i in range(len(result)):
+            print(result[i])
+            if i == 0:
+                problem = Problems.object_converter(result[i])
+                problem.submissions = []
+
+            problem.submissions.append(Submissions.object_converter(result[i][len(Problems.fields):]))
+
+            if i == len(result)-1 or result[i+1][0] != result[i][0]:
+                return_list.append(problem)
+
+        return return_list
+
+    @staticmethod
     def get(**kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """SELECT * FROM PROBLEMS
-                                    WHERE (""" + ' '.join([key + ' = ' + str(kwargs[key]) for key in kwargs]) + """);"""
+            statement = """SELECT {} FROM PROBLEMS WHERE ( {} );"""\
+                .format(', '.join(Problems.fields), 'AND '.join([key + ' = %s' for key in kwargs]))
             cursor.execute(statement)
             result = cursor.fetchall()
             # TODO: None check
@@ -69,7 +116,7 @@ class Problems:
     def get_all():
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            query = """SELECT * FROM PROBLEMS"""
+            query = """SELECT {} FROM PROBLEMS;""".format(', '.join(Problems.fields))
             cursor.execute(query)
             result = cursor.fetchall()
             connection.commit()
