@@ -1,5 +1,6 @@
 import psycopg2 as dbapi2
 from flask import current_app
+from datetime import datetime
 
 
 class Contest:
@@ -45,6 +46,10 @@ class Contest:
                                        self.contest_id))
             cursor.close()
 
+    def get_problems(self):
+        from .problems import Problems
+        self.problems = Problems.get(contest_id=self.contest_id)
+
     @staticmethod
     def create():
         with dbapi2.connect(current_app.config['dsn']) as connection:
@@ -60,25 +65,106 @@ class Contest:
             cursor.close()
 
     @staticmethod
-    def get(*args, **kwargs):
+    def get(**kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            where_cond = ' '.join([key + ' = ' + str(kwargs[key]) for key in kwargs])
-            statement = """SELECT * FROM CONTEST WHERE (""" + where_cond + """);"""
-            cursor.execute(statement)
+            statement = """SELECT {} FROM CONTEST WHERE ( {} );"""\
+                .format(', '.join(Contest.fields), 'AND '.join([key + ' = %s' for key in kwargs]))
+            print(statement)
+            cursor.execute(statement, tuple(str(kwargs[key]) for key in kwargs))
             result = cursor.fetchall()
             cursor.close()
-            return [Contest.object_converter(item) for item in result]
+            return [Contest.object_converter(row) for row in result]
+
+    @staticmethod
+    def get_with_leaderboard(contest_name):
+
+        from .problems import Problems
+        from .submissions import Submissions
+        from .users import Users
+
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+
+            statement = """SELECT {}, {}, {}, MAX(SUBMISSIONS.score) FROM CONTEST 
+        INNER JOIN CONTEST_USERS ON (CONTEST.contest_id = CONTEST_USERS.contest_id)
+        INNER JOIN USERS ON (CONTEST_USERS.user_id = USERS.user_id)
+        INNER JOIN PROBLEMS ON (CONTEST.contest_id = PROBLEMS.contest_id)
+        INNER JOIN SUBMISSIONS ON (USERS.user_id = SUBMISSIONS.user_id AND SUBMISSIONS.problem_id = PROBLEMS.problem_id) 
+        WHERE ( CONTEST.contest_name = %s )
+        GROUP BY (CONTEST.contest_id, USERS.user_id, PROBLEMS.problem_id)
+        ORDER BY MAX(SUBMISSIONS.score) DESC;"""\
+                .format(', '.join(map(lambda x: 'CONTEST.'+x, Contest.fields)),
+                        ', '.join(map(lambda x: 'USERS.'+x, Users.fields)),
+                        ', '.join(map(lambda x: 'PROBLEMS.'+x, Problems.fields)),)
+            print(statement)
+            cursor.execute(statement, (contest_name,))
+            result = cursor.fetchall()
+            print(result)
+            cursor.close()
+
+        u_id = len(Contest.fields)
+        p_id = len(Contest.fields)+len(Users.fields)
+
+        return_dict = {'contest': Contest.object_converter(result[0]), 'users': {}}
+
+        for i in range(len(result)):
+            print(result[i])
+
+            user = Users.object_converter(result[i][u_id:])
+            problem = Problems.object_converter(result[i][p_id:])
+            problem.score = result[i][-1]
+            problem.is_complete = (problem.score == problem.max_score)
+
+            if user.user_id not in return_dict['users']:
+                user.problems = [problem]
+                return_dict['users'][user.user_id] = user
+            else:
+                return_dict['users'][user.user_id].problems.append(problem)
+
+        return return_dict
+
+    @staticmethod
+    def get_with_problems(**kwargs):
+
+        from .problems import Problems
+
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """SELECT {}, {} FROM CONTEST INNER JOIN PROBLEMS ON (CONTEST.contest_id = PROBLEMS.contest_id)
+                            WHERE ( {} );""".format(', '.join(map(lambda x: 'CONTEST.' + x, Contest.fields)),
+                                                    ', '.join(map(lambda x: 'PROBLEMS.' + x, Problems.fields)),
+                                                    'AND '.join([key + ' = %s' for key in kwargs]))
+            print(statement)
+            cursor.execute(statement, tuple(str(kwargs[key]) for key in kwargs))
+            result = cursor.fetchall()
+            cursor.close()
+
+        return_list = []
+
+        for i in range(len(result)):
+            print(result[i])
+            if i == 0:
+                contest = Contest.object_converter(result[i])
+                contest.problems = []
+
+            contest.problems.append(Problems.object_converter(result[i][len(Contest.fields):]))
+
+            if i == len(result)-1 or result[i+1][0] != result[i][0]:
+                return_list.append(contest)
+
+        return return_list
 
     @staticmethod
     def get_all():
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """SELECT * FROM CONTEST;"""
+            statement = """SELECT {} FROM CONTEST ORDER BY start_time DESC, end_time;"""\
+                .format(', '.join(Contest.fields))
             cursor.execute(statement)
             result = cursor.fetchall()
             cursor.close()
-            return result
+            return [Contest.object_converter(row) for row in result]
 
     @staticmethod
     def object_converter(values):
@@ -86,5 +172,12 @@ class Contest:
 
         for ind, field in enumerate(Contest.fields):
             contest.__setattr__(field, values[ind])
+
+        if contest.end_time < datetime.now():
+            contest.status = 'finished'
+        elif contest.start_time <= datetime.now() <= contest.end_time:
+            contest.status = 'active'
+        else:
+            contest.status = 'upcoming'
 
         return contest

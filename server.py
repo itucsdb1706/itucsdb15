@@ -3,18 +3,10 @@ from flask_login import LoginManager
 
 from core import core
 from num import num
-from models.blog import Blog
-from models.clarification import Clarification
-from models.comment import Comment
-from models.contest import Contest
-from models.input import Input
-# from models.message import Message
-# from models.notification import Notification
-from models.problems import Problems
-from models.statistics import Statistics
-from models.submissions import Submissions
-from models.team import Team
+from study import study
+
 from models.users import Users
+from models.message import Message
 
 import os
 import json
@@ -38,7 +30,9 @@ def get_elephantsql_dsn(vcap_services):
 
 @lm.user_loader
 def load_user(user_id):
-    return Users.get(user_id=user_id)[0]
+    user = Users.get(user_id=user_id)[0]
+    user.msg_list = Message.get_messages_for_user(user)
+    return user
 
 
 def create_app():
@@ -46,6 +40,7 @@ def create_app():
     app.secret_key = 'suchsecretmuchwow'
     app.config.from_object('settings')
     app.register_blueprint(core)
+    app.register_blueprint(study)
     app.register_blueprint(num)
 
     lm.init_app(app)

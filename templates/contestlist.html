@@ -7,21 +7,11 @@
         <tr>
             <th>Name</th><th>Start Date</th><th>End Date</th><th>Leaderboard</th><th></th>
         </tr>
-        <tr >
-            <td><a href="{{ url_for('core.contest') }}">Contest 4</a> </td> <td></td><td></td><td > <a class="disabled" href="{{ url_for('core.leaderboard') }}">See leaderboard</a> </td> <td > <button class="btn btn-success btn-xs" type="button" name="button"> Register </button> </td>
-
-        </tr>
-        <tr class = "success">
-            <td><a href="{{ url_for('core.contest') }}">Contest 1</a> </td> <td></td><td></td><td > <a href="{{ url_for('core.leaderboard') }}">See leaderboard</a> </td> <td > <button class="btn btn-success btn-xs" type="button" name="button"> Register </button> </td>
-
-        </tr>
-        <tr class="danger">
-            <td><a href="{{ url_for('core.contest') }}">Contest 2</a></td> <td></td><td></td><td > <a href="{{ url_for('core.leaderboard') }}">See leaderboard</a> </td> <td > <a href="#"> See problems</a> </td>
-
-        </tr>
-        <tr class="danger">
-            <td><a href="{{ url_for('core.contest') }}">Contest 3</a></td><td></td><td></td><td > <a href="{{ url_for('core.leaderboard') }}">See leaderboard</a> </td> <td > <a href="#"> See problems</a> </td>
-        </tr>
+        {% for contest in contests %}
+            <tr class="{% if contest.status == 'active' %}success{% elif contest.status == 'finished' %}danger{% endif %}">
+            <td><a href="{{ url_for('study.contest', contest_name=contest.contest_name) }}">{{ contest.contest_name }}</a> </td> <td>{{ contest.start_time.day }}/{{ contest.start_time.month }}/{{ contest.start_time.year }}</td><td>{{ contest.end_time.day }}/{{ contest.end_time.month }}/{{ contest.end_time.year }}</td><td > <a class="disabled" href="#">See leaderboard</a> </td> <td > {% if contest.status == 'finished' %}<a href="#"> See problems</a>{% elif contest.contest_id not in registered_contests %}<form action="{{ url_for('study.register_contest') }}" method="post"><input type="hidden" name="contest_id" value="{{ contest.contest_id }}"><button class="btn btn-success btn-xs" type="submit" name="button"> Register </button></form>{% endif %} </td>
+            </tr>
+        {% endfor %}
     </table>
     </div>
 {% endblock %}

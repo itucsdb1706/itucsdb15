@@ -1,7 +1,10 @@
 from flask import redirect, url_for
-from functools import wraps
 from flask_login.utils import current_user
+
 import re
+import string
+import random
+from functools import wraps
 
 
 def login_required(f):
@@ -20,3 +23,7 @@ def is_mail(email):
 def password_validation(password):
     return len(password) >= 6 and re.search(r"\d", password)\
            is not None and re.search(r"[a-zA-Z]", password) is not None
+
+
+def random_string(n):
+    return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(n))

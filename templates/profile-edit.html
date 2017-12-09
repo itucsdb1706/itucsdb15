@@ -27,10 +27,14 @@
             </div>
             <div  class="col-md-3">
                 <p>--picture--</p>
-                <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/676465-200.png"/>
+                {% if current_user.profile_photo %}
+                    <img src="{{ current_user.profile_photo }}" height="100%" width="100%"/>
+                {% else %}
+                    <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/676465-200.png"/>
+                {% endif %}
                 <fieldset class="form-group">
                     <label for="File">Profile Picture</label>
-                    <input type="file" class="form-control-file" id="File" form="edit-profile-form">
+                    <input name="profile_picture" type="file" class="form-control-file" id="File" form="edit-profile-form">
                     <small class="text-muted"></small>
                 </fieldset>
             </div>
@@ -75,7 +79,7 @@
                 </fieldset>
             </div>
         </div>
-        <form action="" method="post" id="edit-profile-form">
+        <form action="" method="post" id="edit-profile-form" enctype="multipart/form-data">
             <button type="submit" class="btn btn-primary">Submit Changes</button>
         </form>
     </div>

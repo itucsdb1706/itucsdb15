@@ -68,3 +68,7 @@ target/
 
 # Macbook
 .DS_Store
+
+# Media directory
+
+static/media/*

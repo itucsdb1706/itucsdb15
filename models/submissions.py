@@ -1,6 +1,8 @@
 import psycopg2 as dbapi2
 from flask import current_app
 from datetime import datetime
+from .users import Users
+from .problems import Problems
 
 
 class Submissions:
@@ -63,22 +65,98 @@ class Submissions:
             cursor.close()
 
     @staticmethod
-    def get(*args, **kwargs):
+    def get(**kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """SELECT * FROM USERS
-                                    WHERE (""" + ' '.join([key + ' = ' + str(kwargs[key]) for key in kwargs]) + """);"""
+            statement = """SELECT {} FROM SUBMISSIONS WHERE ( {} );"""\
+                .format(', '.join(Submissions.fields), 'AND '.join([key + ' = %s' for key in kwargs]))
             cursor.execute(statement)
             result = cursor.fetchall()
-            # TODO: None check
             connection.commit()
             return [Submissions.object_converter(row) for row in result]
+
+    @staticmethod
+    def get_solved_problems(user, contest=None):
+        if contest is not None:
+            with dbapi2.connect(current_app.config['dsn']) as connection:
+                cursor = connection.cursor()
+                statement = """SELECT PROBLEMS.problem_id FROM PROBLEMS 
+                INNER JOIN SUBMISSIONS ON (PROBLEMS.problem_id = SUBMISSIONS.problem_id)
+                WHERE ( PROBLEMS.contest_id = %s AND SUBMISSIONS.user_id = %s AND SUBMISSIONS.is_complete = TRUE );"""\
+                    .format(', '.join(Submissions.fields))
+                print(statement)
+                cursor.execute(statement, (contest.contest_id, user.user_id))
+                result = cursor.fetchall()
+                cursor.close()
+        else:
+            with dbapi2.connect(current_app.config['dsn']) as connection:
+                cursor = connection.cursor()
+                statement = """SELECT PROBLEMS.problem_id FROM PROBLEMS 
+                      INNER JOIN SUBMISSIONS ON (PROBLEMS.problem_id = SUBMISSIONS.problem_id)
+                      WHERE ( SUBMISSIONS.user_id = %s AND SUBMISSIONS.is_complete = TRUE );"""\
+                    .format(', '.join(Submissions.fields))
+                cursor.execute(statement, (user.user_id,))
+                result = cursor.fetchall()
+                cursor.close()
+
+        solved_set = set()
+        for row in result:
+            solved_set.add(row[0])
+
+        return solved_set
+
+    @staticmethod
+    def get_tried_problems(user, contest=None):
+        if contest is not None:
+            with dbapi2.connect(current_app.config['dsn']) as connection:
+                cursor = connection.cursor()
+                statement = """SELECT PROBLEMS.problem_id FROM PROBLEMS 
+                INNER JOIN SUBMISSIONS ON (PROBLEMS.problem_id = SUBMISSIONS.problem_id)
+                WHERE ( PROBLEMS.contest_id = %s AND SUBMISSIONS.user_id = %s AND SUBMISSIONS.is_complete = FALSE );"""\
+                    .format(', '.join(Submissions.fields))
+                cursor.execute(statement, (contest.contest_id, user.user_id))
+                result = cursor.fetchall()
+                cursor.close()
+        else:
+            with dbapi2.connect(current_app.config['dsn']) as connection:
+                cursor = connection.cursor()
+                statement = """SELECT PROBLEMS.problem_id FROM PROBLEMS 
+                          INNER JOIN SUBMISSIONS ON (PROBLEMS.problem_id = SUBMISSIONS.problem_id)
+                          WHERE ( SUBMISSIONS.user_id = %s AND SUBMISSIONS.is_complete = FALSE );""" \
+                    .format(', '.join(Submissions.fields))
+                cursor.execute(statement, (user.user_id,))
+                result = cursor.fetchall()
+                cursor.close()
+
+        solved_set = set()
+        for row in result:
+            solved_set.add(row[0])
+
+        return solved_set
+
+    @staticmethod
+    def get_join(**kwargs):
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """SELECT {}, {}, {} FROM SUBMISSIONS INNER JOIN USERS ON (SUBMISSIONS.user_id = USERS.user_id)
+                                              INNER JOIN PROBLEMS ON (SUBMISSIONS.problem_id = PROBLEMS.problem_id)
+                                              WHERE ( {} );"""\
+                .format(', '.join(map(lambda x: 'SUBMISSIONS.' + x, Submissions.fields)),
+                        ', '.join(map(lambda x: 'USERS.' + x, Users.fields)),
+                        ', '.join(map(lambda x: 'PROBLEMS.' + x, Problems.fields)),
+                        'AND '.join(['USERS.' + key + ' = %s' for key in kwargs]))
+            print(statement)
+            cursor.execute(statement, tuple(str(kwargs[key]) for key in kwargs))
+            result = cursor.fetchall()
+            print(result)
+            cursor.close()
+            return [Submissions.object_converter(row, True) for row in result]
 
     @staticmethod
     def get_all():
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            query = """SELECT * FROM SUBMISSIONS;"""
+            query = """SELECT {} FROM SUBMISSIONS;""".format(', '.join(Submissions.fields))
             cursor.execute(query)
             result = cursor.fetchall()
             # TODO: None check
@@ -86,10 +164,27 @@ class Submissions:
             return result
 
     @staticmethod
-    def object_converter(values):
+    def object_converter(values, is_joined=False):
+
         submission = Submissions('a', 'b')
 
         for ind, field in enumerate(Submissions.fields):
             submission.__setattr__(field, values[ind])
+
+        if is_joined:
+
+            user = Users('a', 'b')
+
+            for ind, field in enumerate(Users.fields):
+                submission.__setattr__(field, values[len(Submissions.fields) + ind])
+
+            submission.user = user
+
+            problem = Problems('a', 'b')
+
+            for ind, field in enumerate(Problems.fields):
+                submission.__setattr__(field, values[len(Submissions.fields) + len(Users.fields) + ind])
+
+            submission.problem = problem
 
         return submission
