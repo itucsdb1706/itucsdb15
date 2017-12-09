@@ -7,21 +7,17 @@ from flask_login.utils import login_user, current_user, logout_user
 
 from models.message import Message
 from models.users import Users
-from utils import login_required, is_mail, password_validation
+from utils import login_required, is_mail, password_validation, random_string
+
+import os
 
 core = Blueprint('core', __name__)
 
 
 @core.route('/debug')
 def debug():
-    u = Users.get_join(username='burakbugrul', email='bbugrul96@gmail.com')[0]
-    u.get_submissions()
-    print('AAAAAAAAAa->', u.team.team_name, current_user)
-    s = set()
-    s.add(1)
-    s.add(2)
-    s.add(3)
-    return render_template('debug.html', u=u, s=s)
+    print('AAAAAAAA->', os.getcwd())
+    return render_template('debug.html')
 
 
 @core.route('/')
@@ -50,10 +46,12 @@ def logout():
     return redirect(url_for('core.home'))
 
 
-@core.route('/profile', methods=['GET', 'POST'])
+@core.route('/profile/<string:username>', methods=['GET', 'POST'])
 @login_required
-def profile():
-    return render_template('profile-page.html')
+def profile(username):
+    user = Users.get(username=username)[0]
+    is_owner = current_user.is_authenticated and current_user.user_id == user.user_id
+    return render_template('profile-page.html', user=user, is_owner=is_owner)
 
 
 @core.route('/register', methods=['GET', 'POST'])
@@ -62,8 +60,6 @@ def register():
     if request.method == 'GET':
         return render_template('register-page.html')
     else:
-
-        print(request.form)
 
         required_inputs = ['username', 'email', 'password1', 'password2', 'terms_and_conditions']
         form_inputs = ['bio', 'country', 'city', 'school']
@@ -93,7 +89,13 @@ def register():
 def edit_profile():
 
     if request.method == 'POST':
-        print(request.form)
+
+        if 'profile_picture' in request.files:
+            request.files['profile_picture'].filename = random_string(5) + request.files['profile_picture'].filename
+            request.files['profile_picture'].save(os.path.join(os.getcwd(), 'static', 'media', 'profile_pictures',
+                                                               request.files['profile_picture'].filename))
+            current_user.profile_photo = os.path.join('/static', 'media', 'profile_pictures',
+                                                      request.files['profile_picture'].filename)
 
         for field in Users.editable_fields:
             if field in request.form:

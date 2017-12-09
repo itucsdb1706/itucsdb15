@@ -10,7 +10,7 @@ from .contest import Contest
 class Users(UserMixin):
     fields = ['user_id', 'username', 'email', 'password', 'rank', 'team_id', 'profile_photo', 'school', 'city',
               'country', 'bio']
-    editable_fields = ['email', 'bio', 'country', 'city', 'school']
+    editable_fields = ['email', 'bio', 'country', 'city', 'school', 'profile_photo']
 
     def __init__(self, username, email, password='', rank=0, team_id=None, profile_photo=None, school=None, city=None,
                  country=None, bio=None):
