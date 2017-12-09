@@ -67,9 +67,9 @@ class Message:
             statement = """SELECT * FROM MESSAGE WHERE ( {} );"""\
                 .format(' AND '.join([key + ' = %s' for key in kwargs]))
             cursor.execute(statement, tuple(str(kwargs[key]) for key in kwargs))
-            result = cursor.fetchall()
+            results = cursor.fetchall()
             cursor.close()
-            return [Message.object_converter(row) for row in result]
+            return [Message.object_converter(row) for row in results]
 
     @staticmethod
     def get_messages_for_user(user):
@@ -80,7 +80,7 @@ class Message:
             statement = """SELECT {} 
                                   FROM MESSAGE INNER JOIN USERS ON (MESSAGE.from_user_id = USERS.user_id)
                                   WHERE (to_user_id = %s)
-                                  ORDER BY time_sent DESC;""".format(Users.fields[2] + ', ' + ', '.join(Message.fields))
+                                  ORDER BY time_sent DESC;""".format(Users.fields[1] + ', ' + ', '.join(Message.fields))
             cursor.execute(statement, (user.user_id,))
             results = cursor.fetchall()
             cursor.close()
