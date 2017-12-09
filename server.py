@@ -31,7 +31,8 @@ def get_elephantsql_dsn(vcap_services):
 @lm.user_loader
 def load_user(user_id):
     user = Users.get(user_id=user_id)[0]
-    user.msg_list = Message.get_messages_for_user(user)
+    if user is not None:
+        user.msg_list = Message.get_messages_for_user(user)
     return user
 
 
