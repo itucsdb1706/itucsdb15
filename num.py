@@ -46,8 +46,8 @@ def check_number(number):
     ContestUser.create()
     # ProblemTag.create()
 
-    u = Users(username='burakbugrul', email='bbugrul96@gmail.com', password='123456gs')
-    u.save()
+    # u = Users(username='burakbugrul', email='bbugrul96@gmail.com', password='123456gs')
+    # u.save()
 
     if not os.path.exists(os.path.join(os.getcwd(), 'static', 'media')):
         os.makedirs(os.path.join(os.getcwd(), 'static', 'media'))
