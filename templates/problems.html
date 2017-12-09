@@ -5,18 +5,12 @@
     <div class="panel-heading"><h3>Problems</h3></div>
     <div class="panel-body ">
         <table class="table table-striped ">
+            {% for problem in problems %}
             <tr>
-                <td><a href="{{ url_for('core.statement') }}">Problem 1</a></td> <td style="text-align:left"> <span style="color:green;" class="glyphicon glyphicon-ok"></span> </td>
+                <td><a href="{{ url_for('study.statement', problem_id=problem.problem_id) }}">{{ problem.problem_name }}</a></td> <td style="text-align:left"> {% if problem.problem_id in solved %}<span style="color:green;" class="glyphicon glyphicon-ok"></span>{% elif problem.problem_id in tried %}<span style="color:red;" class=" 	glyphicon glyphicon-remove"></span>{% endif %} </td>
                 <td> implementation</td>
             </tr>
-            <tr>
-                <td><a href="{{ url_for('core.statement') }}">Problem 2</a></td> <td style="text-align:left"> <span style="color:red;" class=" 	glyphicon glyphicon-remove"></span> </td>
-                <td>graph,dynamic</td>
-            </tr>
-            <tr>
-                <td><a href="{{ url_for('core.statement') }}">Problem 3</a></td> <td style="text-align:left"> </td>
-                <td></td>
-            </tr>
+            {% endfor %}
         </table>
     </div>
     </div>
