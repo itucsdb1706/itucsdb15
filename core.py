@@ -5,6 +5,7 @@ from flask.helpers import url_for
 from flask import request
 from flask_login.utils import login_user, current_user, logout_user
 
+from models.message import Message
 from models.users import Users
 from utils import login_required, is_mail, password_validation
 

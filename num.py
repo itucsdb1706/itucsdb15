@@ -10,6 +10,7 @@ from models.contest import Contest
 from models.input import Input
 # from models.message import Message
 # from models.notification import Notification
+from models.message import Message
 from models.problems import Problems
 from models.submissions import Submissions
 from models.team import Team
@@ -37,6 +38,7 @@ def check_number(number):
     Problems.create()
     Input.create()
     Submissions.create()
+    Message.create()
     # Tag.create()
 
     ContestUser.create()
