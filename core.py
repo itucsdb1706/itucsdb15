@@ -90,7 +90,7 @@ def edit_profile():
 
     if request.method == 'POST':
 
-        if 'profile_picture' in request.files:
+        if 'profile_picture' in request.files and request.files['profile_picture'].filename:
             request.files['profile_picture'].filename = random_string(5) + request.files['profile_picture'].filename
             request.files['profile_picture'].save(os.path.join(os.getcwd(), 'static', 'media', 'profile_pictures',
                                                                request.files['profile_picture'].filename))
