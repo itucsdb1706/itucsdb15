@@ -34,7 +34,7 @@ def check_number(number):
     Users.create()
     Contest.create()
 
-    Clarification.drop()
+    # Clarification.drop()
     Clarification.create()
     Problems.create()
     Input.create()
