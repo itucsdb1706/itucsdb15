@@ -35,3 +35,31 @@ class Tag:
                                   WHERE (tag_id = %s);"""
             cursor.execute(statement, (self.tag_name, self.tag_id))
             cursor.close()
+
+    @staticmethod
+    def create():
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """CREATE TABLE IF NOT EXISTS TAG (
+                                  tag_id    SERIAL PRIMARY KEY NOT NULL,
+                                  tag_name  VARCHAR(64) NOT NULL
+                                  );"""
+            cursor.execute(statement)
+            cursor.close()
+
+    @staticmethod
+    def object_converter(values):
+        tag = Tag()
+
+        for ind, field in enumerate(Tag.fields):
+            tag.__setattr__(field, values[ind])
+
+        return tag
+
+    @staticmethod
+    def drop():
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """DROP TABLE TAG;"""
+            cursor.execute(statement)
+            cursor.close()
