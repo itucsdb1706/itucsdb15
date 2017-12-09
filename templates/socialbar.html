@@ -9,9 +9,9 @@
         <div class="tab-content">
             <div id="message" class="tab-pane fade in active">
                 <ul class="social">
-                    <li id="message-list">
-                        {% for from_user, message in current_user.msg_list %}
-                            <button type="button" class="btn btn-block notif" data-toggle="modal" data-target="#msgPopUp">
+                    {% for (from_user, message) in current_user.msg_list %}
+                        <li id="message{{ message.message_id }}">
+                            <button type="button" class="btn btn-block notif" data-toggle="modal" data-target="#msgPopUp{{ message.message_id }}">
                                 {% if message.is_read %}
                                     Message From: {{ from_user }}
                                 {% else %}
@@ -19,7 +19,7 @@
                                 {% endif %}
                             </button>
 
-                            <div class="modal fade" id="msgPopUp">
+                            <div class="modal fade" id="msgPopUp{{ message.message_id }}">
                                 <div class="modal-dialog">
                                     <div class="modal-content panel panel-info">
                                         <div class="modal-header panel-heading">
@@ -34,8 +34,8 @@
                                     </div>
                                 </div>
                             </div>
-                        {% endfor %}
-                    </li>
+                        </li>
+                    {% endfor %}
                 </ul>
             </div>
             <div id="notification" class="tab-pane fade">
@@ -66,3 +66,6 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+
+</script>
