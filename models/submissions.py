@@ -65,17 +65,76 @@ class Submissions:
             cursor.close()
 
     @staticmethod
-    def get(*args, **kwargs):
+    def get(**kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """SELECT * FROM USERS
-                                    WHERE (""" + ' '.join([key + ' = ' + str(kwargs[key]) for key in kwargs]) + """);"""
+            statement = """SELECT {} FROM SUBMISSIONS WHERE ( {} );"""\
+                .format(', '.join(Submissions.fields), 'AND '.join([key + ' = %s' for key in kwargs]))
             cursor.execute(statement)
             result = cursor.fetchall()
-            # TODO: None check
             connection.commit()
             return [Submissions.object_converter(row) for row in result]
 
+    @staticmethod
+    def get_solved_problems(user, contest=None):
+        if contest is not None:
+            with dbapi2.connect(current_app.config['dsn']) as connection:
+                cursor = connection.cursor()
+                statement = """SELECT PROBLEMS.problem_id FROM PROBLEMS 
+                INNER JOIN SUBMISSIONS ON (PROBLEMS.problem_id = SUBMISSIONS.problem_id)
+                WHERE ( PROBLEMS.contest_id = %s AND SUBMISSIONS.user_id = %s AND SUBMISSIONS.is_complete = TRUE );"""\
+                    .format(', '.join(Submissions.fields))
+                print(statement)
+                cursor.execute(statement, (contest.contest_id, user.user_id))
+                result = cursor.fetchall()
+                cursor.close()
+        else:
+            with dbapi2.connect(current_app.config['dsn']) as connection:
+                cursor = connection.cursor()
+                statement = """SELECT PROBLEMS.problem_id FROM PROBLEMS 
+                      INNER JOIN SUBMISSIONS ON (PROBLEMS.problem_id = SUBMISSIONS.problem_id)
+                      WHERE ( SUBMISSION.user_id = %s AND SUBMISSIONS.is_complete = TRUE );"""\
+                    .format(', '.join(Submissions.fields))
+                cursor.execute(statement, (user.user_id,))
+                result = cursor.fetchall()
+                cursor.close()
+
+        solved_set = set()
+        for row in result:
+            solved_set.add(row[0])
+
+        return solved_set
+
+    @staticmethod
+    def get_tried_problems(user, contest=None):
+        if contest is not None:
+            with dbapi2.connect(current_app.config['dsn']) as connection:
+                cursor = connection.cursor()
+                statement = """SELECT PROBLEMS.problem_id FROM PROBLEMS 
+                INNER JOIN SUBMISSIONS ON (PROBLEMS.problem_id = SUBMISSIONS.problem_id)
+                WHERE ( PROBLEMS.contest_id = %s AND SUBMISSIONS.user_id = %s AND SUBMISSIONS.is_complete = FALSE );"""\
+                    .format(', '.join(Submissions.fields))
+                cursor.execute(statement, (contest.contest_id, user.user_id))
+                result = cursor.fetchall()
+                cursor.close()
+        else:
+            with dbapi2.connect(current_app.config['dsn']) as connection:
+                cursor = connection.cursor()
+                statement = """SELECT PROBLEMS.problem_id FROM PROBLEMS 
+                          INNER JOIN SUBMISSIONS ON (PROBLEMS.problem_id = SUBMISSIONS.problem_id)
+                          WHERE ( SUBMISSIONS.user_id = %s AND SUBMISSION.is_complete = FALSE );""" \
+                    .format(', '.join(Submissions.fields))
+                cursor.execute(statement, (user.user_id,))
+                result = cursor.fetchall()
+                cursor.close()
+
+        solved_set = set()
+        for row in result:
+            solved_set.add(row[0])
+
+        return solved_set
+
+    @staticmethod
     def get_join(**kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
@@ -97,7 +156,7 @@ class Submissions:
     def get_all():
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            query = """SELECT * FROM SUBMISSIONS;"""
+            query = """SELECT {} FROM SUBMISSIONS;""".format(', '.join(Submissions.fields))
             cursor.execute(query)
             result = cursor.fetchall()
             # TODO: None check

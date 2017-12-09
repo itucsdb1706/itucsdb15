@@ -73,6 +73,37 @@ class Contest:
             return [Contest.object_converter(row) for row in result]
 
     @staticmethod
+    def get_with_problems(**kwargs):
+
+        from .problems import Problems
+
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """SELECT {}, {} FROM CONTEST INNER JOIN PROBLEMS ON (CONTEST.contest_id = PROBLEMS.contest_id)
+                            WHERE ( {} );""".format(', '.join(map(lambda x: 'CONTEST.' + x, Contest.fields)),
+                                                    ', '.join(map(lambda x: 'PROBLEMS.' + x, Problems.fields)),
+                                                    'AND '.join([key + ' = %s' for key in kwargs]))
+            print(statement)
+            cursor.execute(statement, tuple(str(kwargs[key]) for key in kwargs))
+            result = cursor.fetchall()
+            cursor.close()
+
+        return_list = []
+
+        for i in range(len(result)):
+            print(result[i])
+            if i == 0:
+                contest = Contest.object_converter(result[i])
+                contest.problems = []
+
+            contest.problems.append(Problems.object_converter(result[i][len(Contest.fields):]))
+
+            if i == len(result)-1 or result[i+1][0] != result[i][0]:
+                return_list.append(contest)
+
+        return return_list
+
+    @staticmethod
     def get_all():
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()

@@ -7,6 +7,7 @@ from flask_login.utils import login_user, current_user, logout_user
 
 from models.users import Users
 from models.contest import Contest
+from models.submissions import Submissions
 
 from models.contest_user import ContestUser
 
@@ -25,7 +26,6 @@ def contest_list():
     contests = Contest.get_all()
     if current_user.is_authenticated:
         registered_contests = current_user.get_registered_contests()
-        print('AAAAAAAa->', registered_contests)
     else:
         registered_contests = set()
     return render_template('contestlist.html', contests=contests, registered_contests=registered_contests)
@@ -51,11 +51,21 @@ def leaderboard():
     return render_template('leaderboard.html')
 
 
-@study.route('/contestname')
-def contest():
-    return render_template('contest-page.html')
+@study.route('/contest/<string:contest_name>')
+def contest(contest_name):
+
+    contest = Contest.get_with_problems(contest_name=contest_name)[0]
+    solved = set()
+    tried = set()
+
+    if current_user.is_authenticated:
+        solved = Submissions.get_solved_problems(current_user, contest)
+        tried = Submissions.get_tried_problems(current_user, contest)
+
+    print('solved ->', solved, 'tried->', tried)
+    return render_template('contest-page.html', contest=contest, solved=solved, tried=tried)
 
 
-@study.route('/statement')
-def statement():
+@study.route('/statement/<string:problem_id>')
+def statement(problem_id):
     return render_template('statement.html')
