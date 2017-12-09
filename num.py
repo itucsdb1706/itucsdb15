@@ -4,7 +4,6 @@ from flask import redirect
 from flask.helpers import url_for
 from flask import current_app
 
-from models.blog import Blog
 from models.clarification import Clarification
 from models.comment import Comment
 from models.contest import Contest
@@ -12,7 +11,6 @@ from models.input import Input
 # from models.message import Message
 # from models.notification import Notification
 from models.problems import Problems
-from models.statistics import Statistics
 from models.submissions import Submissions
 from models.team import Team
 from models.users import Users
@@ -39,7 +37,6 @@ def check_number(number):
     Problems.create()
     Input.create()
     Submissions.create()
-    Statistics.create()
     # Tag.create()
 
     ContestUser.create()
