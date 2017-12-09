@@ -35,12 +35,12 @@
 							<li><a href="{{ url_for('study.contest_list') }}">Contests</a></li>
 						</ul>
 				</li>
-                <li><a href="{{ url_for('core.profile') }}">Profile</a></li>
+                <li><a href="{{ url_for('core.profile', username=current_user.username) }}">Profile</a></li>
 			</ul>
 			<!--Login and Register Buttons -->
 			<ul class="nav navbar-nav pull-right">
                 {% if current_user.is_authenticated %}
-                    <button class="btn btn-warning-outline username" id="navbutton" type="button" name="button">{{ current_user.username }}</button>
+                    <a href="{{ url_for('core.profile', username=current_user.username) }}" ><button class="btn btn-warning-outline username" id="navbutton" type="button" name="button">{{ current_user.username }}</button></a>
                     <li> <button id="navbutton" type="button" class="btn btn-danger"> <a style="color:white;" href="{{ url_for('core.logout')}}">Log Out </a> </button> </li>
                 {% else %}
 				<li> <button id="navbutton" type="button" class="btn btn-success" data-toggle="modal" data-target="#popUpWindow"> <a style="color:white;"href="#">Log In </a> </button> </li>
