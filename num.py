@@ -20,6 +20,7 @@ from models.tag import Tag
 from models.problem_tag import ProblemTag
 from models.contest_user import ContestUser
 
+import os
 
 num = Blueprint('num', __name__)
 
@@ -47,6 +48,10 @@ def check_number(number):
 
     # u = Users(username='burakbugrul', email='bbugrul96@gmail.com', password='123456gs')
     # u.save()
+
+    if not os.path.exists(os.path.join(os.getcwd(), 'static', 'media')):
+        os.makedirs(os.path.join(os.getcwd(), 'static', 'media'))
+        os.mkdir(os.path.join(os.getcwd(), 'static', 'media', 'profile_pictures'))
 
     if number >= 10:
         return redirect(url_for('core.home'))
