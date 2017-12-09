@@ -57,9 +57,29 @@ def register_contest():
     return redirect(url_for('study.contest_list'))
 
 
-@study.route('/leaderboard')
-def leaderboard():
-    return render_template('leaderboard.html')
+@study.route('/leaderboard/<string:contest_name>')
+def leaderboard(contest_name):
+
+    contest_dict = Contest.get_with_leaderboard(contest_name)
+
+    contest = contest_dict['contest']
+    contest.get_problems()
+
+    users = [contest_dict['users'][key] for key in contest_dict['users']]
+
+    for user in users:
+        user.score = sum(map(lambda problem: problem.score, user.problems))
+        user.solved = set()
+        user.tried = set()
+        for problem in user.problems:
+            if problem.is_complete:
+                user.solved.add(problem.problem_id)
+            else:
+                user.tried.add(problem.problem_id)
+
+    users.sort(key=lambda user: -user.score)
+
+    return render_template('leaderboard.html', contest=contest, users=users)
 
 
 @study.route('/contest/<string:contest_name>')
