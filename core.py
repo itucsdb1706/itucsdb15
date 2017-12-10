@@ -108,3 +108,11 @@ def edit_profile():
         current_user.update()
 
     return render_template('profile-edit.html')
+
+
+@core.route('/read_msg', methods=['POST'])
+def read_msg():
+    message_id = request.form.get('msg_id')
+    message = Message.get(message_id=message_id)[0]
+    message.update_read()
+    return render_template('home.html')
