@@ -18,6 +18,8 @@ from models.contest_user import ContestUser
 
 from utils import login_required, get_submission_score
 
+import urllib.request as url_req
+
 study = Blueprint('study', __name__)
 
 
@@ -79,7 +81,7 @@ def team_leaderboard():
 @study.route('/leaderboard/<string:contest_name>/')
 def leaderboard(contest_name):
 
-    contest_dict = Contest.get_with_leaderboard(contest_name)
+    contest_dict = Contest.get_with_leaderboard(url_req.unquote(contest_name))
 
     contest = contest_dict['contest']
     contest.get_problems()
@@ -103,8 +105,8 @@ def leaderboard(contest_name):
 
 @study.route('/contest/<string:contest_name>/')
 def contest(contest_name):
-
-    contest = Contest.get_with_problems(contest_name=contest_name)[0]
+    print(url_req.unquote(contest_name))
+    contest = Contest.get_with_problems(contest_name=url_req.unquote(contest_name))[0]
     solved = set()
     tried = set()
 

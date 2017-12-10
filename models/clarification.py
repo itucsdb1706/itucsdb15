@@ -1,6 +1,8 @@
 import psycopg2 as dbapi2
 from flask import current_app
 
+from models.contest import Contest
+
 
 class Clarification:
     fields = ['clarification_id', 'contest_id', 'user_id', 'time_sent', 'clarification_content']
@@ -70,6 +72,20 @@ class Clarification:
             result = cursor.fetchall()
             cursor.close()
             return [Clarification.object_converter(item) for item in result]
+
+    @staticmethod
+    def get_clarifications_for_user(user):
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """SELECT {} 
+                                  FROM CLARIFICATION NATURAL JOIN CONTEST 
+                                  WHERE (user_id = %s)
+                                  ORDER BY time_sent DESC;""".format(Contest.fields[1] + ', '
+                                                                     + ', '.join(Clarification.fields))
+            cursor.execute(statement, (user.user_id,))
+            result = cursor.fetchall()
+            cursor.close()
+            return [(item[0], Clarification.object_converter(item[1:])) for item in result]
 
     @staticmethod
     def get_all():

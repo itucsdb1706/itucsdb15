@@ -56,7 +56,7 @@ class Contest:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS CONTEST (
                                   contest_id    SERIAL PRIMARY KEY NOT NULL,
-                                  contest_name  VARCHAR(256) NOT NULL,
+                                  contest_name  VARCHAR(256) UNIQUE NOT NULL,
                                   is_individual BOOLEAN NOT NULL,
                                   start_time    TIMESTAMP NOT NULL,
                                   end_time      TIMESTAMP NOT NULL 
