@@ -15,17 +15,13 @@
                           </h3>
                       </div>
                       <div class="modal-body panel-body">
-                          <form role="form" id="sendMsgPane" action="{{ url_for('core.send_msg') }}" method="post">
+                          <form action="#">
                             <fieldset style="text-align:left;" class="form-group">
                               <label for="usernameselect">Username</label>
-                                <select class="form-control" id="usernameselect" name="to_user">
-                                  {% for userid, username in current_user.other_users %}
-                                        <option value="{{ userid }}">{{ username }}</option>
-                                  {% endfor %}
-                                </select>
+                              <input type="text" class="form-control" id="usernameselect">
                             </fieldset>
                             <fieldset class="form-group">
-                              <textarea class="form-control" rows="3" name="msg_text"></textarea>
+                              <textarea class="form-control"  rows="3"></textarea>
                             </fieldset>
                             <button type="submit" class="btn btn-primary">Send Message</button>
                           </form>
@@ -70,28 +66,26 @@
             </div>
             <div id="notification" class="tab-pane fade">
                 <ul class="social">
-                    {% for notification in current_user.notifications %}
-                        <li>
-                            <button class="btn btn-block notif" type="button" data-toggle="modal" data-target="#notifPopUp{{ notification.notification_id }}">
-                                {% if not notification.is_read %}NEW: {% endif %}{{ notification.content }}
-                            </button>
-                            <div class="modal fade" id="notifPopUp{{ notification.notification_id }}">
-                                <div class="modal-dialog">
-                                    <div class="modal-content panel panel-primary">
-                                        <div class="modal-header panel-heading">
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h3 style="text-align:center;"class="modal-title">
-                                                {% if not notification.is_read %}NEW{% endif %}
-                                            </h3>
-                                        </div>
-                                        <div class="modal-body panel-body">
-                                            <p>{{ notification.content }}</p>
-                                        </div>
+                    <li>
+                        <button class="btn btn-block notif" type="button" data-toggle="modal" data-target="#notifPopUp">
+                            New contest!
+                        </button>
+                        <div class="modal fade" id="notifPopUp">
+                            <div class="modal-dialog">
+                                <div class="modal-content panel panel-primary">
+                                    <div class="modal-header panel-heading">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h3 style="text-align:center;"class="modal-title">
+                                            New Contest
+                                        </h3>
+                                    </div>
+                                    <div class="modal-body panel-body">
+                                        <p>notification content</p>
                                     </div>
                                 </div>
                             </div>
-                        </li>
-                    {% endfor %}
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>

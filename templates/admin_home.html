@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %}Admin{% endblock %}
+{% block content %}
+    <div class="panel panel-primary">
+    <div class="panel-heading"><h3>Welcome Admin</h3></div>
+    <div class="panel-body">
+        <ul id="message-list">
+            <li><a href="{{ url_for('core.admin_add_contest') }}">Add Contest</a></li>
+            <li><a href = "{{ url_for('core.admin_add_problem') }}" >Add Problem</a></li>
+            <li><a href = "{{ url_for('core.admin_send_clarification') }}" >Send clarification</a></li>
+        </ul>
+    </div>
+    </div>
+{% endblock %}
