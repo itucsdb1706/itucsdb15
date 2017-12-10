@@ -44,6 +44,13 @@ class Team:
             cursor.execute(statement, (increase, self.team_id))
             cursor.close()
 
+    def decrease_rank(self, increase):
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """UPDATE TEAM SET team_rank = team_rank - %s WHERE team_id = %s;"""
+            cursor.execute(statement, (increase, self.team_id))
+            cursor.close()
+
     @staticmethod
     def create():
         with dbapi2.connect(current_app.config['dsn']) as connection:

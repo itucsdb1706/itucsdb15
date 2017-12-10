@@ -49,6 +49,12 @@ def logout():
     return redirect(url_for('core.home'))
 
 
+@core.route('/team/<string:team_name>/', methods=['GET'])
+def team(team_name):
+    users = Users.get_from_team(team_name=team_name)
+    return render_template('user_leaderboard.html', users=users)
+
+
 @core.route('/profile/<string:username>/', methods=['GET', 'POST'])
 def profile(username):
     user = Users.get_join(username=username)[0]
@@ -143,5 +149,15 @@ def join_team():
         team = team[0]
 
     current_user.set_team(team.team_id)
+    team.increase_rank(current_user.rank)
+    return redirect(request.referrer)
+
+
+@core.route('/leave_team/', methods=['POST'])
+@login_required
+def leave_team():
+    current_user.get_team()
+    current_user.team.decrease_rank(current_user.rank)
+    current_user.leave_team()
     return redirect(request.referrer)
 
