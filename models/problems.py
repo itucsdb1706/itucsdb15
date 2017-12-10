@@ -3,22 +3,21 @@ from flask import current_app
 
 
 class Problems:
-    fields = ['problem_id', 'problem_name', 'statement', 'contest_id', 'max_score', 'editorial']
+    fields = ['problem_id', 'problem_name', 'statement', 'contest_id', 'max_score']
 
-    def __init__(self, problem_name, statement, contest_id=None, max_score=0, editorial=None, problem_id=None):
+    def __init__(self, problem_name, statement, contest_id=None, max_score=0, problem_id=None):
         self.problem_id = problem_id
         self.problem_name = problem_name
         self.statement = statement
         self.contest_id = contest_id
         self.max_score = max_score
-        self.editorial = editorial
 
     def save(self):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            query = """INSERT INTO PROBLEMS (problem_name, statement, contest_id, max_score, editorial)""" \
-                    + """VALUES (%s, %s, %s, %s, %s) RETURNING problem_id;"""
-            cursor.execute(query, [self.problem_name, self.statement, self.contest_id, self.max_score, self.editorial])
+            query = """INSERT INTO PROBLEMS (problem_name, statement, contest_id, max_score)""" \
+                    + """VALUES (%s, %s, %s, %s) RETURNING problem_id;"""
+            cursor.execute(query, (self.problem_name, self.statement, self.contest_id, self.max_score))
             self.problem_id = cursor.fetchone()[0]
             connection.commit()
 
@@ -32,10 +31,9 @@ class Problems:
     def update(self):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            query = """UPDATE PROBLEMS SET problem_name = %s, statement = %s, contest_id = %s, 
-                        max_score = %s, editorial = %s WHERE problem_id=%s;"""
-            cursor.execute(query, (self.problem_name, self.statement, self.contest_id, self.max_score,
-                                   self.editorial, self.problem_id))
+            query = """UPDATE PROBLEMS SET (problem_name = %s, statement = %s, contest_id = %s, 
+                        max_score = %s) WHERE (problem_id=%s);"""
+            cursor.execute(query, (self.problem_name, self.statement, self.contest_id, self.max_score, self.problem_id))
             connection.commit()
 
     def get_sample(self):

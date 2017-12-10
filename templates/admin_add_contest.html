@@ -4,28 +4,22 @@
     <div class="panel panel-primary">
     <div class="panel-heading"><h3>Create Contest</h3></div>
     <div class="panel-body">
-        <form>
+        <form action="" method="post">
             <fieldset class="form-group">
                 <label for="contestname">Contest Name</label>
-                <input type="email" class="form-control" id="contestname" placeholder="Enter name">
+                <input type="text" name="contest_name" class="form-control" id="contestname" placeholder="Enter name">
             </fieldset>
             <div style="text-align:left;" class="radio">
                 <label>
-                <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+                <input type="radio" name="is_individual" id="optionsRadios1" value="option1">
                 Individual
-                </label>
-            </div>
-            <div style="text-align:left;" class="radio">
-                <label>
-                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-                    Team
                 </label>
             </div>
             <div style="text-align:left;" class='col-md-5'>
                 <fieldset class="form-group">
                     <label  > Start Date and Time</label>
                     <div class='input-group date' id='datetimepicker1' data-provide="datetimepicker">
-                        <input type="datetime-local" class="form-control" />
+                        <input type="datetime-local" name="start_time" class="form-control" />
 
                     </div>
                 </fieldset>
@@ -34,7 +28,7 @@
                 <div style="text-align:left;" class="form-group">
                     <label > End date and Time</label>
                     <div class='input-group date' id='datetimepicker2' data-provide="datetimepicker">
-                        <input type="datetime-local" class="form-control" />
+                        <input type="datetime-local" name="end_time" class="form-control" />
 
                     </div>
                 </div>

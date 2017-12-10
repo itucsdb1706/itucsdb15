@@ -48,6 +48,17 @@ class Tag:
             cursor.close()
 
     @staticmethod
+    def get(**kwargs):
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """SELECT {} FROM TAG WHERE ( {} );""" \
+                .format(', '.join(Tag.fields), 'AND '.join([key + ' = %s' for key in kwargs]))
+            cursor.execute(statement, tuple(str(kwargs[key]) for key in kwargs))
+            result = cursor.fetchall()
+            connection.commit()
+            return [Tag.object_converter(row) for row in result]
+
+    @staticmethod
     def object_converter(values):
         tag = Tag()
 

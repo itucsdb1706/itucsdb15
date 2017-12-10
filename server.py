@@ -5,6 +5,7 @@ from core import core
 from models.clarification import Clarification
 from num import num
 from study import study
+from admin import admin
 
 from models.users import Users
 from models.message import Message
@@ -57,6 +58,7 @@ def create_app():
     app.register_blueprint(core)
     app.register_blueprint(study)
     app.register_blueprint(num)
+    app.register_blueprint(admin)
 
     lm.init_app(app)
     lm.login_view = 'core.login_page'

@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block title %}Home{% endblock %}
+{% block socialbar %}{% include "clarification.html" %}{% endblock %}
 {% block content %}
     <div class="panel panel-primary">
     <div class="panel-heading"><h3>{{ problem.problem_name }}</h3></div>
@@ -33,10 +34,6 @@
                         </div>
                     </div>
                 </div>
-                <!--div class="well well-sm">
-                    Explanation
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                </div-->
                 <div class="row">
                     <div class="col-md-4">
                         <fieldset class="form-group">
@@ -81,9 +78,10 @@
 
                     </div>
                     <div class="col-md-10">
-                        <form>
+                        <form action="{{ url_for('study.add_discussion') }}" method="post">
+                            <input type="hidden" name="problem_id" value="{{ problem.problem_id }}">
                             <fieldset class="form-group">
-                              <textarea class="form-control"  rows="3"></textarea>
+                              <textarea class="form-control" name="content" rows="3"></textarea>
                             </fieldset>
                             <button type="submit" class="btn btn-primary">Send</button>
                         </form>
@@ -95,19 +93,26 @@
 
                     </div>
                     <div class="col-md-10">
-                        <div class="panel panel-info">
-                            <div style="text-align:left;" class="panel-heading">
-                                Sender username
+                        {% for discussion in problem.discussions %}
+                            <div class="panel panel-info">
+                                <div style="text-align:left;" class="panel-heading">
+                                    {{ discussion.user_id }}
+                                </div>
+                                <div style="text-align:left;" class="panel-body">
+                                {{ discussion.content }}
+                                </div>
+                                <div style="text-align:left;" class="panel-footer">
+                                    <form action="{{ url_for('study.upvote') }}" method="post">
+                                        <input type="hidden" name="discussion_id" value="{{ discussion.discussion_id }}">
+                                        <p>{{ discussion.upvote }}<button class="btn btn-warning-outline" id="navbutton" type="submit" name="button"><span style="color:green;" class="glyphicon glyphicon-chevron-up"> </span></button></p>
+                                    </form>
+                                    <form action="{{ url_for('study.downvote') }}" method="post">
+                                        <input type="hidden" name="discussion_id" value="{{ discussion.discussion_id }}">
+                                        <p>{{ discussion.downvote }}<button class="btn btn-warning-outline" id="navbutton" type="submit" name="button"><span style="color:red;" class="glyphicon glyphicon-chevron-down"> </span></button></p>
+                                    </form>
+                                </div>
                             </div>
-                            <div style="text-align:left;" class="panel-body">
-                                Discussion Content
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                            </div>
-                            <div style="text-align:left;" class="panel-footer">
-                                <p><a href="#"><span style="color:green;" class="glyphicon glyphicon-chevron-up"> </span></a> #votes</p>
-                                <p><a href="#"><span style="color:red;" class="glyphicon glyphicon-chevron-down"></span></a> #votes</p>
-                            </div>
-                        </ div>
+                        {% endfor %}
                     </div>
                 </div>
 
@@ -120,7 +125,14 @@
         <p>Tags:{% for tag in problem.tags %} {{ tag.tag_name }}{% endfor %}</p>
     </div>
     </div>
-{% endblock %}
-{% block socialbar %}
-    {% include "socialbar.html" %}
+
+    {% for discussion in problem.discussions %}
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $("a.submit{{ loop.index }}").click(function(){
+                    document.getElementById("form{{ loop.index }}").submit();
+                });
+            });
+        </script>
+    {% endfor %}
 {% endblock %}

@@ -1,5 +1,6 @@
 import psycopg2 as dbapi2
 from flask import current_app
+from datetime import datetime
 
 from models.contest import Contest
 
@@ -7,7 +8,7 @@ from models.contest import Contest
 class Clarification:
     fields = ['clarification_id', 'contest_id', 'user_id', 'time_sent', 'clarification_content']
 
-    def __init__(self, contest_id=None, user_id=None, time_sent=None, clarification_content=None,
+    def __init__(self, contest_id=None, user_id=None, time_sent=datetime.now(), clarification_content=None,
                  clarification_id=None):
         self.contest_id = contest_id
         self.user_id = user_id

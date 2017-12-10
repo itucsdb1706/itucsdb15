@@ -4,20 +4,18 @@
     <div class="panel panel-primary">
     <div class="panel-heading"><h3>Clarification</h3></div>
     <div class="panel-body">
-        <form>
+        <form action="" method="post">
             <fieldset class="form-group">
                 <label for="contestselect">Choose Contest</label>
-                <select class="form-control" id="contestselect">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
+                <select class="form-control" name="contest_id" id="contestselect">
+                    {% for contest in contests %}
+                        <option value="{{ contest.contest_id }}">{{ contest.contest_name }}</option>
+                    {% endfor %}
                 </select>
             </fieldset>
             <fieldset class="form-group">
                 <label for="clarificationcontent">Clarifcation</label>
-                <textarea class="form-control" id="clarificationcontent" rows="5"></textarea>
+                <textarea class="form-control" name="content" id="clarificationcontent" rows="5"></textarea>
             </fieldset>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>

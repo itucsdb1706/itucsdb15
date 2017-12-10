@@ -4,34 +4,32 @@
     <div class="panel panel-primary">
     <div class="panel-heading"><h3>Add Problem</h3></div>
     <div class="panel-body">
-    <form>
+    <form action="" method="post">
         <fieldset class="form-group">
             <label for="contestselect">Choose Contest</label>
-            <select class="form-control" id="contestselect">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
+            <select class="form-control" name="contest_id" id="contestselect">
+                {% for contest in contests %}
+                    <option value="{{ contest.contest_id }}">{{ contest.contest_name }}</option>
+                {% endfor %}
             </select>
         </fieldset>
         <fieldset class="form-group">
             <label for="problemname">Problem Name</label>
-            <input type="text" class="form-control" id="problemname" placeholder="Enter name">
+            <input type="text" class="form-control" name="problem_name" id="problemname" placeholder="Enter name">
         </fieldset>
         <fieldset class="form-group">
             <label for="maxscore">Maxscore</label>
-            <input type="text" class="form-control" id="maxscore" placeholder="Enter the maxscore">
+            <input type="text" class="form-control" name="max_score" id="maxscore" placeholder="Enter the maxscore">
         </fieldset>
         <fieldset class="form-group">
             <label for="statementinp">Add Statement</label>
-            <textarea class="form-control" id="statementinp" rows="5"></textarea>
+            <textarea class="form-control" name="statement" id="statementinp" rows="5"></textarea>
         </fieldset>
         <div class="row">
             <div class="col-md-5">
                 <fieldset class="form-group">
                     <label for="sampleinp">Add Sample Input</label>
-                    <textarea class="form-control" id="sampleinp" rows="3"></textarea>
+                    <textarea class="form-control" name="sample" id="sampleinp" rows="3"></textarea>
                 </fieldset>
             </div>
             <div class="col-md-1">
@@ -40,7 +38,7 @@
             <div class="col-md-5">
                 <fieldset class="form-group">
                     <label for="sampleout">Add Sample Output</label>
-                    <textarea class="form-control" id="sampleout" rows="3"></textarea>
+                    <textarea class="form-control" name="sampleout" id="sampleout" rows="3"></textarea>
                 </fieldset>
             </div>
         </div>
@@ -56,7 +54,7 @@
                     <div style="margin-left:20px;"class="col-md-5">
                         <fieldset class="form-group">
                             <label for="addinp">Add Input</label>
-                            <textarea class="form-control" id="addinp" rows="3"></textarea>
+                            <textarea class="form-control" name="addinp1" id="addinp" rows="3"></textarea>
                         </fieldset>
                     </div>
                     <div class="col-md-1">
@@ -65,7 +63,7 @@
                     <div class="col-md-5">
                         <fieldset class="form-group">
                             <label for="expout">Add Expected Output</label>
-                            <textarea class="form-control" id="expout" rows="3"></textarea>
+                            <textarea class="form-control" name="expout1" id="expout" rows="3"></textarea>
                         </fieldset>
                     </div>
                 </div>
@@ -83,7 +81,7 @@
                         <div class="taginput">
 
                             <label for="tagin">Tag</label>
-                            <input type="text" class="form-control" id="tagin" placeholder="Enter tag">
+                            <input type="text" class="form-control" name="tagin1" placeholder="Enter tag">
 
                         </div>
                     </div>
@@ -101,13 +99,13 @@
         var inp = $(".addinput");
         var button = $(".add_button");
         var button1 = $(".add_inp_button");
-        var x = 0;
+        var x = 1;
         $(button).click(function(e){
             e.preventDefault();
             x++;
-            $(tag).append('<input type="text" class="form-control" id="tagin'+ x + '" placeholder="Enter tag">');
+            $(tag).append('<input type="text" class="form-control" name="tagin'+ x + '" placeholder="Enter tag">');
         });
-        var y=0;
+        var y=1;
         $(button1).click(function(e){
             e.preventDefault();
             y++;
@@ -115,7 +113,7 @@
             '<div class="col-md-5">'+
                 '<fieldset class="form-group">' +
                     '<label for="statementinp' + y + '">Add Input</label>'+
-                    '<textarea class="form-control" id="statementinp' + y + '" rows="3"></textarea>' +
+                    '<textarea class="form-control" name="addinp' + y + '" rows="3"></textarea>' +
                 '</fieldset>' +
             '</div>' +
             '<div class="col-md-1">'+
@@ -124,7 +122,7 @@
             '<div class="col-md-5">' +
                 '<fieldset class="form-group">' +
                     '<label for="expout' + y + ' ">Add Expected Output</label>' +
-                    '<textarea class="form-control" id="expout' + y + '" rows="3"></textarea>' +
+                    '<textarea class="form-control" name="expout' + y + '" rows="3"></textarea>' +
                 '</fieldset>' +
             '</div>'+
             '</div>'
