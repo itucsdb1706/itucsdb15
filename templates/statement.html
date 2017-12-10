@@ -89,6 +89,7 @@
                         </form>
                     </div>
                 </div>
+                <br>
                 <div class="row">
                     <div class="col-md-1">
 
@@ -116,7 +117,7 @@
 
     </div>
     <div class="panel-footer">
-        <p>Tags:asd,asd,asdas</p>
+        <p>Tags:{% for tag in problem.tags %} {{ tag.tag_name }}{% endfor %}</p>
     </div>
     </div>
 {% endblock %}
