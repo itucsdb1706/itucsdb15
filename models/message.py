@@ -18,7 +18,7 @@ class Message:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """INSERT INTO MESSAGE (message_content, is_read, from_user_id, to_user_id, time_sent) 
-                                  VALUES (%s, %s, %s, %s) 
+                                  VALUES (%s, %s, %s, %s, %s) 
                                   RETURNING message_id;"""
             cursor.execute(statement, (self.message_content,
                                        self.is_read,

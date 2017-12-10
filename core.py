@@ -10,6 +10,7 @@ from models.users import Users
 from utils import login_required, is_mail, password_validation, random_string
 
 import os
+from datetime import datetime
 
 core = Blueprint('core', __name__)
 
@@ -115,4 +116,14 @@ def read_msg():
     message_id = request.form.get('msg_id')
     message = Message.get(message_id=message_id)[0]
     message.update_read()
-    return render_template('home.html')
+    return redirect(url_for('core.home'))
+
+
+@core.route('/send_msg', methods=['POST'])
+def send_msg():
+    to_user_id = request.form.get('to_user', '')
+    msg_text = request.form.get('msg_text', '')
+    if msg_text != '' and to_user_id != '':
+        message = Message(msg_text, False, current_user.user_id, to_user_id, datetime.now())
+        message.save()
+    return redirect(url_for('core.home'))
