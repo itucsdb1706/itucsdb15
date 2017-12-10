@@ -57,6 +57,13 @@ class Users(UserMixin):
                            + (str(self.user_id),))
             cursor.close()
 
+    def increase_rank(self, increase):
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """UPDATE USERS SET rank = rank + %s WHERE user_id = %s;"""
+            cursor.execute(statement, (increase, self.user_id))
+            cursor.close()
+
     def set_password(self, password):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
@@ -152,7 +159,7 @@ class Users(UserMixin):
     def get_all():
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """SELECT {} FROM USERS;""".format(', '.join(Users.fields))
+            statement = """SELECT {} FROM USERS ORDER BY rank DESC;""".format(', '.join(Users.fields))
             cursor.execute(statement)
             result = cursor.fetchall()
             cursor.close()

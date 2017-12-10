@@ -108,6 +108,7 @@ class Problems:
 
         if not return_list:
             return_list = Problems.get(problem_id=problem_id)
+            return_list[0].submissions = []
 
         return return_list
 
