@@ -1,10 +1,36 @@
 <div id="right-bar" class="col-md-3">
     <div class="col-md-12">
         <ul class="nav nav-tabs nav-sm">
-          <li class="active"><a data-toggle="tab" href="#message">Message</a></li>
-          <li><a data-toggle="tab" href="#notification">Notifications</a></li>
-          <li style="float:right;"><a href="#"> Send Msg <i class="small material-icons">add_box</i></a></li>
+            <li class="active"><a data-toggle="tab" href="#message">Message</a></li>
+            <li><a data-toggle="tab" href="#notification">Notifications</a></li>
+            <li style="float:right;"><a  data-toggle="modal"href="#newmsg"> Send Msg <i class="small material-icons">add_box</i></a></li>
+
+            <div class="modal fade" id="newmsg">
+              <div class="modal-dialog">
+                  <div class="modal-content panel panel-info">
+                      <div class="modal-header panel-heading">
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          <h3 style="text-align:center;"class="modal-title">
+                            Send Message
+                          </h3>
+                      </div>
+                      <div class="modal-body panel-body">
+                          <form action="#">
+                            <fieldset style="text-align:left;" class="form-group">
+                              <label for="usernameselect">Username</label>
+                              <input type="text" class="form-control" id="usernameselect">
+                            </fieldset>
+                            <fieldset class="form-group">
+                              <textarea class="form-control"  rows="3"></textarea>
+                            </fieldset>
+                            <button type="submit" class="btn btn-primary">Send Message</button>
+                          </form>
+                      </div>
+                  </div>
+              </div>
+            </div>
         </ul>
+
 
         <div class="tab-content">
             <div id="message" class="tab-pane fade in active">
@@ -61,7 +87,6 @@
                         </div>
                     </li>
                 </ul>
-
             </div>
         </div>
     </div>
