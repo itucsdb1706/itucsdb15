@@ -1,8 +1,6 @@
 from flask import Blueprint
 from flask import render_template
 from flask import redirect, request, url_for
-from flask.helpers import url_for
-from flask import request
 from flask_login.utils import login_user, current_user, logout_user
 
 from models.message import Message
@@ -19,7 +17,6 @@ core = Blueprint('core', __name__)
 
 @core.route('/debug/')
 def debug():
-    print('AAAAAAAA->', os.getcwd())
     return render_template('debug.html')
 
 
@@ -160,19 +157,3 @@ def leave_team():
     current_user.team.decrease_rank(current_user.rank)
     current_user.leave_team()
     return redirect(request.referrer)
-
-@core.route('/admin_home', methods=['GET', 'POST'])
-def admin_home():
-    return render_template('admin_home.html')
-
-@core.route('/admin_add_contest', methods=['GET', 'POST'])
-def admin_add_contest():
-    return render_template('admin_add_contest.html')
-
-@core.route('/admin_add_problem', methods=['GET', 'POST'])
-def admin_add_problem():
-    return render_template('admin_add_problem.html')
-
-@core.route('/admin_send_clarification', methods=['GET', 'POST'])
-def admin_send_clarification():
-    return render_template('admin_send_clarif.html')

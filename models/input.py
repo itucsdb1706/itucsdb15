@@ -15,7 +15,7 @@ class Input:
             cursor = connection.cursor()
             query = """INSERT INTO INPUT (problem_id, testcase, expected_output) VALUES (%s, %s, %s)
                         RETURNING input_id;"""
-            cursor.execute(query, [self.problem_id, self.testcase, self.expected_output])
+            cursor.execute(query, (self.problem_id, self.testcase, self.expected_output))
             self.input_id = cursor.fetchone()[0]
             connection.commit()
 
@@ -52,7 +52,7 @@ class Input:
             cursor = connection.cursor()
             statement = """SELECT {} FROM INPUT WHERE ( {} );""" \
                 .format(', '.join(Input.fields), 'AND '.join([key + ' = %s' for key in kwargs]))
-            cursor.execute(statement)
+            cursor.execute(statement, tuple(str(kwargs[key]) for key in kwargs))
             result = cursor.fetchall()
             # TODO: None check
             connection.commit()

@@ -9,11 +9,11 @@ from .contest import Contest
 
 class Users(UserMixin):
     fields = ['user_id', 'username', 'email', 'password', 'rank', 'team_id', 'profile_photo', 'school', 'city',
-              'country', 'bio']
+              'country', 'bio', 'is_admin']
     editable_fields = ['email', 'bio', 'country', 'city', 'school', 'profile_photo']
 
     def __init__(self, username, email, password='', rank=0, team_id=None, profile_photo=None, school=None, city=None,
-                 country=None, bio=None):
+                 country=None, bio=None, is_admin=False):
         self.username = username
         self.email = email
         self.password = pwd_context.encrypt(password)
@@ -25,16 +25,17 @@ class Users(UserMixin):
         self.city = city
         self.country = country
         self.bio = bio
+        self.is_admin = is_admin
 
     def save(self):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """INSERT INTO USERS ( username, email, password, rank, register_date, team_id, profile_photo,
-                            school, city, country, bio) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                            RETURNING user_id;"""
+                          school, city, country, bio, is_admin) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                          RETURNING user_id;"""
             cursor.execute(statement, (self.username, self.email, self.password, self.rank, self.register_date,\
                                        self.team_id, self.profile_photo, self.school, self.city, self.country,\
-                                       self.bio))
+                                       self.bio, self.is_admin))
             self.user_id = cursor.fetchone()[0]
             cursor.close()
 
@@ -144,7 +145,8 @@ class Users(UserMixin):
                                       school        VARCHAR(140),
                                       city          VARCHAR(140),
                                       country       VARCHAR(140),
-                                      bio           VARCHAR(512)
+                                      bio           VARCHAR(512),
+                                      is_admin      BOOLEAN NOT NULL
                                       );"""
             cursor.execute(statement)
             cursor.close()

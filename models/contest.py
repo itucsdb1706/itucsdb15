@@ -6,7 +6,7 @@ from datetime import datetime
 class Contest:
     fields = ['contest_id', 'contest_name', 'is_individual', 'start_time', 'end_time']
 
-    def __init__(self, contest_name=None, is_individual=None, start_time=None, end_time=None):
+    def __init__(self, contest_name=None, is_individual=True, start_time=None, end_time=None):
         self.contest_id = None
         self.contest_name = contest_name
         self.is_individual = is_individual
@@ -17,7 +17,7 @@ class Contest:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """INSERT INTO CONTEST (contest_name, is_individual, start_time, end_time) 
-                                  VALUES (%s, %s, %s, %s);"""
+                                  VALUES (%s, %s, %s, %s) RETURNING contest_id;"""
             cursor.execute(statement, (self.contest_name,
                                        self.is_individual,
                                        self.start_time,
@@ -49,6 +49,23 @@ class Contest:
     def get_problems(self):
         from .problems import Problems
         self.problems = Problems.get(contest_id=self.contest_id)
+
+    def get_users(self):
+
+        from .users import Users
+
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """SELECT {} FROM CONTEST 
+                                      INNER JOIN CONTEST_USERS ON (CONTEST.contest_id = CONTEST_USERS.contest_id)
+                                      INNER JOIN USERS ON (CONTEST_USERS.user_id = USERS.user_id)
+                                      WHERE (CONTEST.contest_id = %s);"""\
+                .format(', '.join(map(lambda x: 'USERS.'+x, Users.fields)))
+            cursor.execute(statement, (self.contest_id,))
+            result = cursor.fetchall()
+            cursor.close()
+
+        self.users = [Users.object_converter(row) for row in result]
 
     @staticmethod
     def create():
