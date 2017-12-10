@@ -44,11 +44,15 @@
                 <h4>Team</h4>
                 {% if user.team %}
                     <p>
-                        Team name: <strong>{{ user.team.team_name }}</strong>
+                        Team name: <a href="{{ url_for('core.team', team_name=user.team.team_name) }}"><strong>{{ user.team.team_name }}</strong></a>
                     </p>
                     <p>
                         Rank: <strong>{{ user.team.team_rank }}</strong>
                     </p>
+                    <form action="{{ url_for('core.leave_team') }}" method="post">
+                        <input type="submit" value="Leave Team"/>
+                    </form>
+
                 {% elif is_owner %}
                 <p>
                     <form action="{{ url_for('core.join_team') }}" method="post">

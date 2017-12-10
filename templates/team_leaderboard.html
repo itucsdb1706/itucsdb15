@@ -10,7 +10,7 @@
         </tr>
         {% for team in teams %}
             <tr>
-                <td>{{ loop.index }}</td> <td><a href="#">{{ team.team_name }}</a></td><td>{{ team.team_rank }}</td>
+                <td>{{ loop.index }}</td> <td><a href="{{ url_for('core.team', team_name=team.team_name) }}">{{ team.team_name }}</a></td><td>{{ team.team_rank }}</td>
             </tr>
         {% endfor %}
     </table>

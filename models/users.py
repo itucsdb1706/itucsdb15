@@ -99,6 +99,13 @@ class Users(UserMixin):
             cursor.execute(statement, (team_id, self.user_id))
             cursor.close()
 
+    def leave_team(self):
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """UPDATE USERS SET team_id = NULL WHERE (user_id = %s);"""
+            cursor.execute(statement, (self.user_id, ))
+            cursor.close()
+
     def get_submissions(self):
         from .submissions import Submissions
         self.submissions = Submissions.get_join(user_id=self.user_id)
@@ -146,7 +153,7 @@ class Users(UserMixin):
     def get(**kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """SELECT {} FROM USERS WHERE ( {} );"""\
+            statement = """SELECT {} FROM USERS WHERE ( {} ) ORDER BY rank DESC;"""\
                 .format(', '.join(Users.fields), 'AND '.join([key + ' = %s' for key in kwargs]))
             print(statement)
             cursor.execute(statement, tuple(str(kwargs[key]) for key in kwargs))
@@ -176,6 +183,20 @@ class Users(UserMixin):
                 users[i].team = None
 
             return users
+
+    @staticmethod
+    def get_from_team(team_name):
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """SELECT {} FROM USERS INNER JOIN TEAM ON (USERS.team_id = TEAM.team_id)
+                                                WHERE ( TEAM.team_name = %s ) ORDER BY USERS.rank DESC;"""\
+                .format(', '.join(map(lambda x: 'USERS.' + x, Users.fields)))
+            cursor.execute(statement, (team_name,))
+            result = cursor.fetchall()
+            print(result)
+            cursor.close()
+
+            return [Users.object_converter(row) for row in result]
 
     @staticmethod
     def get_all():
