@@ -32,10 +32,12 @@ def get_elephantsql_dsn(vcap_services):
 @lm.user_loader
 def load_user(user_id):
     user = None
+    print('asasd->', Notification.get(user_id=user_id))
     try:
         user = Users.get(user_id=user_id)[0]
         user.msg_list = Message.get_messages_for_user(user)
         user.notifications = Notification.get(user_id=user.user_id)
+        print('AAAAAAAAAA->', user.notifications)
     finally:
         return user
 
