@@ -82,8 +82,22 @@ class Users(UserMixin):
         return return_value
 
     def get_team(self):
+
         self.team = Team.get(team_id=self.team_id)
+
+        if self.team:
+            self.team = self.team[0]
+        else:
+            self.team = None
+
         return self.team
+
+    def set_team(self, team_id):
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """UPDATE USERS SET team_id = %s WHERE (user_id = %s);"""
+            cursor.execute(statement, (team_id, self.user_id))
+            cursor.close()
 
     def get_submissions(self):
         from .submissions import Submissions
@@ -153,7 +167,15 @@ class Users(UserMixin):
             result = cursor.fetchall()
             print(result)
             cursor.close()
-            return [Users.object_converter(row, ['TEAM']) for row in result]
+
+            if result:
+                return [Users.object_converter(row, ['TEAM']) for row in result]
+
+            users = Users.get(**kwargs)
+            for i in range(len(users)):
+                users[i].team = None
+
+            return users
 
     @staticmethod
     def get_all():

@@ -42,12 +42,21 @@
             </div>
             <div  style="text-align:left" class="col-md-5">
                 <h4>Team</h4>
+                {% if user.team %}
+                    <p>
+                        Team name: <strong>{{ user.team.team_name }}</strong>
+                    </p>
+                    <p>
+                        Rank: <strong>{{ user.team.team_rank }}</strong>
+                    </p>
+                {% elif is_owner %}
                 <p>
-                    <!--team yoksa create team linki koyalim-->
+                    <form action="{{ url_for('core.join_team') }}" method="post">
+                        <input type="text" name="team_name"/>
+                        <input type="submit" value="Crete/Join Team"/>
+                    </form>
                 </p>
-                <p>
-                    <strong>Rank: -- teamrank --</strong>
-                </p>
+                {% endif %}
             </div>
             <div  style="text-align:left"  class="col-md-5">
                 <h4>Personal Rank</h4>
