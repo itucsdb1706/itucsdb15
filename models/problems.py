@@ -85,7 +85,7 @@ class Problems:
             statement = """SELECT {}, {} FROM PROBLEMS 
                                           INNER JOIN SUBMISSIONS ON (PROBLEMS.problem_id = SUBMISSIONS.problem_id)
                                           WHERE ( PROBLEMS.problem_id = %s AND SUBMISSIONS.user_id = %s )
-                                          ORDER BY SUBMISSIONS.send_time;"""\
+                                          ORDER BY SUBMISSIONS.send_time DESC;"""\
                 .format(', '.join(map(lambda x: 'PROBLEMS.' + x, Problems.fields)),
                         ', '.join(map(lambda x: 'SUBMISSIONS.' + x, Submissions.fields)))
             print(statement)
