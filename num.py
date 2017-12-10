@@ -20,6 +20,8 @@ from models.notification import Notification
 from models.problem_tag import ProblemTag
 from models.contest_user import ContestUser
 from models.discussion import Discussion
+from models.users_upvote import UsersUpvote
+from models.users_downvote import UsersDownvote
 
 import os
 
@@ -48,6 +50,8 @@ def check_number(number):
     ProblemTag.create()
     Notification.create()
     Discussion.create()
+    UsersUpvote.create()
+    UsersDownvote.create()
 
     # u = Users(username='burakbugrul', email='bbugrul96@gmail.com', password='123456gs')
     # u.save()

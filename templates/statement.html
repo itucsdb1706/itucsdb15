@@ -101,8 +101,14 @@
                                 {{ discussion.content }}
                                 </div>
                                 <div style="text-align:left;" class="panel-footer">
-                                    <p><a href="#"><span style="color:green;" class="glyphicon glyphicon-chevron-up"> </span></a> {{ discussion.upvote }}</p>
-                                    <p><a href="#"><span style="color:red;" class="glyphicon glyphicon-chevron-down"></span></a> {{ discussion.downvote }}</p>
+                                    <form action="{{ url_for('study.upvote') }}" method="post">
+                                        <input type="hidden" name="discussion_id" value="{{ discussion.discussion_id }}">
+                                        <p>{{ discussion.upvote }}<button class="btn btn-warning-outline" id="navbutton" type="submit" name="button"><span style="color:green;" class="glyphicon glyphicon-chevron-up"> </span></button></p>
+                                    </form>
+                                    <form action="{{ url_for('study.downvote') }}" method="post">
+                                        <input type="hidden" name="discussion_id" value="{{ discussion.discussion_id }}">
+                                        <p>{{ discussion.downvote }}<button class="btn btn-warning-outline" id="navbutton" type="submit" name="button"><span style="color:red;" class="glyphicon glyphicon-chevron-down"> </span></button></p>
+                                    </form>
                                 </div>
                             </div>
                         {% endfor %}
@@ -118,4 +124,14 @@
         <p>Tags:{% for tag in problem.tags %} {{ tag.tag_name }}{% endfor %}</p>
     </div>
     </div>
+
+    {% for discussion in problem.discussions %}
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $("a.submit{{ loop.index }}").click(function(){
+                    document.getElementById("form{{ loop.index }}").submit();
+                });
+            });
+        </script>
+    {% endfor %}
 {% endblock %}

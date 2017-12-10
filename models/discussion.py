@@ -9,7 +9,7 @@ class Discussion:
     def __init__(self, problem_id, user_id, content, post_time=datetime.now(), upvote=0, downvote=0):
         self.problem_id = problem_id
         self.user_id = user_id
-        self.content= content
+        self.content = content
         self.post_time = post_time
         self.upvote = upvote
         self.downvote = downvote
@@ -58,7 +58,7 @@ class Discussion:
     def get(**kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """SELECT {} FROM DISCUSSION WHERE ( {} );""" \
+            statement = """SELECT {} FROM DISCUSSION WHERE ( {} ) ORDER BY discussion_id;""" \
                 .format(', '.join(Discussion.fields), 'AND '.join([key + ' = %s' for key in kwargs]))
             cursor.execute(statement, tuple(str(kwargs[key]) for key in kwargs))
             result = cursor.fetchall()
