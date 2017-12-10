@@ -5,7 +5,7 @@ from flask import current_app
 class Notification:
     fields = ['notification_id', 'user_id', 'content', 'is_read']
 
-    def __init__(self, notification_id, user_id, content, is_read = False):
+    def __init__(self, notification_id, user_id, content, is_read=False):
         self.notification_id = notification_id
         self.user_id = user_id
         self.content = content

@@ -7,6 +7,7 @@ from study import study
 
 from models.users import Users
 from models.message import Message
+from models.notification import Notification
 
 import os
 import json
@@ -34,6 +35,7 @@ def load_user(user_id):
     try:
         user = Users.get(user_id=user_id)[0]
         user.msg_list = Message.get_messages_for_user(user)
+        user.notifications = Notification.get(user_id=user.user_id)
     finally:
         return user
 

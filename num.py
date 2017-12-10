@@ -5,7 +5,6 @@ from flask.helpers import url_for
 from flask import current_app
 
 from models.clarification import Clarification
-# from models.comment import Comment
 from models.contest import Contest
 from models.input import Input
 # from models.message import Message
@@ -16,9 +15,11 @@ from models.submissions import Submissions
 from models.team import Team
 from models.users import Users
 from models.tag import Tag
+from models.notification import Notification
 
 from models.problem_tag import ProblemTag
 from models.contest_user import ContestUser
+from models.discussion import Discussion
 
 import os
 
@@ -41,10 +42,12 @@ def check_number(number):
     Input.create()
     Submissions.create()
     Message.create()
-    # Tag.create()
+    Tag.create()
 
     ContestUser.create()
-    # ProblemTag.create()
+    ProblemTag.create()
+    Notification.create()
+    Discussion.create()
 
     # u = Users(username='burakbugrul', email='bbugrul96@gmail.com', password='123456gs')
     # u.save()
