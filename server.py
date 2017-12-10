@@ -2,6 +2,7 @@ from flask import Flask
 from flask_login import LoginManager
 
 from core import core
+from models.clarification import Clarification
 from num import num
 from study import study
 
@@ -43,6 +44,8 @@ def load_user(user_id):
         
         user.notifications = Notification.get(user_id=user.user_id)
         print('AAAAAAAAAA->', user.notifications)
+
+        user.clarifications = Clarification.get_clarifications_for_user(user)
     finally:
         return user
 

@@ -8,29 +8,30 @@
         <div class="tab-content">
             <div id="clarifiation" class="tab-pane fade in active">
                 <ul class="social">
-                    <li id="message-list">
-                        <button type="button" class="btn btn-block notif" data-toggle="modal" data-target="#msgPopUp">
-                            New clarification!
-                        </button>
+                    {% for contest_name, clarification in current_user.clarifications %}
+                        <li id="message-list">
+                            <button type="button" class="btn btn-block notif" data-toggle="modal" data-target="#msgPopUp{{ clarification.clarification_id }}">
+                                Clarification from {{ contest_name }}
+                            </button>
 
-                    <div class="modal fade" id="msgPopUp" >
-                        <div class="modal-dialog">
-                            <div class="modal-content panel panel-info">
-                                <div class="modal-header panel-heading">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h3 style="text-align:center;"class="modal-title">
-                                        Clarification
-                                    </h3>
-                                </div>
-                                <div class="modal-body panel-body">
-                                    <p>
-                                        Content
-                                    </p>
+                            <div class="modal fade" id="msgPopUp{{ clarification.clarification_id }}" >
+                                <div class="modal-dialog">
+                                    <div class="modal-content panel panel-info">
+                                        <div class="modal-header panel-heading">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h3 style="text-align:center;"class="modal-title">
+                                                Clarification from {{ contest_name }}
+                                            </h3>
+                                        </div>
+                                        <div class="modal-body panel-body">
+                                            <p style="font-size:small;">(Sent at {{ clarification.time_sent }})</p>
+                                            <p>{{ clarification.clarification_content }}</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    </li>
+                        </li>
+                    {% endfor %}
                 </ul>
             </div>
         </div>
