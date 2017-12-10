@@ -6,8 +6,7 @@ from datetime import datetime
 class Discussion:
     fields = ['discussion_id', 'problem_id', 'user_id', 'content', 'post_time', 'upvote', 'downvote']
 
-    def __init__(self, discussion_id, problem_id, user_id, content, post_time = datetime.now() , upvote = 0, downvote = 0):
-        self.discussion_id = discussion_id
+    def __init__(self, problem_id, user_id, content, post_time=datetime.now(), upvote=0, downvote=0):
         self.problem_id = problem_id
         self.user_id = user_id
         self.content= content
@@ -18,9 +17,10 @@ class Discussion:
     def save(self):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            query = """INSERT INTO DISCUSSION ( problem_id, user_id, content, post_time, upvote, downvote) VALUES ( %s, %s, %s, %s, %s, %s)
-                        RETURNING discussion_id;"""
-            cursor.execute(query, [self.problem_id, self.user_id, self.content, self.post_time, self.upvote, self.downvote])
+            query = """INSERT INTO DISCUSSION ( problem_id, user_id, content, post_time, upvote, downvote)
+                        VALUES ( %s, %s, %s, %s, %s, %s) RETURNING discussion_id;"""
+            cursor.execute(query, [self.problem_id, self.user_id, self.content, self.post_time, self.upvote,
+                                   self.downvote])
             self.discussion_id = cursor.fetchone()[0]
             connection.commit()
 
@@ -34,7 +34,7 @@ class Discussion:
     def update(self):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            query = """UPDATE INPUT SET  upvote = %s, downvote = %s WHERE discussion_id=%s;"""
+            query = """UPDATE INPUT SET  upvote = %s, downvote = %s WHERE discussion_id = %s;"""
             cursor.execute(query, (self.upvote, self.downvote, self.discussion_id))
             connection.commit()
 
@@ -58,9 +58,9 @@ class Discussion:
     def get(**kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """SELECT {} FROM INPUT WHERE ( {} );""" \
+            statement = """SELECT {} FROM DISCUSSION WHERE ( {} );""" \
                 .format(', '.join(Discussion.fields), 'AND '.join([key + ' = %s' for key in kwargs]))
-            cursor.execute(statement)
+            cursor.execute(statement, tuple(str(kwargs[key]) for key in kwargs))
             result = cursor.fetchall()
             # TODO: None check
             connection.commit()
@@ -79,7 +79,7 @@ class Discussion:
     @staticmethod
     def object_converter(values):
 
-        disc = Discussion('a', 'b', 'c', 'd', datetime.now(), 0, 0)
+        disc = Discussion('a', 'b', 'c')
 
         for ind, field in enumerate(Discussion.fields):
             disc.__setattr__(field, values[ind])

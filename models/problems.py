@@ -56,6 +56,10 @@ class Problems:
         from .problem_tag import ProblemTag
         self.tags = ProblemTag.get_tags_for_problem(self)
 
+    def get_discussions(self):
+        from .discussion import Discussion
+        self.discussions = Discussion.get(problem_id=self.problem_id)
+
     @staticmethod
     def create():
         with dbapi2.connect(current_app.config['dsn']) as connection:
