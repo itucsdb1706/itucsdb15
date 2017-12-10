@@ -15,7 +15,7 @@ from models.users_downvote import UsersDownvote
 
 from models.contest_user import ContestUser
 
-from utils import login_required
+from utils import login_required, get_submission_score
 
 study = Blueprint('study', __name__)
 
@@ -112,10 +112,24 @@ def statement(problem_id):
         else:
             problem = Problems.get(problem_id=problem_id)[0]
 
-        problem.get_sample()
-        problem.get_tags()
-        problem.get_discussions()
+    elif request.method == 'POST':
 
+        if not current_user.is_authenticated:
+            return redirect(url_for('core.home'))
+
+        problem = Problems.get_with_submissions(problem_id=problem_id, user_id=current_user.user_id)[0]
+        score = get_submission_score(problem.max_score)
+        source = request.files['source'].read()
+        print(source)
+        submission = Submissions(user_id=current_user.user_id, problem_id=problem_id, score=score[0],
+                                 is_complete=(score[0] == problem.max_score), language=request.form['language'],
+                                 error=score[1])
+        submission.save()
+        problem.submissions = [submission] + problem.submissions
+
+    problem.get_sample()
+    problem.get_tags()
+    problem.get_discussions()
     return render_template('statement.html', problem=problem)
 
 

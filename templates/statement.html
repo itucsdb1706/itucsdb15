@@ -37,27 +37,27 @@
                     <div class="col-md-4">
                         <fieldset class="form-group">
                             <label for="File">Choose File</label>
-                            <input type="file" class="form-control-file" id="File">
+                            <input type="file" name="source" class="form-control-file" id="File" form="submissionForm">
                             <small class="text-muted"></small>
                         </fieldset>
                     </div>
                     <div class="col-md-8">
                         <fieldset class="form-group">
                           <label for="exampleSelect1">Select Language</label>
-                          <select class="form-control" id="exampleSelect1">
-                            <option>C++</option>
-                            <option>Python2</option>
-                            <option>C</option>
-                            <option>Java</option>
-                            <option>Haskell</option>
-                            <option>C#</option>
-                            <option>Pascal</option>
-                            <option>Pyhton3</option>
+                          <select name="language" class="form-control" id="exampleSelect1" form="submissionForm">
+                            <option value="C++">C++</option>
+                            <option value="Python2">Python2</option>
+                            <option value="C">C</option>
+                            <option value="Java">Java</option>
+                            <option value="Haskell">Haskell</option>
+                            <option value="C#">C#</option>
+                            <option value="Pascal">Pascal</option>
+                            <option value="Python3">Pyhton3</option>
                           </select>
                         </fieldset>
                     </div>
                 </div>
-                <form>
+                <form action="" method="post" id="submissionForm" enctype="multipart/form-data">
 
                      <button type="submit" class="btn btn-primary">Submit Code</button>
                 </form>
@@ -124,14 +124,4 @@
         <p>Tags:{% for tag in problem.tags %} {{ tag.tag_name }}{% endfor %}</p>
     </div>
     </div>
-
-    {% for discussion in problem.discussions %}
-        <script type="text/javascript">
-            $(document).ready(function(){
-                $("a.submit{{ loop.index }}").click(function(){
-                    document.getElementById("form{{ loop.index }}").submit();
-                });
-            });
-        </script>
-    {% endfor %}
 {% endblock %}

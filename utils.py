@@ -27,3 +27,16 @@ def password_validation(password):
 
 def random_string(n):
     return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(n))
+
+
+def get_submission_score(max_score):
+
+    errors = ['Wrong Answer', 'Compilation Error', 'Runtime Error', 'Memory Limit Exceeded', 'Time Limit Exceeded']
+    rand = random.randint(1, 100)
+
+    if rand <= 25:
+        return max_score, 'Correct'
+    elif rand <= 50:
+        return 0, random.choice(errors)
+
+    return random.randint(1, max_score-1), 'OK'

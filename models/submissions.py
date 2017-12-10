@@ -24,9 +24,9 @@ class Submissions:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """INSERT INTO SUBMISSIONS (user_id, problem_id, score, is_complete, source, language, error,
-                        send_time VALUES (%s, %s, %s, %s, %s) RETURNING submission_id;"""
-            cursor.execute(query, [self.user_id, self.problem_id, self.score,
-                                   self.is_complete, self.source, self.language, self.error, self.send_time])
+                        send_time) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING submission_id;"""
+            cursor.execute(query, (self.user_id, self.problem_id, self.score,
+                                   self.is_complete, self.source, self.language, self.error, self.send_time))
             self.submission_id = cursor.fetchone()[0]
             connection.commit()
 
