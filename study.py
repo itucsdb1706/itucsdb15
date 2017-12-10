@@ -10,6 +10,8 @@ from models.problems import Problems
 from models.contest import Contest
 from models.submissions import Submissions
 from models.discussion import Discussion
+from models.users_upvote import UsersUpvote
+from models.users_downvote import UsersDownvote
 
 from models.contest_user import ContestUser
 
@@ -125,3 +127,17 @@ def add_discussion():
                             content=request.form['content'])
     discussion.save()
     return redirect(url_for('study.statement', problem_id=request.form['problem_id']))
+
+
+@study.route('/upvote', methods=['POST'])
+@login_required
+def upvote():
+    UsersUpvote.upvote(current_user.user_id, request.form['discussion_id'])
+    return redirect(request.referrer)
+
+
+@study.route('/downvote', methods=['POST'])
+@login_required
+def downvote():
+    UsersDownvote.downvote(current_user.user_id, request.form['discussion_id'])
+    return redirect(request.referrer)
