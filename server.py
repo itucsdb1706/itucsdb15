@@ -41,8 +41,8 @@ def load_user(user_id):
                             for ouser in Users.get_all()
                             if user.user_id != ouser.user_id]
         
-        # user.notifications = Notification.get(user_id=user.user_id)
-        # print('AAAAAAAAAA->', user.notifications)
+        user.notifications = Notification.get(user_id=user.user_id)
+        print('AAAAAAAAAA->', user.notifications)
     finally:
         return user
 
