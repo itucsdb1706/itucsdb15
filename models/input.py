@@ -52,7 +52,7 @@ class Input:
             cursor = connection.cursor()
             statement = """SELECT {} FROM INPUT WHERE ( {} );""" \
                 .format(', '.join(Input.fields), 'AND '.join([key + ' = %s' for key in kwargs]))
-            cursor.execute(statement, tuple(str(kwargs[key]) for key in kwargs))
+            cursor.execute(statement)
             result = cursor.fetchall()
             # TODO: None check
             connection.commit()

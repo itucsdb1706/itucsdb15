@@ -33,31 +33,35 @@
                         </div>
                     </div>
                 </div>
+                <!--div class="well well-sm">
+                    Explanation
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </div-->
                 <div class="row">
                     <div class="col-md-4">
                         <fieldset class="form-group">
                             <label for="File">Choose File</label>
-                            <input type="file" name="source" class="form-control-file" id="File" form="submissionForm">
+                            <input type="file" class="form-control-file" id="File">
                             <small class="text-muted"></small>
                         </fieldset>
                     </div>
                     <div class="col-md-8">
                         <fieldset class="form-group">
                           <label for="exampleSelect1">Select Language</label>
-                          <select name="language" class="form-control" id="exampleSelect1" form="submissionForm">
-                            <option value="C++">C++</option>
-                            <option value="Python2">Python2</option>
-                            <option value="C">C</option>
-                            <option value="Java">Java</option>
-                            <option value="Haskell">Haskell</option>
-                            <option value="C#">C#</option>
-                            <option value="Pascal">Pascal</option>
-                            <option value="Python3">Pyhton3</option>
+                          <select class="form-control" id="exampleSelect1">
+                            <option>C++</option>
+                            <option>Python2</option>
+                            <option>C</option>
+                            <option>Java</option>
+                            <option>Haskell</option>
+                            <option>C#</option>
+                            <option>Pascal</option>
+                            <option>Pyhton3</option>
                           </select>
                         </fieldset>
                     </div>
                 </div>
-                <form action="" method="post" id="submissionForm" enctype="multipart/form-data">
+                <form>
 
                      <button type="submit" class="btn btn-primary">Submit Code</button>
                 </form>
@@ -77,10 +81,9 @@
 
                     </div>
                     <div class="col-md-10">
-                        <form action="{{ url_for('study.add_discussion') }}" method="post">
-                            <input type="hidden" name="problem_id" value="{{ problem.problem_id }}">
+                        <form>
                             <fieldset class="form-group">
-                              <textarea class="form-control" name="content" rows="3"></textarea>
+                              <textarea class="form-control"  rows="3"></textarea>
                             </fieldset>
                             <button type="submit" class="btn btn-primary">Send</button>
                         </form>
@@ -92,26 +95,19 @@
 
                     </div>
                     <div class="col-md-10">
-                        {% for discussion in problem.discussions %}
-                            <div class="panel panel-info">
-                                <div style="text-align:left;" class="panel-heading">
-                                    {{ discussion.user_id }}
-                                </div>
-                                <div style="text-align:left;" class="panel-body">
-                                {{ discussion.content }}
-                                </div>
-                                <div style="text-align:left;" class="panel-footer">
-                                    <form action="{{ url_for('study.upvote') }}" method="post">
-                                        <input type="hidden" name="discussion_id" value="{{ discussion.discussion_id }}">
-                                        <p>{{ discussion.upvote }}<button class="btn btn-warning-outline" id="navbutton" type="submit" name="button"><span style="color:green;" class="glyphicon glyphicon-chevron-up"> </span></button></p>
-                                    </form>
-                                    <form action="{{ url_for('study.downvote') }}" method="post">
-                                        <input type="hidden" name="discussion_id" value="{{ discussion.discussion_id }}">
-                                        <p>{{ discussion.downvote }}<button class="btn btn-warning-outline" id="navbutton" type="submit" name="button"><span style="color:red;" class="glyphicon glyphicon-chevron-down"> </span></button></p>
-                                    </form>
-                                </div>
+                        <div class="panel panel-info">
+                            <div style="text-align:left;" class="panel-heading">
+                                Sender username
                             </div>
-                        {% endfor %}
+                            <div style="text-align:left;" class="panel-body">
+                                Discussion Content
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            </div>
+                            <div style="text-align:left;" class="panel-footer">
+                                <p><a href="#"><span style="color:green;" class="glyphicon glyphicon-chevron-up"> </span></a> #votes</p>
+                                <p><a href="#"><span style="color:red;" class="glyphicon glyphicon-chevron-down"></span></a> #votes</p>
+                            </div>
+                        </ div>
                     </div>
                 </div>
 

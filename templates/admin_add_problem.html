@@ -1,0 +1,135 @@
+{% extends "layout.html" %}
+{% block title %}Add Problem{% endblock %}
+{% block content %}
+    <div class="panel panel-primary">
+    <div class="panel-heading"><h3>Add Problem</h3></div>
+    <div class="panel-body">
+    <form>
+        <fieldset class="form-group">
+            <label for="contestselect">Choose Contest</label>
+            <select class="form-control" id="contestselect">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+            </select>
+        </fieldset>
+        <fieldset class="form-group">
+            <label for="problemname">Problem Name</label>
+            <input type="text" class="form-control" id="problemname" placeholder="Enter name">
+        </fieldset>
+        <fieldset class="form-group">
+            <label for="maxscore">Maxscore</label>
+            <input type="text" class="form-control" id="maxscore" placeholder="Enter the maxscore">
+        </fieldset>
+        <fieldset class="form-group">
+            <label for="statementinp">Add Statement</label>
+            <textarea class="form-control" id="statementinp" rows="5"></textarea>
+        </fieldset>
+        <div class="row">
+            <div class="col-md-5">
+                <fieldset class="form-group">
+                    <label for="sampleinp">Add Sample Input</label>
+                    <textarea class="form-control" id="sampleinp" rows="3"></textarea>
+                </fieldset>
+            </div>
+            <div class="col-md-1">
+
+            </div>
+            <div class="col-md-5">
+                <fieldset class="form-group">
+                    <label for="sampleout">Add Sample Output</label>
+                    <textarea class="form-control" id="sampleout" rows="3"></textarea>
+                </fieldset>
+            </div>
+        </div>
+        <div class="row">
+            <div class="addinput">
+                <div class="row">
+                    <div class="col-md-11">
+                    <button class="add_inp_button">Add Input</button>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div style="margin-left:20px;"class="col-md-5">
+                        <fieldset class="form-group">
+                            <label for="addinp">Add Input</label>
+                            <textarea class="form-control" id="addinp" rows="3"></textarea>
+                        </fieldset>
+                    </div>
+                    <div class="col-md-1">
+
+                    </div>
+                    <div class="col-md-5">
+                        <fieldset class="form-group">
+                            <label for="expout">Add Expected Output</label>
+                            <textarea class="form-control" id="expout" rows="3"></textarea>
+                        </fieldset>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <fieldset class="form-group">
+                    <div class="row">
+                        <button class="add_button">Add Tag</button>
+                    </div>
+                    <div class="row">
+                        <div class="taginput">
+
+                            <label for="tagin">Tag</label>
+                            <input type="text" class="form-control" id="tagin" placeholder="Enter tag">
+
+                        </div>
+                    </div>
+
+                </fieldset>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    </div>
+    </div>
+    <script  type="text/javascript">
+    $(document).ready(function() {
+        var tag = $(".taginput");
+        var inp = $(".addinput");
+        var button = $(".add_button");
+        var button1 = $(".add_inp_button");
+        var x = 0;
+        $(button).click(function(e){
+            e.preventDefault();
+            x++;
+            $(tag).append('<input type="text" class="form-control" id="tagin'+ x + '" placeholder="Enter tag">');
+        });
+        var y=0;
+        $(button1).click(function(e){
+            e.preventDefault();
+            y++;
+            $(inp).append( '<div class="row">'+
+            '<div class="col-md-5">'+
+                '<fieldset class="form-group">' +
+                    '<label for="statementinp' + y + '">Add Input</label>'+
+                    '<textarea class="form-control" id="statementinp' + y + '" rows="3"></textarea>' +
+                '</fieldset>' +
+            '</div>' +
+            '<div class="col-md-1">'+
+
+            '</div> '+
+            '<div class="col-md-5">' +
+                '<fieldset class="form-group">' +
+                    '<label for="expout' + y + ' ">Add Expected Output</label>' +
+                    '<textarea class="form-control" id="expout' + y + '" rows="3"></textarea>' +
+                '</fieldset>' +
+            '</div>'+
+            '</div>'
+            );
+        });
+    });
+    </script>
+{% endblock %}
