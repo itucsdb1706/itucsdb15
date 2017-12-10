@@ -156,7 +156,7 @@ class Users(UserMixin):
             cursor.execute(statement)
             result = cursor.fetchall()
             cursor.close()
-            return result
+            return [Users.object_converter(row) for row in result]
 
     @staticmethod
     def object_converter(values, is_joined=False):

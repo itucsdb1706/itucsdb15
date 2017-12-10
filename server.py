@@ -34,6 +34,9 @@ def load_user(user_id):
     try:
         user = Users.get(user_id=user_id)[0]
         user.msg_list = Message.get_messages_for_user(user)
+        user.other_users = [(ouser.user_id, ouser.username)
+                            for ouser in Users.get_all()
+                            if user.user_id != ouser.user_id]
     finally:
         return user
 
