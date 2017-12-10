@@ -5,7 +5,7 @@ from flask import current_app
 class Notification:
     fields = ['notification_id', 'user_id', 'content', 'is_read']
 
-    def __init__(self, notification_id, user_id, content, is_read = False):
+    def __init__(self, notification_id, user_id, content, is_read=False):
         self.notification_id = notification_id
         self.user_id = user_id
         self.content = content
@@ -51,9 +51,9 @@ class Notification:
     def get(**kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """SELECT {} FROM NOTIFICATION  WHERE ( {} );""" \
+            statement = """SELECT {} FROM NOTIFICATION WHERE ( {} );""" \
                 .format(', '.join(Notification.fields), 'AND '.join([key + ' = %s' for key in kwargs]))
-            cursor.execute(statement)
+            cursor.execute(statement, tuple(str(kwargs[key]) for key in kwargs))
             result = cursor.fetchall()
             # TODO: None check
             connection.commit()
@@ -72,7 +72,7 @@ class Notification:
     @staticmethod
     def object_converter(values):
 
-        notif = Notification('a', 'b', 'c', False)
+        notif = Notification('a', 'b', 'c')
 
         for ind, field in enumerate(Notification.fields):
             notif.__setattr__(field, values[ind])

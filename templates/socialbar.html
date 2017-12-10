@@ -70,26 +70,28 @@
             </div>
             <div id="notification" class="tab-pane fade">
                 <ul class="social">
-                    <li>
-                        <button class="btn btn-block notif" type="button" data-toggle="modal" data-target="#notifPopUp">
-                            New contest!
-                        </button>
-                        <div class="modal fade" id="notifPopUp">
-                            <div class="modal-dialog">
-                                <div class="modal-content panel panel-primary">
-                                    <div class="modal-header panel-heading">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h3 style="text-align:center;"class="modal-title">
-                                            New Contest
-                                        </h3>
-                                    </div>
-                                    <div class="modal-body panel-body">
-                                        <p>notification content</p>
+                    {% for notification in current_user.notifications %}
+                        <li>
+                            <button class="btn btn-block notif" type="button" data-toggle="modal" data-target="#notifPopUp{{ notification.notification_id }}">
+                                {% if not notification.is_read %}NEW: {% endif %}{{ notification.content }}
+                            </button>
+                            <div class="modal fade" id="notifPopUp{{ notification.notification_id }}">
+                                <div class="modal-dialog">
+                                    <div class="modal-content panel panel-primary">
+                                        <div class="modal-header panel-heading">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h3 style="text-align:center;"class="modal-title">
+                                                {% if not notification.is_read %}NEW{% endif %}
+                                            </h3>
+                                        </div>
+                                        <div class="modal-body panel-body">
+                                            <p>{{ notification.content }}</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </li>
+                        </li>
+                    {% endfor %}
                 </ul>
             </div>
         </div>

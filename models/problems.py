@@ -52,6 +52,14 @@ class Problems:
 
         self.sample = Input.object_converter(result[0])
 
+    def get_tags(self):
+        from .problem_tag import ProblemTag
+        self.tags = ProblemTag.get_tags_for_problem(self)
+
+    def get_discussions(self):
+        from .discussion import Discussion
+        self.discussions = Discussion.get(problem_id=self.problem_id)
+
     @staticmethod
     def create():
         with dbapi2.connect(current_app.config['dsn']) as connection:
@@ -98,6 +106,9 @@ class Problems:
             if i == len(result)-1 or result[i+1][0] != result[i][0]:
                 return_list.append(problem)
 
+        if not return_list:
+            return_list = Problems.get(problem_id=problem_id)
+
         return return_list
 
     @staticmethod
@@ -108,8 +119,8 @@ class Problems:
                 .format(', '.join(Problems.fields), 'AND '.join([key + ' = %s' for key in kwargs]))
             cursor.execute(statement, tuple(str(kwargs[key]) for key in kwargs))
             result = cursor.fetchall()
-            # TODO: None check
             connection.commit()
+            print('AAAAAAAAAAa->', [Problems.object_converter(row) for row in result])
             return [Problems.object_converter(row) for row in result]
 
     @staticmethod

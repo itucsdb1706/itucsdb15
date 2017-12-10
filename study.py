@@ -9,6 +9,7 @@ from models.users import Users
 from models.problems import Problems
 from models.contest import Contest
 from models.submissions import Submissions
+from models.discussion import Discussion
 
 from models.contest_user import ContestUser
 
@@ -20,7 +21,10 @@ study = Blueprint('study', __name__)
 @study.route('/problemlist')
 def problem_list():
 
+    # TODO: This can be mor efficient
     problems = Problems.get_all()
+    for problem in problems:
+        problem.get_tags()
 
     if current_user.is_authenticated:
         solved = Submissions.get_solved_problems(current_user)
@@ -104,7 +108,20 @@ def statement(problem_id):
         if current_user.is_authenticated:
             problem = Problems.get_with_submissions(problem_id=problem_id, user_id=current_user.user_id)[0]
         else:
-            problem = Problems.get(problem_id=problem_id)
+            problem = Problems.get(problem_id=problem_id)[0]
+
         problem.get_sample()
+        problem.get_tags()
+        problem.get_discussions()
 
     return render_template('statement.html', problem=problem)
+
+
+@study.route('/add_discussion', methods=['POST'])
+@login_required
+def add_discussion():
+
+    discussion = Discussion(problem_id=request.form['problem_id'], user_id=current_user.user_id,
+                            content=request.form['content'])
+    discussion.save()
+    return redirect(url_for('study.statement', problem_id=request.form['problem_id']))

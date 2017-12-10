@@ -40,7 +40,7 @@ class ProblemTag:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT {} 
-                                  FROM PROBLEM NATURAL JOIN PROBLEM_TAG NATURAL JOIN TAG
+                                  FROM PROBLEMS NATURAL JOIN PROBLEM_TAG NATURAL JOIN TAG
                                   WHERE (problem_id = %s);""".format(', '.join(Tag.fields))
             cursor.execute(statement, (problem.problem_id,))
             tags_as_tuples = cursor.fetchall()
@@ -52,7 +52,7 @@ class ProblemTag:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT {}
-                                  FROM PROBLEM NATURAL JOIN PROBLEM_TAG NATURAL JOIN TAG
+                                  FROM PROBLEMS NATURAL JOIN PROBLEM_TAG NATURAL JOIN TAG
                                   WHERE (tag_id = %s);""".format(', '.join(Problems.fields))
             cursor.execute(statement, (tag.tag_id,))
             problems_as_tuples = cursor.fetchall()
