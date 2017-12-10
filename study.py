@@ -5,6 +5,7 @@ from flask.helpers import url_for
 from flask import request
 from flask_login.utils import login_user, current_user, logout_user
 
+from models.team import Team
 from models.users import Users
 from models.problems import Problems
 from models.contest import Contest
@@ -20,7 +21,7 @@ from utils import login_required, get_submission_score
 study = Blueprint('study', __name__)
 
 
-@study.route('/problemlist')
+@study.route('/problemlist/')
 def problem_list():
 
     # TODO: This can be mor efficient
@@ -38,7 +39,7 @@ def problem_list():
     return render_template('problems.html', problems=problems, solved=solved, tried=tried)
 
 
-@study.route('/contestlist')
+@study.route('/contestlist/')
 def contest_list():
     contests = Contest.get_all()
     if current_user.is_authenticated:
@@ -48,7 +49,7 @@ def contest_list():
     return render_template('contestlist.html', contests=contests, registered_contests=registered_contests)
 
 
-@study.route('/register_contest', methods=['POST'])
+@study.route('/register_contest/', methods=['POST'])
 @login_required
 def register_contest():
 
@@ -69,7 +70,13 @@ def user_leaderboard():
     return render_template('user_leaderboard.html', users=users)
 
 
-@study.route('/leaderboard/<string:contest_name>')
+@study.route('/team_leaderboard/')
+def team_leaderboard():
+    teams = Team.get_all()
+    return render_template('team_leaderboard.html', teams=teams)
+
+
+@study.route('/leaderboard/<string:contest_name>/')
 def leaderboard(contest_name):
 
     contest_dict = Contest.get_with_leaderboard(contest_name)
@@ -94,7 +101,7 @@ def leaderboard(contest_name):
     return render_template('leaderboard.html', contest=contest, users=users)
 
 
-@study.route('/contest/<string:contest_name>')
+@study.route('/contest/<string:contest_name>/')
 def contest(contest_name):
 
     contest = Contest.get_with_problems(contest_name=contest_name)[0]
@@ -108,8 +115,7 @@ def contest(contest_name):
     return render_template('contest-page.html', contest=contest, solved=solved, tried=tried)
 
 
-# TODO: discussion and post
-@study.route('/statement/<string:problem_id>', methods=['GET', 'POST'])
+@study.route('/statement/<string:problem_id>/', methods=['GET', 'POST'])
 def statement(problem_id):
 
     if request.method == 'GET':
@@ -136,7 +142,9 @@ def statement(problem_id):
 
         if increase > 0:
             current_user.increase_rank(increase)
-            # TODO: update team rank
+            current_user.get_team()
+            if current_user.team is not None:
+                current_user.team.increase_rank(increase)
 
         problem.submissions = [submission] + problem.submissions
 
@@ -146,7 +154,7 @@ def statement(problem_id):
     return render_template('statement.html', problem=problem)
 
 
-@study.route('/add_discussion', methods=['POST'])
+@study.route('/add_discussion/', methods=['POST'])
 @login_required
 def add_discussion():
 
@@ -156,14 +164,14 @@ def add_discussion():
     return redirect(url_for('study.statement', problem_id=request.form['problem_id']))
 
 
-@study.route('/upvote', methods=['POST'])
+@study.route('/upvote/', methods=['POST'])
 @login_required
 def upvote():
     UsersUpvote.upvote(current_user.user_id, request.form['discussion_id'])
     return redirect(request.referrer)
 
 
-@study.route('/downvote', methods=['POST'])
+@study.route('/downvote/', methods=['POST'])
 @login_required
 def downvote():
     UsersDownvote.downvote(current_user.user_id, request.form['discussion_id'])

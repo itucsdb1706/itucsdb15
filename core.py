@@ -7,6 +7,8 @@ from flask_login.utils import login_user, current_user, logout_user
 
 from models.message import Message
 from models.users import Users
+from models.team import Team
+
 from utils import login_required, is_mail, password_validation, random_string
 
 import os
@@ -15,7 +17,7 @@ from datetime import datetime
 core = Blueprint('core', __name__)
 
 
-@core.route('/debug')
+@core.route('/debug/')
 def debug():
     print('AAAAAAAA->', os.getcwd())
     return render_template('debug.html')
@@ -26,7 +28,7 @@ def home():
     return render_template('home.html')
 
 
-@core.route('/login', methods=['POST'])
+@core.route('/login/', methods=['POST'])
 def login():
     email = request.form.get('email', '-')
     password = request.form.get('password', '-')
@@ -38,7 +40,7 @@ def login():
     return redirect(request.referrer)
 
 
-@core.route('/logout')
+@core.route('/logout/')
 def logout():
 
     if current_user.is_authenticated:
@@ -47,15 +49,14 @@ def logout():
     return redirect(url_for('core.home'))
 
 
-@core.route('/profile/<string:username>', methods=['GET', 'POST'])
-@login_required
+@core.route('/profile/<string:username>/', methods=['GET', 'POST'])
 def profile(username):
-    user = Users.get(username=username)[0]
+    user = Users.get_join(username=username)[0]
     is_owner = current_user.is_authenticated and current_user.user_id == user.user_id
     return render_template('profile-page.html', user=user, is_owner=is_owner)
 
 
-@core.route('/register', methods=['GET', 'POST'])
+@core.route('/register/', methods=['GET', 'POST'])
 def register():
 
     if request.method == 'GET':
@@ -85,7 +86,7 @@ def register():
         return redirect(url_for('core.home'))
 
 
-@core.route('/edit-profile', methods=['GET', 'POST'])
+@core.route('/edit-profile/', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
 
@@ -111,7 +112,7 @@ def edit_profile():
     return render_template('profile-edit.html')
 
 
-@core.route('/read_msg', methods=['POST'])
+@core.route('/read_msg/', methods=['POST'])
 def read_msg():
     message_id = request.form.get('msg_id')
     message = Message.get(message_id=message_id)[0]
@@ -119,7 +120,7 @@ def read_msg():
     return redirect(url_for('core.home'))
 
 
-@core.route('/send_msg', methods=['POST'])
+@core.route('/send_msg/', methods=['POST'])
 def send_msg():
     to_user_id = request.form.get('to_user', '')
     msg_text = request.form.get('msg_text', '')
@@ -127,3 +128,20 @@ def send_msg():
         message = Message(msg_text, False, current_user.user_id, to_user_id, datetime.now())
         message.save()
     return redirect(url_for('core.home'))
+
+
+@core.route('/join_team/', methods=['POST'])
+@login_required
+def join_team():
+
+    team = Team.get(team_name=request.form['team_name'])
+
+    if not team:
+        team = Team(team_name=request.form['team_name'])
+        team.save()
+    else:
+        team = team[0]
+
+    current_user.set_team(team.team_id)
+    return redirect(request.referrer)
+

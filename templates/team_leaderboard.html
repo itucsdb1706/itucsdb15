@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block title %}All Teams{% endblock %}
+{% block content %}
+    <div class="panel panel-primary">
+    <div class="panel-heading">Teams</div>
+    <div class="panel-body">
+        <table class="table table-hover">
+        <tr>
+            <th>#</th> <th>Team Name</th><th>Total Score</th>
+        </tr>
+        {% for team in teams %}
+            <tr>
+                <td>{{ loop.index }}</td> <td><a href="#">{{ team.team_name }}</a></td><td>{{ team.team_rank }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+    </div>
+{% endblock %}
