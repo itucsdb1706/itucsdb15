@@ -11,7 +11,7 @@
                 <ul class="social">
                     {% for (from_user, message) in current_user.msg_list %}
                         <li id="message{{ message.message_id }}">
-                            <button type="button" class="btn btn-block notif" data-toggle="modal" data-target="#msgPopUp{{ message.message_id }}">
+                            <button id="msgButton{{ message.message_id }}" type="button" onclick="readMsg({{ message.message_id }})" class="btn btn-block notif" data-toggle="modal" data-target="#msgPopUp{{ message.message_id }}">
                                 {% if message.is_read %}
                                     Message From: {{ from_user }}
                                 {% else %}
@@ -67,5 +67,11 @@
     </div>
 </div>
 <script type="text/javascript">
-
+    function readMsg(id) {
+        $.ajax({
+            url: "/read_msg",
+            type: "POST",
+            data: {msg_id: id}
+        });
+    }
 </script>

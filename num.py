@@ -5,7 +5,6 @@ from flask.helpers import url_for
 from flask import current_app
 
 from models.clarification import Clarification
-from models.comment import Comment
 from models.contest import Contest
 from models.input import Input
 # from models.message import Message
