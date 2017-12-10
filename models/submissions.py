@@ -76,6 +76,18 @@ class Submissions:
             return [Submissions.object_converter(row) for row in result]
 
     @staticmethod
+    def get_max(user_id, problem_id):
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """SELECT MAX(score) FROM SUBMISSIONS WHERE (user_id = %s AND problem_id = %s );"""
+            cursor.execute(statement, (user_id, problem_id))
+            result = cursor.fetchone()
+            connection.commit()
+            if result[0] is None:
+                result = (0,)
+            return result[0]
+
+    @staticmethod
     def get_solved_problems(user, contest=None):
         if contest is not None:
             with dbapi2.connect(current_app.config['dsn']) as connection:

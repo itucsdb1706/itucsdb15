@@ -106,7 +106,10 @@ class Contest:
         u_id = len(Contest.fields)
         p_id = len(Contest.fields)+len(Users.fields)
 
-        return_dict = {'contest': Contest.object_converter(result[0]), 'users': {}}
+        if not result:
+            return_dict = {'contest': Contest.get(contest_name=contest_name)[0], 'users': {}}
+        else:
+            return_dict = {'contest': Contest.object_converter(result[0]), 'users': {}}
 
         for i in range(len(result)):
             print(result[i])

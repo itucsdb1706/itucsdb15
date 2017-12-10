@@ -63,6 +63,12 @@ def register_contest():
     return redirect(url_for('study.contest_list'))
 
 
+@study.route('/user_leaderboard/')
+def user_leaderboard():
+    users = Users.get_all()
+    return render_template('user_leaderboard.html', users=users)
+
+
 @study.route('/leaderboard/<string:contest_name>')
 def leaderboard(contest_name):
 
@@ -120,11 +126,18 @@ def statement(problem_id):
         problem = Problems.get_with_submissions(problem_id=problem_id, user_id=current_user.user_id)[0]
         score = get_submission_score(problem.max_score)
         source = request.files['source'].read()
-        print(source)
         submission = Submissions(user_id=current_user.user_id, problem_id=problem_id, score=score[0],
                                  is_complete=(score[0] == problem.max_score), language=request.form['language'],
                                  error=score[1])
+
+        max_score = int(Submissions.get_max(current_user.user_id, problem_id))
+        increase = score[0]-max_score
         submission.save()
+
+        if increase > 0:
+            current_user.increase_rank(increase)
+            # TODO: update team rank
+
         problem.submissions = [submission] + problem.submissions
 
     problem.get_sample()
