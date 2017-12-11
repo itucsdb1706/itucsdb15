@@ -78,17 +78,25 @@ def init_db():
         future.save()
 
         # Problems
-        easy = Problems(problem_name='Easy', statement='This problem is easy', contest_id=past.contest_id,
+        easy = Problems(problem_name='Easy', statement='This problem is easy', contest_id=online.contest_id,
                         max_score=100)
         easy.save()
 
-        moderate = Problems(problem_name='Moderate', statement='This problem is moderate', contest_id=past.contest_id,
+        moderate = Problems(problem_name='Moderate', statement='This problem is moderate', contest_id=online.contest_id,
                             max_score=100)
         moderate.save()
 
-        hard = Problems(problem_name='Hard', statement='This problem is hard', contest_id=past.contest_id,
+        hard = Problems(problem_name='Hard', statement='This problem is hard', contest_id=online.contest_id,
                         max_score=100)
         hard.save()
+
+        past_prob = Problems(problem_name='Old', statement='This problem is old', contest_id=past.contest_id,
+                             max_score=100)
+        past_prob.save()
+
+        new_prob = Problems(problem_name='New', statement='This problem is new', contest_id=future.contest_id,
+                            max_score=100)
+        new_prob.save()
 
         # Tags
 
