@@ -230,6 +230,6 @@ class Users(UserMixin):
     def drop():
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """DROP TABLE  IF EXISTS USERS;"""
+            statement = """DROP TABLE  IF EXISTS USERS CASCADE;"""
             cursor.execute(statement)
             cursor.close()

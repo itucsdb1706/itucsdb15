@@ -99,6 +99,6 @@ class Team:
     def drop():
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """DROP TABLE  IF EXISTS TEAM;"""
+            statement = """DROP TABLE  IF EXISTS TEAM CASCADE;"""
             cursor.execute(statement)
             cursor.close()

@@ -105,7 +105,6 @@ def leaderboard(contest_name):
 
 @study.route('/contest/<string:contest_name>/')
 def contest(contest_name):
-    print(url_req.unquote(contest_name))
     contest = Contest.get_with_problems(contest_name=url_req.unquote(contest_name))[0]
     solved = set()
     tried = set()

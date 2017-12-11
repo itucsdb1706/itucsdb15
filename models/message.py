@@ -90,7 +90,7 @@ class Message:
     def drop():
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """DROP TABLE IF EXISTS MESSAGE;"""
+            statement = """DROP TABLE IF EXISTS MESSAGE CASCADE;"""
             cursor.execute(statement)
             cursor.close()
 

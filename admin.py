@@ -8,8 +8,6 @@ from models.clarification import Clarification
 from models.contest import Contest
 from models.input import Input
 from models.message import Message
-from models.notification import Notification
-from models.message import Message
 from models.problems import Problems
 from models.submissions import Submissions
 from models.team import Team
@@ -24,6 +22,7 @@ from models.users_upvote import UsersUpvote
 from models.users_downvote import UsersDownvote
 
 from utils import admin_required
+from datetime import datetime, timedelta
 
 admin = Blueprint('admin', __name__)
 
@@ -32,6 +31,98 @@ admin = Blueprint('admin', __name__)
 @admin_required
 def admin_home():
     return render_template('admin_home.html')
+
+
+@admin.route('/init_db/')
+def init_db():
+
+    Team.create()
+    Users.create()
+
+    if len(Users.get(is_admin=True)) == 0:
+
+        tables = [Team, Contest, Users, Problems, Tag, ProblemTag, Message, Clarification, Notification, Discussion,
+                  Submissions, Input, ContestUser, UsersUpvote, UsersDownvote]
+
+        for table in tables[::-1]:
+            table.drop()
+        for table in tables:
+            table.create()
+
+        # Teams and Users
+        bumbles = Team(team_name='HumbleBumbles')
+        bumbles.save()
+        burakbugrul = Users(username='burakbugrul', email='bbugrul96@gmail.com', password='123456gs', is_admin=True,
+                            team_id=bumbles.team_id)
+        burakbugrul.save()
+
+        packers = Team(team_name='HackerPackers')
+        packers.save()
+        hackergirl = Users(username='hackergirl123', email='info@hackpack.com', password='123456gs', is_admin=True,
+                           team_id=packers.team_id)
+        hackergirl.save()
+        pax = Users(username='pax', email='pax@pax.com', password='123456gs', is_admin=True, team_id=packers.team_id)
+        pax.save()
+
+        # Contests
+        online = Contest(contest_name='online', start_time=datetime.now(),
+                         end_time=datetime.now()+timedelta(days=1000))
+        online.save()
+
+        past = Contest(contest_name='past', start_time=datetime.now() - timedelta(days=1000),
+                       end_time=datetime.now() - timedelta(days=1))
+        past.save()
+
+        future = Contest(contest_name='future', start_time=datetime.now()+timedelta(days=500),
+                         end_time=datetime.now() + timedelta(days=1000))
+        future.save()
+
+        # Problems
+        easy = Problems(problem_name='Easy', statement='This problem is easy', contest_id=past.contest_id,
+                        max_score=100)
+        easy.save()
+
+        moderate = Problems(problem_name='Moderate', statement='This problem is moderate', contest_id=past.contest_id,
+                            max_score=100)
+        moderate.save()
+
+        hard = Problems(problem_name='Hard', statement='This problem is hard', contest_id=past.contest_id,
+                        max_score=100)
+        hard.save()
+
+        # Tags
+
+        dynamic = Tag(tag_name='Dynamic')
+        dynamic.save()
+
+        graph = Tag(tag_name='Graph')
+        graph.save()
+
+        greedy = Tag(tag_name='Greedy')
+        greedy.save()
+
+        games = Tag(tag_name='Game-Theory')
+        games.save()
+
+        ProblemTag.save_tags_to_problem(easy, [greedy])
+        ProblemTag.save_tags_to_problem(moderate, [dynamic, games])
+        ProblemTag.save_tags_to_problem(hard, [dynamic, graph, greedy])
+
+        # Inputs
+
+        inp = Input(problem_id=easy.problem_id, testcase='input', expected_output='output')
+        inp.save()
+
+        inp = Input(problem_id=easy.problem_id, testcase='input2', expected_output='output2')
+        inp.save()
+
+        inp = Input(problem_id=moderate.problem_id, testcase='input moderate', expected_output='output moderate')
+        inp.save()
+
+        inp = Input(problem_id=hard.problem_id, testcase='input hard', expected_output='output hard')
+        inp.save()
+
+    return redirect(url_for('core.home'))
 
 
 @admin.route('/admin_add_contest/', methods=['GET', 'POST'])

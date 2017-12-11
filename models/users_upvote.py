@@ -45,6 +45,6 @@ class UsersUpvote:
     def drop():
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """DROP TABLE  IF EXISTS USERS_UPVOTE;"""
+            statement = """DROP TABLE  IF EXISTS USERS_UPVOTE CASCADE;"""
             cursor.execute(statement)
             cursor.close()
