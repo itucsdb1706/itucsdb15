@@ -59,6 +59,16 @@ class Tag:
             return [Tag.object_converter(row) for row in result]
 
     @staticmethod
+    def get_all(**kwargs):
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """SELECT {} FROM TAG ORDER BY tag_name;""".format(', '.join(Tag.fields))
+            cursor.execute(statement, tuple(str(kwargs[key]) for key in kwargs))
+            result = cursor.fetchall()
+            connection.commit()
+            return [Tag.object_converter(row) for row in result]
+
+    @staticmethod
     def object_converter(values):
         tag = Tag()
 

@@ -2,7 +2,6 @@ from flask import Blueprint
 from flask import render_template
 from flask import redirect, request, url_for
 from flask.helpers import url_for
-from flask import request
 from flask_login.utils import login_user, current_user, logout_user
 
 from models.team import Team
@@ -13,6 +12,8 @@ from models.submissions import Submissions
 from models.discussion import Discussion
 from models.users_upvote import UsersUpvote
 from models.users_downvote import UsersDownvote
+from models.problem_tag import ProblemTag
+from models.tag import Tag
 
 from models.contest_user import ContestUser
 
@@ -177,3 +178,15 @@ def upvote():
 def downvote():
     UsersDownvote.downvote(current_user.user_id, request.form['discussion_id'])
     return redirect(request.referrer)
+
+
+@study.route('/tag/<int:tag_id>/')
+def tag(tag_id):
+
+    tag = Tag.get(tag_id=tag_id)[0]
+    problems = ProblemTag.get_problems_with_tag(tag)
+
+    for i in range(len(problems)):
+        problems[i].get_tags()
+
+    return render_template('tag.html', tag=tag, problems=problems)

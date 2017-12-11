@@ -3,7 +3,36 @@
 {% block content %}
     <div class="panel panel-primary">
     <div class="panel-heading"><h3>Welcome to HackPack {{ current_user.username }}</h3></div>
-    <div class="panel-body">Have a nice hackday.</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Have a nice hackday.</h2>
+                <blockquote style="font-size: large">
+                    HackPack is an online competition and education platform for data structures and algorithms. Here you can enter contest or just solve the old contests' problems. Solve, discuss, unite and most important have fun!
+                    You can find the problems categorized by tags just below.
+                    <footer>With the best wishes HackPack Team</footer>
+                </blockquote>
+
+            </div>
+        </div>
+        <div style="text-align: left;" class="row">
+
+            <div class="col-md-3">
+
+            </div>
+            <div class="col-md-6">
+                <h4> Tags of Problems </h4>
+                <ul>
+                {% for tag in tags %}
+                    <a href="{{ url_for('study.tag', tag_id=tag.tag_id) }}"><li>{{ tag.tag_name }}</li></a>
+                {% endfor %}
+                </ul>
+            </div>
+
+        </div>
+
+
+    </div>
     </div>
 {% endblock %}
 {% block socialbar %}

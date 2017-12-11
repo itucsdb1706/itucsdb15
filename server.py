@@ -3,7 +3,6 @@ from flask_login import LoginManager
 
 from core import core
 from models.clarification import Clarification
-from num import num
 from study import study
 from admin import admin
 

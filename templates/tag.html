@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block title %}{{ tag.tag_name }}{% endblock %}
+{% block content %}
+    <div class="panel panel-primary">
+    <div class="panel-heading"><h3>Problems</h3></div>
+    <div class="panel-body ">
+        <table class="table table-striped ">
+            {% for problem in problems %}
+            <tr>
+                <td><a href="{{ url_for('study.statement', problem_id=problem.problem_id) }}">{{ problem.problem_name }}</a></td> <td style="text-align:left"> {% if problem.problem_id in solved %}<span style="color:green;" class="glyphicon glyphicon-ok"></span>{% elif problem.problem_id in tried %}<span style="color:red;" class=" 	glyphicon glyphicon-remove"></span>{% endif %} </td>
+                <td>{% for tag in problem.tags %}{{ tag.tag_name }} {% endfor %}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    </div>
+{% endblock %}
+{% block socialbar %}
+    {% include "socialbar.html" %}
+{% endblock %}
