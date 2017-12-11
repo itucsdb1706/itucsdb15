@@ -34,15 +34,10 @@ class ContestUser:
             cursor.executemany(statement, [(contest.contest_id, user.user_id) for user in user_list])
             cursor.close()
 
-    # TODO: Should be implemented in Users?
-    '''
     @staticmethod
-    def get_registered_contests(user):
+    def drop():
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """SELECT {} FROM CONTEST NATURAL JOIN CONTEST_USERS WHERE (user_id = %s);""".format()
-            cursor.execute(statement, (user.tag_id,))
-            problems_as_tuples = cursor.fetchall()
+            statement = """DROP TABLE  IF EXISTS CONTEST_USERS;"""
+            cursor.execute(statement)
             cursor.close()
-            return [Problems(item[1], item[2], item[3], item[4], item[5], item[0]) for item in problems_as_tuples]
-    '''

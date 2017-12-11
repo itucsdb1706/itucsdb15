@@ -85,3 +85,11 @@ class Discussion:
             disc.__setattr__(field, values[ind])
 
         return disc
+
+    @staticmethod
+    def drop():
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """DROP TABLE  IF EXISTS DISCUSSION;"""
+            cursor.execute(statement)
+            cursor.close()

@@ -225,3 +225,11 @@ class Users(UserMixin):
             user.team = team
 
         return user
+
+    @staticmethod
+    def drop():
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """DROP TABLE  IF EXISTS USERS;"""
+            cursor.execute(statement)
+            cursor.close()

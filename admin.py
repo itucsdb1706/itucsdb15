@@ -42,6 +42,12 @@ def admin_add_contest():
         contest = Contest(contest_name=request.form['contest_name'], is_individual='is_individual' in request.form,
                           start_time=request.form['start_time'], end_time=request.form['end_time'])
         contest.save()
+
+        users = Users.get_all()
+        for user in users:
+            notification = Notification(notification_id=0, user_id=user.user_id,
+                                        content='There is a new contest for you to participate')
+            notification.save()
         return redirect(url_for('admin.admin_home'))
 
     return render_template('admin_add_contest.html')

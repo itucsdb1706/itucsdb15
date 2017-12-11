@@ -58,3 +58,11 @@ class ProblemTag:
             problems_as_tuples = cursor.fetchall()
             cursor.close()
             return [Problems.object_converter(item) for item in problems_as_tuples]
+
+    @staticmethod
+    def drop():
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """DROP TABLE  IF EXISTS PROBLEMM_TAG;"""
+            cursor.execute(statement)
+            cursor.close()

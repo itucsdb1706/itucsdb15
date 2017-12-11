@@ -5,7 +5,7 @@ from flask import current_app
 class Team:
     fields = ['team_id', 'team_name', 'team_rank']
 
-    def __init__(self, team_name, team_rank=0, team_photo=None):
+    def __init__(self, team_name, team_rank=0):
         self.team_name = team_name
         self.team_rank = team_rank
 
@@ -94,3 +94,11 @@ class Team:
             team.__setattr__(field, values[ind])
 
         return team
+
+    @staticmethod
+    def drop():
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """DROP TABLE  IF EXISTS TEAM;"""
+            cursor.execute(statement)
+            cursor.close()

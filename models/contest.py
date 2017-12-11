@@ -201,3 +201,11 @@ class Contest:
             contest.status = 'upcoming'
 
         return contest
+
+    @staticmethod
+    def drop():
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """DROP TABLE  IF EXISTS CONTEST;"""
+            cursor.execute(statement)
+            cursor.close()

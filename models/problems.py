@@ -140,3 +140,11 @@ class Problems:
             problem.__setattr__(field, values[ind])
 
         return problem
+
+    @staticmethod
+    def drop():
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """DROP TABLE  IF EXISTS PROBLEM_TAG;"""
+            cursor.execute(statement)
+            cursor.close()

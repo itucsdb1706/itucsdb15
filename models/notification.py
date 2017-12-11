@@ -51,7 +51,7 @@ class Notification:
     def get(**kwargs):
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """SELECT {} FROM NOTIFICATION WHERE ( {} );""" \
+            statement = """SELECT {} FROM NOTIFICATION WHERE ( {} ) ORDER BY notification_id DESC;""" \
                 .format(', '.join(Notification.fields), 'AND '.join([key + ' = %s' for key in kwargs]))
             cursor.execute(statement, tuple(str(kwargs[key]) for key in kwargs))
             result = cursor.fetchall()
@@ -78,3 +78,11 @@ class Notification:
             notif.__setattr__(field, values[ind])
 
         return notif
+
+    @staticmethod
+    def drop():
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """DROP TABLE  IF EXISTS NOTIFICATION;"""
+            cursor.execute(statement)
+            cursor.close()

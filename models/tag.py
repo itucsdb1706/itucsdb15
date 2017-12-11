@@ -71,6 +71,6 @@ class Tag:
     def drop():
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """DROP TABLE TAG;"""
+            statement = """DROP TABLE IF EXISTS TAG;"""
             cursor.execute(statement)
             cursor.close()
