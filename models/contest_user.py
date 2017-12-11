@@ -11,8 +11,8 @@ class ContestUser:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS CONTEST_USERS (
-                                  contest_id  INTEGER REFERENCES CONTEST(contest_id) NOT NULL,
-                                  user_id     INTEGER REFERENCES USERS(user_id) NOT NULL,
+                                  contest_id  INTEGER REFERENCES CONTEST(contest_id) ON DELETE CASCADE NOT NULL,
+                                  user_id     INTEGER REFERENCES USERS(user_id) ON DELETE CASCADE NOT NULL,
                                   PRIMARY KEY (contest_id, user_id)
                                   );"""
             cursor.execute(statement)

@@ -10,8 +10,8 @@ class ProblemTag:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS PROBLEM_TAG (
-                                  problem_id INTEGER REFERENCES PROBLEMS(problem_id) NOT NULL,
-                                  tag_id     INTEGER REFERENCES TAG(tag_id) NOT NULL,
+                                  problem_id INTEGER REFERENCES PROBLEMS(problem_id) ON DELETE CASCADE NOT NULL,
+                                  tag_id     INTEGER REFERENCES TAG(tag_id) ON DELETE CASCADE NOT NULL,
                                   PRIMARY KEY (problem_id, tag_id)
                                   );"""
             cursor.execute(statement)
