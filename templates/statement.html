@@ -96,7 +96,7 @@
                         {% for discussion in problem.discussions %}
                             <div class="panel panel-info">
                                 <div style="text-align:left;" class="panel-heading">
-                                    {{ discussion.user_id }}
+                                    <a href="{{ url_for('core.profile', username=discussion.user.username) }}">{{ discussion.user.username }}</a>
                                 </div>
                                 <div style="text-align:left;" class="panel-body">
                                 {{ discussion.content }}

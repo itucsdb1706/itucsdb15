@@ -56,7 +56,10 @@ class Problems:
 
     def get_discussions(self):
         from .discussion import Discussion
+        from .users import Users
         self.discussions = Discussion.get(problem_id=self.problem_id)
+        for discussion in self.discussions:
+            discussion.user = Users.get(user_id=discussion.user_id)[0]
 
     @staticmethod
     def create():
