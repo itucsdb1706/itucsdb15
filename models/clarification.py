@@ -111,6 +111,6 @@ class Clarification:
     def drop():
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
-            statement = """DROP TABLE CLARIFICATION;"""
+            statement = """DROP TABLE  IF EXISTS CLARIFICATION;"""
             cursor.execute(statement)
             cursor.close()

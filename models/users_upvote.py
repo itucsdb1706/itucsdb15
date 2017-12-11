@@ -40,3 +40,11 @@ class UsersUpvote:
             statement = """INSERT INTO USERS_UPVOTE (user_id, discussion_id) VALUES (%s, %s);"""
             cursor.execute(statement, (user_id, discussion_id))
             cursor.close()
+
+    @staticmethod
+    def drop():
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """DROP TABLE  IF EXISTS USERS_UPVOTE;"""
+            cursor.execute(statement)
+            cursor.close()

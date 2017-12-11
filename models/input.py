@@ -77,3 +77,11 @@ class Input:
             inp.__setattr__(field, values[ind])
 
         return inp
+
+    @staticmethod
+    def drop():
+        with dbapi2.connect(current_app.config['dsn']) as connection:
+            cursor = connection.cursor()
+            statement = """DROP TABLE  IF EXISTS INPUT;"""
+            cursor.execute(statement)
+            cursor.close()
