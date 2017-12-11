@@ -24,6 +24,8 @@ from models.users_downvote import UsersDownvote
 from utils import admin_required
 from datetime import datetime, timedelta
 
+import os
+
 admin = Blueprint('admin', __name__)
 
 
@@ -35,6 +37,10 @@ def admin_home():
 
 @admin.route('/init_db/')
 def init_db():
+
+    if not os.path.exists(os.path.join(os.getcwd(), 'static', 'media')):
+        os.makedirs(os.path.join(os.getcwd(), 'static', 'media'))
+        os.mkdir(os.path.join(os.getcwd(), 'static', 'media', 'profile_pictures'))
 
     Team.create()
     Users.create()

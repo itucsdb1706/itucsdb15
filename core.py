@@ -6,6 +6,7 @@ from flask_login.utils import login_user, current_user, logout_user
 from models.message import Message
 from models.users import Users
 from models.team import Team
+from models.tag import Tag
 
 from utils import login_required, is_mail, password_validation, random_string
 
@@ -22,7 +23,8 @@ def debug():
 
 @core.route('/')
 def home():
-    return render_template('home.html')
+    tags = Tag.get_all()
+    return render_template('home.html', tags=tags)
 
 
 @core.route('/login/', methods=['POST'])
@@ -111,6 +113,8 @@ def edit_profile():
             current_user.set_password(request.form['new_password'])
 
         current_user.update()
+
+        return redirect(url_for('core.profile', username=current_user.username))
 
     return render_template('profile-edit.html')
 
