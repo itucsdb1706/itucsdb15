@@ -9,8 +9,8 @@ class UsersUpvote:
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS USERS_UPVOTE (
-                                  user_id       INTEGER REFERENCES USERS(user_id) NOT NULL,
-                                  discussion_id INTEGER REFERENCES DISCUSSION(discussion_id) NOT NULL,
+                                  user_id       INTEGER REFERENCES USERS(user_id) ON DELETE CASCADE NOT NULL,
+                                  discussion_id INTEGER REFERENCES DISCUSSION(discussion_id) ON DELETE CASCADE NOT NULL,
                                   PRIMARY KEY (user_id, discussion_id)
                                   );"""
             cursor.execute(statement)

@@ -40,7 +40,7 @@ class Notification:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS NOTIFICATION (
                                   notification_id    SERIAL PRIMARY KEY NOT NULL,
-                                  user_id            INTEGER REFERENCES USERS(user_id) NOT NULL,
+                                  user_id            INTEGER REFERENCES USERS(user_id) ON DELETE CASCADE NOT NULL,
                                   content            VARCHAR(1024),
                                   is_read            BOOLEAN
                                   );"""

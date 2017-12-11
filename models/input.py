@@ -39,7 +39,7 @@ class Input:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS INPUT (
                                   input_id        SERIAL PRIMARY KEY NOT NULL,
-                                  problem_id      INTEGER REFERENCES PROBLEMS(problem_id) NOT NULL,
+                                  problem_id      INTEGER REFERENCES PROBLEMS(problem_id) ON DELETE CASCADE NOT NULL,
                                   testcase        VARCHAR(1024),
                                   expected_output VARCHAR(1024)
                                   );"""

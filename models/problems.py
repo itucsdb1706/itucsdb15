@@ -69,7 +69,7 @@ class Problems:
                                       problem_id    SERIAL PRIMARY KEY NOT NULL,
                                       problem_name  VARCHAR(140),
                                       statement     VARCHAR(1000),
-                                      contest_id    INTEGER REFERENCES CONTEST(contest_id) NOT NULL,
+                                      contest_id    INTEGER REFERENCES CONTEST(contest_id) ON DELETE CASCADE NOT NULL,
                                       max_score     INT NOT NULL,
                                       editorial     VARCHAR(1000)
                                       );"""

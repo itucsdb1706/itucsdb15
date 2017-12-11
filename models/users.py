@@ -140,7 +140,7 @@ class Users(UserMixin):
                                       password      VARCHAR(256),
                                       rank          INT NOT NULL,
                                       register_date TIMESTAMP NOT NULL,
-                                      team_id       INTEGER REFERENCES TEAM(team_id),
+                                      team_id       INTEGER REFERENCES TEAM(team_id) ON DELETE SET NULL,
                                       profile_photo VARCHAR(4096),
                                       school        VARCHAR(140),
                                       city          VARCHAR(140),

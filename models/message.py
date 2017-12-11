@@ -53,8 +53,8 @@ class Message:
                                   message_id      SERIAL PRIMARY KEY NOT NULL,
                                   message_content VARCHAR(4096) NOT NULL,
                                   is_read         BOOLEAN NOT NULL DEFAULT FALSE,
-                                  from_user_id    INTEGER REFERENCES USERS(user_id) NOT NULL,
-                                  to_user_id      INTEGER REFERENCES USERS(user_id) NOT NULL,
+                                  from_user_id    INTEGER REFERENCES USERS(user_id) ON DELETE CASCADE NOT NULL,
+                                  to_user_id      INTEGER REFERENCES USERS(user_id) ON DELETE CASCADE NOT NULL,
                                   time_sent       TIMESTAMP NOT NULL
                                   );"""
             cursor.execute(statement)

@@ -44,8 +44,8 @@ class Discussion:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS DISCUSSION (
                                     discussion_id   SERIAL PRIMARY KEY NOT NULL,
-                                    problem_id      INTEGER REFERENCES PROBLEMS(problem_id) NOT NULL,
-                                    user_id         INTEGER REFERENCES USERS(user_id) NOT NULL,
+                                    problem_id      INTEGER REFERENCES PROBLEMS(problem_id) ON DELETE CASCADE NOT NULL,
+                                    user_id         INTEGER REFERENCES USERS(user_id) ON DELETE CASCADE NOT NULL,
                                     content         VARCHAR(500),
                                     post_time       TIMESTAMP NOT NULL,
                                     upvote          INTEGER NOT NULL,
