@@ -3,6 +3,8 @@ from flask import current_app
 
 
 class Notification:
+    """ Blueprint of NOTIFICATION table """
+
     fields = ['notification_id', 'user_id', 'content', 'is_read']
 
     def __init__(self, notification_id, user_id, content, is_read=False):
@@ -12,6 +14,10 @@ class Notification:
         self.is_read = is_read;
 
     def save(self):
+        """
+        Inserts notification into database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """INSERT INTO NOTIFICATION (user_id, content, is_read) VALUES (%s, %s, %s)
@@ -21,6 +27,10 @@ class Notification:
             connection.commit()
 
     def delete(self):
+        """
+        Deletes notification from database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """DELETE FROM DISCUSSION WHERE discussion_id = %s;"""
@@ -28,6 +38,10 @@ class Notification:
             connection.commit()
 
     def update(self):
+        """
+        Updates notification in database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """UPDATE DISCUSSION SET user_id = %s, content  = %s, is_read = %s WHERE notification_id=%s;"""
@@ -36,6 +50,10 @@ class Notification:
 
     @staticmethod
     def create():
+        """
+        Creates NOTIFICATION table in database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS NOTIFICATION (
@@ -49,6 +67,11 @@ class Notification:
 
     @staticmethod
     def get(**kwargs):
+        """
+        Queries notifications from database according to given arguments.
+        :param kwargs: Arguments
+        :return: list
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT {} FROM NOTIFICATION WHERE ( {} ) ORDER BY notification_id DESC;""" \
@@ -61,6 +84,10 @@ class Notification:
 
     @staticmethod
     def get_all():
+        """
+        Gets all notifications from database.
+        :return: list
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """SELECT {} FROM NOTIFICATION;""".format(', '.join(Notification.fields))
@@ -71,6 +98,11 @@ class Notification:
 
     @staticmethod
     def object_converter(values):
+        """
+        Creates a Notification object with given arguments.
+        :param values: Objects attributes(tuple)
+        :return: Team
+        """
 
         notif = Notification('a', 'b', 'c')
 
@@ -81,6 +113,10 @@ class Notification:
 
     @staticmethod
     def drop():
+        """
+        Drops NOTIFICATION table.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """DROP TABLE  IF EXISTS NOTIFICATION CASCADE;"""

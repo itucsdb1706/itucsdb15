@@ -3,6 +3,8 @@ from flask import current_app
 
 
 class Input:
+    """ Blueprint of INPUT table """
+
     fields = ['input_id', 'problem_id', 'testcase', 'expected_output']
 
     def __init__(self, problem_id, testcase, expected_output):
@@ -11,6 +13,10 @@ class Input:
         self.expected_output = expected_output
 
     def save(self):
+        """
+        Saves input into database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """INSERT INTO INPUT (problem_id, testcase, expected_output) VALUES (%s, %s, %s)
@@ -20,6 +26,10 @@ class Input:
             connection.commit()
 
     def delete(self):
+        """
+        Deletes input from database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """DELETE FROM INPUT WHERE input_id = %s;"""
@@ -27,6 +37,10 @@ class Input:
             connection.commit()
 
     def update(self):
+        """
+        Updates input in database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """UPDATE INPUT SET problem_id = %s, testcase = %s, expected_output = %s WHERE input_id=%s;"""
@@ -35,6 +49,10 @@ class Input:
 
     @staticmethod
     def create():
+        """
+        Creates INPUT table in database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS INPUT (
@@ -48,6 +66,11 @@ class Input:
 
     @staticmethod
     def get(**kwargs):
+        """
+        Queries inputs from database according to given arguments.
+        :param kwargs: Arguments
+        :return: list
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT {} FROM INPUT WHERE ( {} );""" \
@@ -60,6 +83,10 @@ class Input:
 
     @staticmethod
     def get_all():
+        """
+        Returns all inputs
+        :return: list
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """SELECT {} FROM INPUT;""".format(', '.join(Input.fields))
@@ -70,6 +97,11 @@ class Input:
 
     @staticmethod
     def object_converter(values):
+        """
+        Creates a Input object with given arguments.
+        :param values: Object attributes(tuple)
+        :return: Input object
+        """
 
         inp = Input('a', 'b', 'c')
 
@@ -80,6 +112,10 @@ class Input:
 
     @staticmethod
     def drop():
+        """
+        Drops INPUT table.
+        :return:
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """DROP TABLE  IF EXISTS INPUT CASCADE;"""

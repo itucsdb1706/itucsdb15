@@ -28,6 +28,10 @@ class Users(UserMixin):
         self.is_admin = is_admin
 
     def save(self):
+        """
+        Inserts user into database
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """INSERT INTO USERS ( username, email, password, rank, register_date, team_id, profile_photo,
@@ -40,6 +44,10 @@ class Users(UserMixin):
             cursor.close()
 
     def delete(self):
+        """
+        Deletes user from database
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """DELETE FROM USERS WHERE (user_id = %s);"""
@@ -47,6 +55,10 @@ class Users(UserMixin):
             cursor.close()
 
     def update(self):
+        """
+        Updates user in database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             set_condition = ', '.join([field + '= %s' for field in Users.editable_fields])
@@ -59,6 +71,11 @@ class Users(UserMixin):
             cursor.close()
 
     def increase_rank(self, increase):
+        """
+        Increases a users rank by given parameter
+        :param increase: int
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """UPDATE USERS SET rank = rank + %s WHERE user_id = %s;"""
@@ -66,6 +83,11 @@ class Users(UserMixin):
             cursor.close()
 
     def set_password(self, password):
+        """
+        Sets a users password by given parameter by hashing it.
+        :param password: str
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             hashed = pwd_context.encrypt(password)
@@ -74,6 +96,11 @@ class Users(UserMixin):
             cursor.close()
 
     def check_password(self, password):
+        """
+        Checks if given password is true for user
+        :param password: str
+        :return: bool
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT password FROM USERS WHERE (user_id = %s);"""
@@ -83,6 +110,10 @@ class Users(UserMixin):
         return return_value
 
     def get_team(self):
+        """
+        Gets users team into user object and returns it
+        :return: Team object
+        """
 
         self.team = Team.get(team_id=self.team_id)
 
@@ -94,6 +125,11 @@ class Users(UserMixin):
         return self.team
 
     def set_team(self, team_id):
+        """
+        Sets users team by given team id.
+        :param team_id: int
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """UPDATE USERS SET team_id = %s WHERE (user_id = %s);"""
@@ -101,6 +137,10 @@ class Users(UserMixin):
             cursor.close()
 
     def leave_team(self):
+        """
+        Sets users team as NULL
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """UPDATE USERS SET team_id = NULL WHERE (user_id = %s);"""
@@ -108,13 +148,25 @@ class Users(UserMixin):
             cursor.close()
 
     def get_submissions(self):
+        """
+        Gets all submissions of user into user object
+        :return: None
+        """
         from .submissions import Submissions
         self.submissions = Submissions.get_join(user_id=self.user_id)
 
     def get_notifications(self):
+        """
+        Not implemented
+        :return: None
+        """
         pass
 
     def get_registered_contests(self):
+        """
+        Gets registered contests ids of user
+        :return: set
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT contest_id FROM CONTEST NATURAL JOIN CONTEST_USERS WHERE (user_id = %s);"""
@@ -127,10 +179,18 @@ class Users(UserMixin):
             return contest_set
 
     def get_id(self):
+        """
+        Returns users id
+        :return: int
+        """
         return self.user_id
 
     @staticmethod
     def create():
+        """
+        Creates USERS table in database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS USERS (
@@ -153,6 +213,11 @@ class Users(UserMixin):
 
     @staticmethod
     def get(**kwargs):
+        """
+        Gets users with given parameters.
+        :param kwargs:
+        :return: list
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT {} FROM USERS WHERE ( {} ) ORDER BY rank DESC;"""\
@@ -165,6 +230,11 @@ class Users(UserMixin):
 
     @staticmethod
     def get_join(**kwargs):
+        """
+        Gets users with given parameter with their teams.
+        :param kwargs:
+        :return: list
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT {}, {} FROM USERS INNER JOIN TEAM ON (USERS.team_id = TEAM.team_id) WHERE ( {} );""" \
@@ -188,6 +258,11 @@ class Users(UserMixin):
 
     @staticmethod
     def get_from_team(team_name):
+        """
+        Gets users of a team.
+        :param team_name: str
+        :return: list
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT {} FROM USERS INNER JOIN TEAM ON (USERS.team_id = TEAM.team_id)
@@ -202,6 +277,10 @@ class Users(UserMixin):
 
     @staticmethod
     def get_all():
+        """
+        Gets all users.
+        :return: list
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT {} FROM USERS ORDER BY rank DESC;""".format(', '.join(Users.fields))
@@ -212,6 +291,12 @@ class Users(UserMixin):
 
     @staticmethod
     def object_converter(values, is_joined=False):
+        """
+        Creates a Users object with given arguments.
+        :param values: Object attributes (tuple)
+        :param is_joined: (default False) bool
+        :return: Users object
+        """
 
         user = Users('a', 'b', 'c')
 
@@ -228,6 +313,10 @@ class Users(UserMixin):
 
     @staticmethod
     def drop():
+        """
+        Drops USERS table.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """DROP TABLE  IF EXISTS USERS CASCADE;"""

@@ -3,6 +3,8 @@ from flask import current_app
 
 
 class Team:
+    """ Blueprint of TEAM table """
+
     fields = ['team_id', 'team_name', 'team_rank']
 
     def __init__(self, team_name, team_rank=0):
@@ -10,6 +12,10 @@ class Team:
         self.team_rank = team_rank
 
     def save(self):
+        """
+        Inserts team into database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """INSERT INTO TEAM (team_name, team_rank)
@@ -19,6 +25,10 @@ class Team:
             connection.commit()
 
     def delete(self):
+        """
+        Deletes team from database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """DELETE FROM TEAM WHERE team_id=%s"""
@@ -26,6 +36,10 @@ class Team:
             connection.commit()
 
     def update(self):
+        """
+        Updates team in database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """UPDATE TEAM SET (team_name = %s, team_rank = %s) WHERE (team_id = %s);"""
@@ -33,11 +47,20 @@ class Team:
             connection.commit()
 
     def get_users(self):
+        """
+        Get users of a team into object.
+        :return: list
+        """
         from .users import Users
         self.users = Users.get(team_id=self.team_id)
         return self.users
 
     def increase_rank(self, increase):
+        """
+        Increases teams rank by given value.
+        :param increase: int
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """UPDATE TEAM SET team_rank = team_rank + %s WHERE team_id = %s;"""
@@ -45,6 +68,11 @@ class Team:
             cursor.close()
 
     def decrease_rank(self, increase):
+        """
+        Decreases teams rank by given value.
+        :param increase: int
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """UPDATE TEAM SET team_rank = team_rank - %s WHERE team_id = %s;"""
@@ -53,6 +81,10 @@ class Team:
 
     @staticmethod
     def create():
+        """
+        Creates TEAM table in database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS TEAM (
@@ -65,6 +97,11 @@ class Team:
 
     @staticmethod
     def get(**kwargs):
+        """
+        Queries teams from database according to given arguments.
+        :param kwargs: Arguments
+        :return: list
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT {} FROM TEAM WHERE ( {} );"""\
@@ -77,6 +114,10 @@ class Team:
 
     @staticmethod
     def get_all():
+        """
+        Gets all teams from database.
+        :return: list
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """SELECT {} FROM TEAM ORDER BY team_rank DESC;""".format(', '.join(Team.fields))
@@ -87,6 +128,11 @@ class Team:
 
     @staticmethod
     def object_converter(values):
+        """
+        Creates a Team object with given arguments.
+        :param values: Objects attributs(tuple)
+        :return: Team object
+        """
 
         team = Team('a')
 
@@ -97,6 +143,10 @@ class Team:
 
     @staticmethod
     def drop():
+        """
+        Drops TEAM table.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """DROP TABLE  IF EXISTS TEAM CASCADE;"""

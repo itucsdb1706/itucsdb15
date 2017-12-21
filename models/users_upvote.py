@@ -6,6 +6,10 @@ class UsersUpvote:
 
     @staticmethod
     def create():
+        """
+        Creates USERS_UPVOTE table in database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS USERS_UPVOTE (
@@ -18,6 +22,12 @@ class UsersUpvote:
 
     @staticmethod
     def upvote(user_id, discussion_id):
+        """
+        nserts (user_id, discussion_id) row into USERS_UPVOTE table
+        :param user_id: int
+        :param discussion_id: int
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT user_id, discussion_id FROM USERS_UPVOTE
@@ -43,6 +53,10 @@ class UsersUpvote:
 
     @staticmethod
     def drop():
+        """
+        Drops USERS_UPVOTE table.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """DROP TABLE  IF EXISTS USERS_UPVOTE CASCADE;"""

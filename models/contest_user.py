@@ -8,6 +8,10 @@ class ContestUser:
 
     @staticmethod
     def create():
+        """
+        Creates CONTEST_USERS table in database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS CONTEST_USERS (
@@ -20,6 +24,12 @@ class ContestUser:
 
     @staticmethod
     def register_users(contest, user_list):
+        """
+        Registers a list of users to given contest
+        :param contest: Contest object
+        :param user_list: Users list
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """INSERT INTO CONTEST_USERS (contest_id, user_id) VALUES (%s, %s);"""
@@ -28,6 +38,12 @@ class ContestUser:
 
     @staticmethod
     def unregister_users(contest, user_list):
+        """
+        Unregisters a list of users to given contest
+        :param contest: Contest object
+        :param user_list: Users list
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """DELETE FROM CONTEST_USERS WHERE (contest_id = %s AND user_id = %s);"""
@@ -36,6 +52,10 @@ class ContestUser:
 
     @staticmethod
     def drop():
+        """
+        Drops CONTEST_USERS table.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """DROP TABLE  IF EXISTS CONTEST_USERS CASCADE;"""
