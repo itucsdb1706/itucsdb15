@@ -11,7 +11,9 @@ Database Design
 Code
 ----
 
- .. automodule:: clarification
+.. automodule:: clarification
+   :modules:
+  
 **explain the technical structure of your code**
 
 **to include a code listing, use the following example**::
