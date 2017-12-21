@@ -10,6 +10,7 @@ class Tag:
         self.tag_name = tag_name
 
     def save(self):
+        """Saves this tag object to the database, also assigns the id of the message in the database to the object"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """INSERT INTO TAG (tag_name) 
@@ -20,6 +21,7 @@ class Tag:
             cursor.close()
 
     def delete(self):
+        """Deletes this tag inside the database by using its id"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """DELETE FROM TAG 
@@ -28,6 +30,7 @@ class Tag:
             cursor.close()
 
     def update(self):
+        """Updates the entire tag row with this objects values"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """UPDATE TAG 
@@ -38,6 +41,7 @@ class Tag:
 
     @staticmethod
     def create():
+        """Executes the create statement for the TAG table in the database"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS TAG (
@@ -49,6 +53,8 @@ class Tag:
 
     @staticmethod
     def get(**kwargs):
+        """Generic get command with flexible arguments for tag fetching from the database
+            :returns list of fetched tag objects"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT {} FROM TAG WHERE ( {} );""" \
@@ -60,6 +66,8 @@ class Tag:
 
     @staticmethod
     def object_converter(values):
+        """Generic tag object conversion method for converting the tuples returned from select statements
+            :returns tag object that wraps the values in the tuple list"""
         tag = Tag()
 
         for ind, field in enumerate(Tag.fields):
@@ -69,6 +77,7 @@ class Tag:
 
     @staticmethod
     def drop():
+        """Executes the drop statement to the TAG table"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """DROP TABLE IF EXISTS TAG CASCADE;"""

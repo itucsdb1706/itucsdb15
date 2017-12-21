@@ -14,6 +14,8 @@ class Contest:
         self.end_time = end_time
 
     def save(self):
+        """Saves this contest object to the database, also assigns the id of the message in the database to the
+            object"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """INSERT INTO CONTEST (contest_name, is_individual, start_time, end_time) 
@@ -26,6 +28,7 @@ class Contest:
             cursor.close()
 
     def delete(self):
+        """Deletes this contest inside the database by using its id"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """DELETE FROM CONTEST 
@@ -34,6 +37,7 @@ class Contest:
             cursor.close()
 
     def update(self):
+        """Updates the entire contest row with this objects values"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """UPDATE CONTEST
@@ -47,11 +51,12 @@ class Contest:
             cursor.close()
 
     def get_problems(self):
+        """Attaches a list of problems to this contest object associated with the contest"""
         from .problems import Problems
         self.problems = Problems.get(contest_id=self.contest_id)
 
     def get_users(self):
-
+        """Fetches the list of participants of the contest and attaches them to this contest object"""
         from .users import Users
 
         with dbapi2.connect(current_app.config['dsn']) as connection:
@@ -69,6 +74,7 @@ class Contest:
 
     @staticmethod
     def create():
+        """Executes the create statement for the CONTEST table in the database"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS CONTEST (
@@ -83,6 +89,8 @@ class Contest:
 
     @staticmethod
     def get(**kwargs):
+        """Generic get command with flexible arguments for contest fetching from the database
+            :returns list of fetched contest objects"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT {} FROM CONTEST WHERE ( {} );"""\
@@ -95,7 +103,9 @@ class Contest:
 
     @staticmethod
     def get_with_leaderboard(contest_name):
-
+        """Fetches a leaderboard for a given contest with users, the tried problems, and the maximum scores achieved
+            for the tried problems
+            :returns a dictionary containing the given contest's users and their problem solution statuses"""
         from .problems import Problems
         from .submissions import Submissions
         from .users import Users
@@ -146,7 +156,9 @@ class Contest:
 
     @staticmethod
     def get_with_problems(**kwargs):
-
+        """Generic get command with flexible arguments for contest fetching from the database with the problems
+            associated with it
+            :returns list of fetched contest objects with their associated problems"""
         from .problems import Problems
 
         with dbapi2.connect(current_app.config['dsn']) as connection:
@@ -177,6 +189,8 @@ class Contest:
 
     @staticmethod
     def get_all():
+        """Fetches all contests from the database reverse ordered by the start time, and then ordered by end time
+            :returns list of fetched contest objects"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT {} FROM CONTEST ORDER BY start_time DESC, end_time;"""\
@@ -188,6 +202,8 @@ class Contest:
 
     @staticmethod
     def object_converter(values):
+        """Generic contest object conversion method for converting the tuples returned from select statements
+            :returns contest object that wraps the values in the tuple list, which also contains a status state"""
         contest = Contest()
 
         for ind, field in enumerate(Contest.fields):
@@ -204,6 +220,7 @@ class Contest:
 
     @staticmethod
     def drop():
+        """Executes the drop statement to the MESSAGE table"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """DROP TABLE  IF EXISTS CONTEST CASCADE;"""

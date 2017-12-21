@@ -15,6 +15,8 @@ class Message:
         self.message_id = message_id
 
     def save(self):
+        """Saves this message object to the database, also assigns the id of the message in the database to the
+            object"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """INSERT INTO MESSAGE (message_content, is_read, from_user_id, to_user_id, time_sent) 
@@ -29,6 +31,7 @@ class Message:
             cursor.close()
 
     def delete(self):
+        """Deletes this message inside the database by using its id"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """DELETE FROM MESSAGE
@@ -37,16 +40,19 @@ class Message:
             cursor.close()
 
     def update_read(self):
+        """Updates the read-state of this message in the database and the object to True"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """UPDATE MESSAGE
                                   SET is_read = TRUE 
                                   WHERE (message_id = %s);"""
             cursor.execute(statement, (self.message_id,))
+            self.is_read = True
             cursor.close()
 
     @staticmethod
     def create():
+        """Executes the create statement for the MESSAGE table in the database"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS MESSAGE (
@@ -62,6 +68,8 @@ class Message:
 
     @staticmethod
     def get(**kwargs):
+        """Generic get command with flexible arguments for message fetching from the database
+            :returns list of fetched message objects"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT * FROM MESSAGE WHERE ( {} );"""\
@@ -73,6 +81,9 @@ class Message:
 
     @staticmethod
     def get_messages_for_user(user):
+        """Fetches the messages sent to a certain user, given the user
+            :returns list of tuples such that element [0] is a string containing the sender's username and element [1]
+            is the message object sent by that user"""
         from models.users import Users
 
         with dbapi2.connect(current_app.config['dsn']) as connection:
@@ -88,6 +99,7 @@ class Message:
 
     @staticmethod
     def drop():
+        """Executes the drop statement to the MESSAGE table"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """DROP TABLE IF EXISTS MESSAGE CASCADE;"""
@@ -96,6 +108,8 @@ class Message:
 
     @staticmethod
     def object_converter(values):
+        """Generic message object conversion method for converting the tuples returned from select statements
+            :returns message object that wraps the values in the tuple list"""
         message = Message()
 
         for ind, field in enumerate(Message.fields):

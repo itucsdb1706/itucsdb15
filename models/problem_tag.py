@@ -7,6 +7,7 @@ from models.problems import Problems
 class ProblemTag:
     @staticmethod
     def create():
+        """Executes the create statement for the PROBLEM_TAG table in the database"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS PROBLEM_TAG (
@@ -19,6 +20,7 @@ class ProblemTag:
 
     @staticmethod
     def save_tags_to_problem(problem, tags_list):
+        """Saves the given tags to the problem in the database using the intermediate table"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """INSERT INTO PROBLEM_TAG (problem_id, tag_id) 
@@ -28,6 +30,7 @@ class ProblemTag:
 
     @staticmethod
     def delete_tags_from_problem(problem, tags_list):
+        """Deletes the given tags to the problem in the database using the intermediate table"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """DELETE FROM PROBLEM_TAG
@@ -37,6 +40,8 @@ class ProblemTag:
 
     @staticmethod
     def get_tags_for_problem(problem):
+        """Fetches the tags associated with the given problem from the database
+            :returns list of fetched tag objects"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT {} 
@@ -49,6 +54,8 @@ class ProblemTag:
 
     @staticmethod
     def get_problems_with_tag(tag):
+        """Fetches the problems associated with the given tag from the database
+            :returns list of fetched problem objects"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT {}
@@ -61,6 +68,7 @@ class ProblemTag:
 
     @staticmethod
     def drop():
+        """Executes the drop statement to the PROBLEM_TAG table"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """DROP TABLE  IF EXISTS PROBLEM_TAG CASCADE;"""
