@@ -11,6 +11,7 @@ Database Design
 Code
 ----
 
+ .. automodule:: clarification
 **explain the technical structure of your code**
 
 **to include a code listing, use the following example**::
@@ -27,5 +28,3 @@ Code
    member1
    member2
    member3
-   member4
-   member5

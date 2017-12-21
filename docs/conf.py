@@ -19,7 +19,8 @@ import os
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('../models'))
+sys.path.insert(1, os.path.abspath('../'))
 
 # -- General configuration ------------------------------------------------
 
@@ -44,8 +45,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'itucsdb'
-copyright = '2015, Team Name'
+project = 'itucsdb1706'
+copyright = '2017, HackPack Team'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -177,7 +178,7 @@ html_use_index = False
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'itucsdbdoc'
+htmlhelp_basename = 'itucsdb1706doc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -197,8 +198,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'itucsdb.tex', 'itucsdb Documentation',
-   'Team Name', 'manual'),
+  ('index', 'itucsdb1706.tex', 'HackPack Documentation',
+   'HackPack Team', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -227,8 +228,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'itucsdb', 'itucsdb Documentation',
-     ['Team Name'], 1)
+    ('index', 'itucsdb1706', 'HackPack Documentation',
+     ['HackPack Team'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -241,8 +242,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'itucsdb', 'itucsdb Documentation',
-   'Team Name', 'itucsdb', 'One line description of project.',
+  ('index', 'itucsdb1706', 'HackPack Documentation',
+   'HackPack Team', 'itucsdb1706', 'A new competitive programming platform!',
    'Miscellaneous'),
 ]
 
