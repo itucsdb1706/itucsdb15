@@ -8,6 +8,11 @@ from functools import wraps
 
 
 def login_required(f):
+    """
+    A decorator that allows only sites users to reach the given view
+    :param f: function
+    :return: function
+    """
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not current_user.is_authenticated:
@@ -17,6 +22,11 @@ def login_required(f):
 
 
 def admin_required(f):
+    """
+    A decorator that allows only sites admins to reach the given view
+    :param f: function
+    :return: function
+    """
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not current_user.is_authenticated or not current_user.is_admin:
@@ -26,19 +36,39 @@ def admin_required(f):
 
 
 def is_mail(email):
+    """
+    Checks if given mail is valid.
+    :param email: str
+    :return: re
+    """
     return re.match(r"[^@]+@[^@]+\.[^@]+", email)
 
 
 def password_validation(password):
+    """
+    Checks if given password is valid.
+    :param password: str
+    :return: bool
+    """
     return len(password) >= 6 and re.search(r"\d", password)\
            is not None and re.search(r"[a-zA-Z]", password) is not None
 
 
 def random_string(n):
+    """
+    Returns a random string lenght of 'n' that can contain only uppercase ASCII character and numbers.
+    :param n: int
+    :return: str
+    """
     return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(n))
 
 
 def get_submission_score(max_score):
+    """
+    Gives a score to submission
+    :param max_score: int
+    :return: tuple
+    """
 
     errors = ['Wrong Answer', 'Compilation Error', 'Runtime Error', 'Memory Limit Exceeded', 'Time Limit Exceeded']
     rand = random.randint(1, 100)

@@ -32,11 +32,19 @@ admin = Blueprint('admin', __name__)
 @admin.route('/admin_home/')
 @admin_required
 def admin_home():
+    """
+    Admin home page view.
+    :return: HTTP Response
+    """
     return render_template('admin_home.html')
 
 
 @admin.route('/init_db/')
 def init_db():
+    """
+    Initializing database and creating necessary files for user profile images view.
+    :return: HTTP Response
+    """
 
     if not os.path.exists(os.path.join(os.getcwd(), 'static', 'media')):
         os.makedirs(os.path.join(os.getcwd(), 'static', 'media'))
@@ -142,6 +150,10 @@ def init_db():
 @admin.route('/admin_add_contest/', methods=['GET', 'POST'])
 @admin_required
 def admin_add_contest():
+    """
+    Add contest view.
+    :return: HTTP Response
+    """
 
     if request.method == 'POST':
         contest = Contest(contest_name=request.form['contest_name'], is_individual='is_individual' in request.form,
@@ -161,6 +173,10 @@ def admin_add_contest():
 @admin.route('/admin_add_problem/', methods=['GET', 'POST'])
 @admin_required
 def admin_add_problem():
+    """
+    Add problem, input and tag view.
+    :return: HTTP Response
+    """
     if request.method == 'POST':
 
         problem = Problems(problem_name=request.form['problem_name'], statement=request.form['statement'],
@@ -204,6 +220,10 @@ def admin_add_problem():
 @admin.route('/admin_send_clarification/', methods=['GET', 'POST'])
 @admin_required
 def admin_send_clarification():
+    """
+    Send clarification view.
+    :return: HTTP Response
+    """
     if request.method == 'POST':
 
         contest = Contest.get(contest_id=request.form['contest_id'])[0]

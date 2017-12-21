@@ -32,6 +32,11 @@ def get_elephantsql_dsn(vcap_services):
 
 @lm.user_loader
 def load_user(user_id):
+    """
+    User loader for flask_login
+    :param user_id: int
+    :return: Users object
+    """
     user = None
     try:
         user = Users.get(user_id=user_id)[0]
@@ -48,6 +53,10 @@ def load_user(user_id):
 
 
 def create_app():
+    """
+    Initializing the app.
+    :return: Flask object
+    """
     app = Flask(__name__)
     app.secret_key = 'suchsecretmuchwow'
     app.config.from_object('settings')
@@ -61,6 +70,10 @@ def create_app():
 
 
 def main():
+    """
+    Function that runs Flask app.
+    :return: None
+    """
     app = create_app()
     port = app.config.get('PORT', 5000)
 

@@ -18,17 +18,29 @@ core = Blueprint('core', __name__)
 
 @core.route('/debug/')
 def debug():
+    """
+    Debug view for dummy pages and debugging.
+    :return: HTTP Response
+    """
     return render_template('debug.html')
 
 
 @core.route('/')
 def home():
+    """
+    Home page view.
+    :return: HTTP Response
+    """
     tags = Tag.get_all()
     return render_template('home.html', tags=tags)
 
 
 @core.route('/login/', methods=['POST'])
 def login():
+    """
+    Login user view. User token saved into sessions.
+    :return: HTTP Response
+    """
     email = request.form.get('email', '-')
     password = request.form.get('password', '-')
     user = Users.get(email=email)[0]
@@ -41,6 +53,10 @@ def login():
 
 @core.route('/logout/')
 def logout():
+    """
+    Logout user view.
+    :return: HTTP Response
+    """
 
     if current_user.is_authenticated:
         logout_user()
@@ -50,12 +66,22 @@ def logout():
 
 @core.route('/team/<string:team_name>/', methods=['GET'])
 def team(team_name):
+    """
+    Team member list view.
+    :param team_name: str
+    :return: HTTP Response
+    """
     users = Users.get_from_team(team_name=team_name)
     return render_template('user_leaderboard.html', users=users)
 
 
 @core.route('/profile/<string:username>/', methods=['GET', 'POST'])
 def profile(username):
+    """
+    Profile page view.
+    :param username: str
+    :return: HTTP Response
+    """
     user = Users.get_join(username=username)[0]
     is_owner = current_user.is_authenticated and current_user.user_id == user.user_id
     return render_template('profile-page.html', user=user, is_owner=is_owner)
@@ -63,6 +89,10 @@ def profile(username):
 
 @core.route('/register/', methods=['GET', 'POST'])
 def register():
+    """
+    User register view.
+    :return: HTTP Response
+    """
 
     if request.method == 'GET':
         return render_template('register-page.html')
@@ -94,6 +124,10 @@ def register():
 @core.route('/edit-profile/', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
+    """
+    Profile editing view.
+    :return: HTTP Response
+    """
 
     if request.method == 'POST':
 
@@ -121,6 +155,10 @@ def edit_profile():
 
 @core.route('/read_msg/', methods=['POST'])
 def read_msg():
+    """
+    Message read view.
+    :return: HTTP Response
+    """
     message_id = request.form.get('msg_id')
     message = Message.get(message_id=message_id)[0]
     message.update_read()
@@ -129,6 +167,10 @@ def read_msg():
 
 @core.route('/send_msg/', methods=['POST'])
 def send_msg():
+    """
+    Sending message view.
+    :return: HTTP Response
+    """
     to_user_id = request.form.get('to_user', '')
     msg_text = request.form.get('msg_text', '')
     if msg_text != '' and to_user_id != '':
@@ -140,6 +182,10 @@ def send_msg():
 @core.route('/join_team/', methods=['POST'])
 @login_required
 def join_team():
+    """
+    Joining team view.
+    :return: HTTP Response
+    """
 
     team = Team.get(team_name=request.form['team_name'])
 
@@ -157,6 +203,10 @@ def join_team():
 @core.route('/leave_team/', methods=['POST'])
 @login_required
 def leave_team():
+    """
+    Leaving team view.
+    :return: HTTP Response
+    """
     current_user.get_team()
     current_user.team.decrease_rank(current_user.rank)
     current_user.leave_team()
