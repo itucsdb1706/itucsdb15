@@ -6,6 +6,8 @@ from .problems import Problems
 
 
 class Submissions:
+    """ Blueprint of SUBMISSIONS table """
+
     fields = ['submission_id', 'user_id', 'problem_id', 'score', 'is_complete', 'source', 'language', 'error',
               'send_time']
 
@@ -21,6 +23,10 @@ class Submissions:
         self.send_time = send_time
 
     def save(self):
+        """
+        Saves submission into database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """INSERT INTO SUBMISSIONS (user_id, problem_id, score, is_complete, source, language, error,
@@ -31,6 +37,10 @@ class Submissions:
             connection.commit()
 
     def delete(self):
+        """
+        Deletes submission from database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """DELETE FROM SUBMISSIONS WHERE submission=%s"""
@@ -38,6 +48,10 @@ class Submissions:
             connection.commit()
 
     def update(self):
+        """
+        Updates submission in database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """UPDATE SUBMISSIONS SET user_id = %s, problem_id = %s, score = %s, is_complete = %s, source = %s,
@@ -48,6 +62,10 @@ class Submissions:
 
     @staticmethod
     def create():
+        """
+        Creates SUBMISSIONS table in database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS SUBMISSIONS (
@@ -68,6 +86,11 @@ class Submissions:
 
     @staticmethod
     def get(**kwargs):
+        """
+        Queries submissions from database according to given arguments.
+        :param kwargs: Arguments
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT {} FROM SUBMISSIONS WHERE ( {} );"""\
@@ -79,6 +102,12 @@ class Submissions:
 
     @staticmethod
     def get_max(user_id, problem_id):
+        """
+        Returns max point a user got from a problem
+        :param user_id: int
+        :param problem_id: int
+        :return: int
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT MAX(score) FROM SUBMISSIONS WHERE (user_id = %s AND problem_id = %s );"""
@@ -91,6 +120,12 @@ class Submissions:
 
     @staticmethod
     def get_solved_problems(user, contest=None):
+        """
+        Returns solved problems of a user (for a specific contest if given)
+        :param user: Users object
+        :param contest: Contest object
+        :return: set
+        """
         if contest is not None:
             with dbapi2.connect(current_app.config['dsn']) as connection:
                 cursor = connection.cursor()
@@ -121,6 +156,12 @@ class Submissions:
 
     @staticmethod
     def get_tried_problems(user, contest=None):
+        """
+        Returns tried problems of a user (for a specific contest if given)
+        :param user: Users object
+        :param contest: Contest object
+        :return: set
+        """
         if contest is not None:
             with dbapi2.connect(current_app.config['dsn']) as connection:
                 cursor = connection.cursor()
@@ -150,6 +191,11 @@ class Submissions:
 
     @staticmethod
     def get_join(**kwargs):
+        """
+        Returns submissions with problems and users
+        :param kwargs: Arguments
+        :return: list
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT {}, {}, {} FROM SUBMISSIONS INNER JOIN USERS ON (SUBMISSIONS.user_id = USERS.user_id)
@@ -168,6 +214,10 @@ class Submissions:
 
     @staticmethod
     def get_all():
+        """
+        Returns all submissions
+        :return: list
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """SELECT {} FROM SUBMISSIONS;""".format(', '.join(Submissions.fields))
@@ -179,6 +229,12 @@ class Submissions:
 
     @staticmethod
     def object_converter(values, is_joined=False):
+        """
+        Creates a Submissions object with given arguments.
+        :param values: Object attributes(tuple)
+        :param is_joined: (default False) bool
+        :return: Submissions object
+        """
 
         submission = Submissions('a', 'b')
 
@@ -205,6 +261,10 @@ class Submissions:
 
     @staticmethod
     def drop():
+        """
+        Drops SUBMISSIONS table
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """DROP TABLE  IF EXISTS SUBMISSIONS CASCADE;"""

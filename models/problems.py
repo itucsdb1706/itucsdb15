@@ -3,6 +3,9 @@ from flask import current_app
 
 
 class Problems:
+    """ Blueprint of PROBLEMS table """
+
+    # Column names of PROBLEM table
     fields = ['problem_id', 'problem_name', 'statement', 'contest_id', 'max_score']
 
     def __init__(self, problem_name, statement, contest_id=None, max_score=0, problem_id=None):
@@ -13,6 +16,10 @@ class Problems:
         self.max_score = max_score
 
     def save(self):
+        """
+        Saves problem into database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """INSERT INTO PROBLEMS (problem_name, statement, contest_id, max_score)""" \
@@ -22,6 +29,10 @@ class Problems:
             connection.commit()
 
     def delete(self):
+        """
+        Deletes problem from database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """DELETE FROM PROBLEMS WHERE problem_id = %s;"""
@@ -29,6 +40,10 @@ class Problems:
             connection.commit()
 
     def update(self):
+        """
+        Updates problem in database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """UPDATE PROBLEMS SET (problem_name = %s, statement = %s, contest_id = %s, 
@@ -37,6 +52,10 @@ class Problems:
             connection.commit()
 
     def get_sample(self):
+        """
+        Fetches sample input of problem.
+        :return: None
+        """
 
         from .input import Input
 
@@ -51,10 +70,18 @@ class Problems:
         self.sample = Input.object_converter(result[0])
 
     def get_tags(self):
+        """
+        Fetches tags of problem.
+        :return: None
+        """
         from .problem_tag import ProblemTag
         self.tags = ProblemTag.get_tags_for_problem(self)
 
     def get_discussions(self):
+        """
+        Fetches discussions of problem.
+        :return: None
+        """
         from .discussion import Discussion
         from .users import Users
         self.discussions = Discussion.get(problem_id=self.problem_id)
@@ -63,6 +90,10 @@ class Problems:
 
     @staticmethod
     def create():
+        """
+        Creates PROBLEMS table in database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS PROBLEMS (
@@ -78,6 +109,12 @@ class Problems:
 
     @staticmethod
     def get_with_submissions(problem_id, user_id):
+        """
+        Gets a problem from databse with submissions of given user
+        :param problem_id: PK of the problem (int)
+        :param user_id: PK of the user (int)
+        :return: Problems with submissions (list)
+        """
 
         from .submissions import Submissions
 
@@ -115,6 +152,11 @@ class Problems:
 
     @staticmethod
     def get(**kwargs):
+        """
+        Queries problems from database according to given arguments.
+        :param kwargs: Arguments
+        :return: Problem list (list)
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT {} FROM PROBLEMS WHERE ( {} );"""\
@@ -127,6 +169,10 @@ class Problems:
 
     @staticmethod
     def get_all():
+        """
+        Fetches all problems from database.
+        :return: Problem list (list)
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """SELECT {} FROM PROBLEMS;""".format(', '.join(Problems.fields))
@@ -137,6 +183,11 @@ class Problems:
 
     @staticmethod
     def object_converter(values):
+        """
+        Creates a Problems object with given arguments.
+        :param values: Fetched colums from database.
+        :return: Problem (object)
+        """
         problem = Problems('a', 'b')
 
         for ind, field in enumerate(Problems.fields):
@@ -146,6 +197,10 @@ class Problems:
 
     @staticmethod
     def drop():
+        """
+        Drops PROBLEM table.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """DROP TABLE  IF EXISTS PROBLEMS CASCADE;"""

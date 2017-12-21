@@ -15,6 +15,10 @@ class Discussion:
         self.downvote = downvote
 
     def save(self):
+        """
+        Inserts discussion into database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """INSERT INTO DISCUSSION ( problem_id, user_id, content, post_time, upvote, downvote)
@@ -25,6 +29,10 @@ class Discussion:
             connection.commit()
 
     def delete(self):
+        """
+        Deletes discussion from database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """DELETE FROM DISCUSSION WHERE discussion_id = %s;"""
@@ -32,6 +40,10 @@ class Discussion:
             connection.commit()
 
     def update(self):
+        """
+        Updates discussion in database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """UPDATE INPUT SET  upvote = %s, downvote = %s WHERE discussion_id = %s;"""
@@ -40,6 +52,10 @@ class Discussion:
 
     @staticmethod
     def create():
+        """
+        Creates DISCUSSION table in database.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS DISCUSSION (
@@ -56,6 +72,11 @@ class Discussion:
 
     @staticmethod
     def get(**kwargs):
+        """
+        Queries discussions from database according to given arguments.
+        :param kwargs: Arguments
+        :return: list
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT {} FROM DISCUSSION WHERE ( {} ) ORDER BY discussion_id;""" \
@@ -68,6 +89,10 @@ class Discussion:
 
     @staticmethod
     def get_all():
+        """
+        Gets all discussions from database.
+        :return: list
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             query = """SELECT {} FROM DISCUSSION;""".format(', '.join(Discussion.fields))
@@ -78,6 +103,11 @@ class Discussion:
 
     @staticmethod
     def object_converter(values):
+        """
+        Creates a Discussion object with given arguments.
+        :param values: Objects attributes(tuple)
+        :return: None
+        """
 
         disc = Discussion('a', 'b', 'c')
 
@@ -88,6 +118,10 @@ class Discussion:
 
     @staticmethod
     def drop():
+        """
+        Drops DISCUSSION table.
+        :return: None
+        """
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """DROP TABLE  IF EXISTS DISCUSSION CASCADE;"""
