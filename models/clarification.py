@@ -17,6 +17,8 @@ class Clarification:
         self.clarification_id = clarification_id
 
     def save(self):
+        """Saves this clarification object to the database, also assigns the id of the clarification in the database
+            to the object"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """INSERT INTO CLARIFICATION (contest_id, user_id, time_sent,clarification_content) 
@@ -30,6 +32,7 @@ class Clarification:
             cursor.close()
 
     def delete(self):
+        """Deletes this clarification inside the database by using its id"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """DELETE FROM CLARIFICATION 
@@ -38,6 +41,7 @@ class Clarification:
             cursor.close()
 
     def update_content(self):
+        """Updates the content and send time of this clarification in the database"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """UPDATE CLARIFICATION
@@ -50,6 +54,7 @@ class Clarification:
 
     @staticmethod
     def create():
+        """Executes the create statement for the CLARIFICATION table in the database"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """CREATE TABLE IF NOT EXISTS CLARIFICATION (
@@ -65,6 +70,8 @@ class Clarification:
 
     @staticmethod
     def get(**kwargs):
+        """Generic get command with flexible arguments for clarification fetching from the database
+            :returns list of fetched clarification objects"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             where_cond = ' AND '.join([key + ' = %s' for key in kwargs])
@@ -76,6 +83,7 @@ class Clarification:
 
     @staticmethod
     def get_clarifications_for_user(user):
+        """Fetches the names of the contests"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT {} 
@@ -90,6 +98,8 @@ class Clarification:
 
     @staticmethod
     def get_all():
+        """Fetches all clarifications from the database
+            :returns list of fetched clarification objects"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """SELECT * FROM CLARIFICATION;"""
@@ -100,6 +110,8 @@ class Clarification:
 
     @staticmethod
     def object_converter(values):
+        """Generic clarification object conversion method for converting the tuples returned from select statements
+            :returns clarification object that wraps the values in the tuple list"""
         clarification = Clarification()
 
         for ind, field in enumerate(Clarification.fields):
@@ -109,6 +121,7 @@ class Clarification:
 
     @staticmethod
     def drop():
+        """Executes the drop statement to the CLARIFICATION table"""
         with dbapi2.connect(current_app.config['dsn']) as connection:
             cursor = connection.cursor()
             statement = """DROP TABLE  IF EXISTS CLARIFICATION CASCADE;"""
