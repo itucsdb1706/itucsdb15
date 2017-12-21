@@ -26,6 +26,10 @@ study = Blueprint('study', __name__)
 
 @study.route('/problemlist/')
 def problem_list():
+    """
+    Lists all problems with users scores
+    :return: HTTP response
+    """
 
     # TODO: This can be mor efficient
     problems = Problems.get_all()
@@ -44,6 +48,10 @@ def problem_list():
 
 @study.route('/contestlist/')
 def contest_list():
+    """
+    Lists all contests with users registration info
+    :return: HTTP Response
+    """
     contests = Contest.get_all()
     if current_user.is_authenticated:
         registered_contests = current_user.get_registered_contests()
@@ -55,6 +63,10 @@ def contest_list():
 @study.route('/register_contest/', methods=['POST'])
 @login_required
 def register_contest():
+    """
+    Register user to a contest
+    :return: HTTP Response
+    """
 
     contest_id = request.form.get('contest_id', 0)
     contest = Contest.get(contest_id=contest_id)[0]
@@ -69,18 +81,31 @@ def register_contest():
 
 @study.route('/user_leaderboard/')
 def user_leaderboard():
+    """
+    Leaderboard of users view.
+    :return: HTTP Response
+    """
     users = Users.get_all()
     return render_template('user_leaderboard.html', users=users)
 
 
 @study.route('/team_leaderboard/')
 def team_leaderboard():
+    """
+    Leaderboard of teams view.
+    :return: HTTP Response
+    """
     teams = Team.get_all()
     return render_template('team_leaderboard.html', teams=teams)
 
 
 @study.route('/leaderboard/<string:contest_name>/')
 def leaderboard(contest_name):
+    """
+    User leaderboard of a contest view.
+    :param contest_name: str
+    :return: HTTP Response
+    """
 
     contest_dict = Contest.get_with_leaderboard(url_req.unquote(contest_name))
 
@@ -106,6 +131,11 @@ def leaderboard(contest_name):
 
 @study.route('/contest/<string:contest_name>/')
 def contest(contest_name):
+    """
+    Contest page view.
+    :param contest_name: str
+    :return: HTTP Response
+    """
     contest = Contest.get_with_problems(contest_name=url_req.unquote(contest_name))[0]
     solved = set()
     tried = set()
@@ -119,6 +149,11 @@ def contest(contest_name):
 
 @study.route('/statement/<string:problem_id>/', methods=['GET', 'POST'])
 def statement(problem_id):
+    """
+    Problem statement and submission view.
+    :param problem_id: int
+    :return: HTTP Response
+    """
 
     if request.method == 'GET':
         if current_user.is_authenticated:
@@ -159,6 +194,10 @@ def statement(problem_id):
 @study.route('/add_discussion/', methods=['POST'])
 @login_required
 def add_discussion():
+    """
+    Adding discussion view.
+    :return: HTTP Response
+    """
 
     discussion = Discussion(problem_id=request.form['problem_id'], user_id=current_user.user_id,
                             content=request.form['content'])
@@ -169,6 +208,10 @@ def add_discussion():
 @study.route('/upvote/', methods=['POST'])
 @login_required
 def upvote():
+    """
+    Upvoting discussion view.
+    :return: HTTP Response
+    """
     UsersUpvote.upvote(current_user.user_id, request.form['discussion_id'])
     return redirect(request.referrer)
 
@@ -176,12 +219,21 @@ def upvote():
 @study.route('/downvote/', methods=['POST'])
 @login_required
 def downvote():
+    """
+    Downvoting discussion view.
+    :return: HTTP Response
+    """
     UsersDownvote.downvote(current_user.user_id, request.form['discussion_id'])
     return redirect(request.referrer)
 
 
 @study.route('/tag/<int:tag_id>/')
 def tag(tag_id):
+    """
+    Problem list by tag view.
+    :param tag_id: int
+    :return: HTTP Response
+    """
 
     tag = Tag.get(tag_id=tag_id)[0]
     problems = ProblemTag.get_problems_with_tag(tag)
