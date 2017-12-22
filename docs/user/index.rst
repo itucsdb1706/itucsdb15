@@ -1,16 +1,18 @@
 User Guide
 ==========
 
-**explain how your application works from the user perspective, use
+**explain how your application works from the uasdser perspective, usesssssss
 screenshots whereever appropriate**
 
 **to add a picture, use the following example**::
 
-   .. figure:: picture.png
-      :scale: 50 %
-      :alt: map to buried treasure
+     -----IMAGE---
 
-      This is the caption of the figure (a simple paragraph).
+.. figure:: picture.png
+     :scale: 100 %
+     :alt: asdasd
+
+     ASASDASD
 
 .. toctree::
 

@@ -4,26 +4,56 @@ Developer Guide
 Database Design
 ---------------
 
-**explain the database design of your project**
+**Here is our database diagram**
 
-**include the E/R diagram(s)**
+    .. figure:: diagram.png
+        :scale: 100 %
+        :alt: Database Diagram
 
-Code
-----
+Initialization
+--------------
 
-.. automodule:: clarification
-   :modules:
-  
-**explain the technical structure of your code**
+Server
+------
 
-**to include a code listing, use the following example**::
+    .. automodule:: server
+        :members:
+        :undoc-members:
 
-   .. code-block:: python
 
-      class Foo:
+Models
+------
+**Most important class of the project is Users class. It is implemented by all group members together**
 
-         def __init__(self, x):
-            self.x = x
+    .. autoclass:: models.users.Users
+        :members:
+        :undoc-members:
+
+Views
+-----
+
+Study Views
+-----------
+
+    .. automodule:: study
+        :members:
+        :undoc-members:
+
+Core Views
+----------
+
+    .. automodule:: core
+        :members:
+        :undoc-members:
+
+Admin Views
+-----------
+
+    .. automodule:: admin
+        :members:
+        :undoc-members:
+
+
 
 .. toctree::
 
