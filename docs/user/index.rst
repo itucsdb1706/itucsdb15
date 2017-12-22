@@ -1,13 +1,16 @@
 User Guide
 ==========
 
+
     You will meet this page when you first entered the HackPack.
 
 .. figure:: home.png
     :scale: 100 %
     :alt: home page when there is no current user.
 
+
     You can find **register** and **login** buttons right top of the page and you can find the problems and contest at the navbar and take a look to the general leaderboards.
+
 
 
     Register button brings you to this page and after you enter your information you can start your journey in the HackPack
